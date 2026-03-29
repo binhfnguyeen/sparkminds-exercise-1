@@ -17,11 +17,14 @@ public class EmailServiceImpl implements EmailService {
     JavaMailSender mailSender;
 
     @Override
-    public void sendOtpEmail(String to, String otp) {
+    public void sendOtpEmail(String to, String otp, String link) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
-        message.setSubject("Mã OTP xác thực tài khoản");
-        message.setText("Xin chào,\n\nMã OTP của bạn là: " + otp + "\nOTP có hiệu lực trong 5 phút.");
+        message.setSubject("Xác thực tài khoản thư viện");
+        message.setText("Xin chào,\n\n" +
+                "Mã OTP của bạn là: " + otp + "\n" +
+                "Hoặc bạn có thể click vào link sau để xác thực: " + link + "\n\n" +
+                "OTP và Link có hiệu lực trong 5 phút.");
         mailSender.send(message);
     }
 }

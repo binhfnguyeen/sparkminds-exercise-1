@@ -6,5 +6,6 @@ import com.heulwen.demo.form.VerifyEmailForm;
 
 public interface UserService {
     UserDto createUser(UserCreateForm form);
-    UserDto verifyEmailOtp(VerifyEmailForm form);
+    String verifyEmailLink(String token);
+    void resendVerification(String email);
 }

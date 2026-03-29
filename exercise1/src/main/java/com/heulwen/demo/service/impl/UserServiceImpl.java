@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -44,22 +46,9 @@ public class UserServiceImpl implements UserService {
 
         User user = UserMapper.map(form);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         User savedUser = userRepository.save(user);
 
-        SecureRandom random = new SecureRandom();
-        int otpNumber = 100000 + random.nextInt(900000);
-        String otp = String.valueOf(otpNumber);
-
-        VerificationToken verificationToken = new VerificationToken();
-        verificationToken.setToken(otp);
-        verificationToken.setType(VerificationType.EMAIL_VERIFICATION);
-        verificationToken.setExpiryDate(LocalDateTime.now().plusMinutes(5));
-        verificationToken.setUsed(false);
-        verificationToken.setUser(savedUser);
-        verificationTokenRepository.save(verificationToken);
-
-        emailService.sendOtpEmail(savedUser.getEmail(), otp);
+        sendVerification(savedUser);
 
         log.info("User account created successfully. Verification OTP sent to: {}", savedUser.getEmail());
 
@@ -67,29 +56,76 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto verifyEmailOtp(VerifyEmailForm form) {
-        User user = userRepository.findUserByEmail(form.getEmail())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    @Transactional
+    public String verifyEmailLink(String token) {
+        VerificationToken verificationToken = verificationTokenRepository
+                .findByTokenAndType(token, VerificationType.EMAIL_VERIFICATION_LINK)
+                .orElseThrow(() -> new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN));
 
+        if (verificationToken.isUsed()) {
+            throw new AppException(ErrorCode.OTP_USED);
+        }
+
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new AppException(ErrorCode.OTP_EXPIRED);
+        }
+
+        User user = verificationToken.getUser();
         if (UserStatus.ACTIVE.equals(user.getStatus())) {
             throw new AppException(ErrorCode.ACCOUNT_VERIFIED);
-        }
-
-        VerificationToken verificationToken = verificationTokenRepository
-                .findByTokenAndUserAndType(form.getOtp(), user, VerificationType.EMAIL_VERIFICATION);
-
-        if (verificationToken.isUsed()){
-            throw new AppException(ErrorCode.ACCOUNT_VERIFIED);
-        }
-
-        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())){
-            throw new AppException(ErrorCode.OTP_EXPIRED);
         }
 
         verificationToken.setUsed(true);
         verificationTokenRepository.save(verificationToken);
 
         user.setStatus(UserStatus.ACTIVE);
-        return UserMapper.map(userRepository.save(user));
+        userRepository.save(user);
+
+        return "Account verification successful!";
+    }
+
+    @Override
+    public void resendVerification(String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (UserStatus.ACTIVE.equals(user.getStatus())) {
+            throw new AppException(ErrorCode.ACCOUNT_VERIFIED);
+        }
+
+        List<VerificationToken> oldTokens = verificationTokenRepository
+                .findByUserAndTypeInAndUsedFalse(user,
+                        List.of(VerificationType.EMAIL_VERIFICATION_OTP,
+                                VerificationType.EMAIL_VERIFICATION_LINK));
+
+        oldTokens.forEach(t -> t.setExpiryDate(LocalDateTime.now()));
+        verificationTokenRepository.saveAll(oldTokens);
+
+        sendVerification(user);
+    }
+
+    private void sendVerification(User user) {
+        String otp = String.valueOf(100000 + new SecureRandom().nextInt(900000));
+        String linkToken = UUID.randomUUID().toString();
+
+        VerificationToken otpEntity = new VerificationToken();
+        otpEntity.setToken(otp);
+        otpEntity.setType(VerificationType.EMAIL_VERIFICATION_OTP);
+        otpEntity.setExpiryDate(LocalDateTime.now().plusMinutes(5));
+        otpEntity.setUsed(false);
+        otpEntity.setUser(user);
+
+        VerificationToken linkEntity = new VerificationToken();
+        linkEntity.setToken(linkToken);
+        linkEntity.setType(VerificationType.EMAIL_VERIFICATION_LINK);
+        linkEntity.setExpiryDate(LocalDateTime.now().plusMinutes(5));
+        linkEntity.setUsed(false);
+        linkEntity.setUser(user);
+
+        verificationTokenRepository.saveAll(List.of(otpEntity, linkEntity));
+
+        String verifyLink = "http://localhost:8081/api/verify-email-link?token=" + linkToken;
+
+        emailService.sendOtpEmail(user.getEmail(), otp, verifyLink);
     }
 }

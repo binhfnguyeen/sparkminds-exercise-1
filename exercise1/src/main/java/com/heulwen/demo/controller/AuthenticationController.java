@@ -5,17 +5,14 @@ import com.heulwen.demo.dto.AuthenticateDto;
 import com.heulwen.demo.dto.UserDto;
 import com.heulwen.demo.form.LoginForm;
 import com.heulwen.demo.form.UserCreateForm;
-import com.heulwen.demo.form.VerifyEmailForm;
 import com.heulwen.demo.service.AuthService;
 import com.heulwen.demo.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -35,25 +32,38 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public  ApiDto<UserDto> register(@RequestBody UserCreateForm form) {
+    public  ApiDto<UserDto> register(@RequestBody @Valid UserCreateForm form) {
         return ApiDto.<UserDto>builder()
                 .code(1000)
                 .result(userService.createUser(form))
                 .build();
     }
 
-    @PostMapping("/verify-email")
-    public ApiDto<UserDto> verifyEmail(@RequestBody VerifyEmailForm form) {
-        return ApiDto.<UserDto>builder()
+    @PostMapping("/verify-email-link")
+    public ApiDto<String> verifyEmailLink(@RequestParam("token") String token) {
+        String result = userService.verifyEmailLink(token);
+        return ApiDto.<String>builder()
                 .code(1000)
-                .result(userService.verifyEmailOtp(form))
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("/resend-verification")
+    public ApiDto<String> resendVerification(@RequestParam("email") String email) {
+        userService.resendVerification(email);
+        return ApiDto.<String>builder()
+                .code(1000)
+                .result("OTP and verification link have been resent.")
                 .build();
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+    public ApiDto<String> logout(@RequestHeader("Authorization") String authHeader) {
         authService.logout(authHeader);
-        return ResponseEntity.ok(Map.of("message", "Logout successful."));
+        return ApiDto.<String>builder()
+                .code(1000)
+                .result("Logout successful.")
+                .build();
     }
 
     @PostMapping("/refresh-token")

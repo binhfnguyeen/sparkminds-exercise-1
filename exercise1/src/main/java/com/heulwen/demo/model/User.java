@@ -34,6 +34,9 @@ public class User {
     @Column(name = "password", nullable = false)
     String password;
 
+    @Column(name = "phone", unique = true)
+    String phone;
+
     @Column(name = "first_name")
     String firstName;
 
