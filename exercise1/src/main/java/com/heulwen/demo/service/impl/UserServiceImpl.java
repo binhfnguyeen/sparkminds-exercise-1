@@ -3,6 +3,7 @@ package com.heulwen.demo.service.impl;
 import com.heulwen.demo.dto.UserDto;
 import com.heulwen.demo.exception.AppException;
 import com.heulwen.demo.exception.ErrorCode;
+import com.heulwen.demo.form.ChangePasswordForm;
 import com.heulwen.demo.form.UserCreateForm;
 import com.heulwen.demo.form.VerifyEmailForm;
 import com.heulwen.demo.mapper.UserMapper;
@@ -13,6 +14,7 @@ import com.heulwen.demo.model.enumType.VerificationType;
 import com.heulwen.demo.repository.UserRepository;
 import com.heulwen.demo.repository.VerificationTokenRepository;
 import com.heulwen.demo.service.EmailService;
+import com.heulwen.demo.service.JwtService;
 import com.heulwen.demo.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService {
     VerificationTokenRepository  verificationTokenRepository;
     PasswordEncoder passwordEncoder;
     EmailService emailService;
+    JwtService jwtService;
 
     @Override
     @Transactional
@@ -102,6 +106,30 @@ public class UserServiceImpl implements UserService {
         verificationTokenRepository.saveAll(oldTokens);
 
         sendVerification(user);
+    }
+
+    @Override
+    public UserDto changePassword(String token, ChangePasswordForm form) {
+        try {
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            String email = jwtService.extractEmail(token);
+
+            User user = userRepository.findUserByEmail(email)
+                    .orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+
+            if (!passwordEncoder.matches(form.getOldPassword(), user.getPassword())) {
+                throw new AppException(ErrorCode.INVALID_PASSWORD);
+            }
+
+            user.setPassword(passwordEncoder.encode(form.getNewPassword()));
+
+            return UserMapper.map(userRepository.save(user));
+        } catch (ParseException e){
+            throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
+        }
     }
 
     private void sendVerification(User user) {

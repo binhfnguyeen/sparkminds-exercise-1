@@ -3,6 +3,8 @@ package com.heulwen.demo.controller;
 import com.heulwen.demo.dto.ApiDto;
 import com.heulwen.demo.dto.AuthenticateDto;
 import com.heulwen.demo.dto.UserDto;
+import com.heulwen.demo.form.ChangePasswordFirstTimeForm;
+import com.heulwen.demo.form.ChangePasswordForm;
 import com.heulwen.demo.form.LoginForm;
 import com.heulwen.demo.form.UserCreateForm;
 import com.heulwen.demo.service.AuthService;
@@ -27,6 +29,7 @@ public class AuthenticationController {
     public ApiDto<AuthenticateDto> login(@RequestBody LoginForm form) {
         return ApiDto.<AuthenticateDto>builder()
                 .code(1000)
+                .message("Login successful")
                 .result(authService.login(form))
                 .build();
     }
@@ -35,6 +38,7 @@ public class AuthenticationController {
     public  ApiDto<UserDto> register(@RequestBody @Valid UserCreateForm form) {
         return ApiDto.<UserDto>builder()
                 .code(1000)
+                .message("Register successful")
                 .result(userService.createUser(form))
                 .build();
     }
@@ -44,6 +48,7 @@ public class AuthenticationController {
         String result = userService.verifyEmailLink(token);
         return ApiDto.<String>builder()
                 .code(1000)
+                .message("Verify email link successful")
                 .result(result)
                 .build();
     }
@@ -53,6 +58,7 @@ public class AuthenticationController {
         userService.resendVerification(email);
         return ApiDto.<String>builder()
                 .code(1000)
+                .message("Resend verification successful")
                 .result("OTP and verification link have been resent.")
                 .build();
     }
@@ -62,7 +68,7 @@ public class AuthenticationController {
         authService.logout(authHeader);
         return ApiDto.<String>builder()
                 .code(1000)
-                .result("Logout successful.")
+                .message("Logout successful")
                 .build();
     }
 
@@ -70,7 +76,35 @@ public class AuthenticationController {
     public ApiDto<AuthenticateDto> refreshToken(@RequestHeader("Authorization") String authHeader) {
         return ApiDto.<AuthenticateDto>builder()
                 .code(1000)
+                .message("Refresh token successful")
                 .result(authService.refreshToken(authHeader))
+                .build();
+    }
+
+    @PostMapping("/forgot-password")
+    public ApiDto<String> forgotPassword(@RequestParam String email) {
+        authService.forgotPassword(email);
+        return ApiDto.<String>builder()
+                .code(1000)
+                .message("A temporary password has been sent via email.")
+                .build();
+    }
+
+    @PostMapping("/reset-password")
+    public ApiDto<AuthenticateDto> resetPassword(@RequestBody ChangePasswordFirstTimeForm form){
+        return ApiDto.<AuthenticateDto>builder()
+                .code(1000)
+                .message("Reset password successful")
+                .result(authService.changePasswordFirstTime(form))
+                .build();
+    }
+
+    @PostMapping("/change-password")
+    public ApiDto<UserDto> changePassword(@RequestHeader("Authorization") String authHeader, @RequestBody ChangePasswordForm form){
+        return ApiDto.<UserDto>builder()
+                .code(1000)
+                .message("Change password successful")
+                .result(userService.changePassword(authHeader, form))
                 .build();
     }
 }

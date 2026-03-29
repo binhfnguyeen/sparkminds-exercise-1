@@ -20,6 +20,8 @@ public enum ErrorCode {
     USER_EXISTED(10014, "The user already existed.", HttpStatus.BAD_REQUEST),
     REFRESH_TOKEN_INVALID(10015, "Refresh token is invalid.", HttpStatus.BAD_REQUEST),
     INCORRECT_FORMAT_TOKEN(10016, "Incorrect format token.", HttpStatus.BAD_REQUEST),
+    REQUIRE_PASSWORD_CHANGE(1017, "You must change your password before logging in.", HttpStatus.FORBIDDEN),
+    NO_PASSWORD_CHANGE_REQUIRED(1018, "This account does not require a mandatory password change.", HttpStatus.FORBIDDEN),
     ;
 
     private final int code;

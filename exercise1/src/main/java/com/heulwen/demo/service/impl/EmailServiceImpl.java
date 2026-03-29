@@ -27,4 +27,14 @@ public class EmailServiceImpl implements EmailService {
                 "OTP và Link có hiệu lực trong 5 phút.");
         mailSender.send(message);
     }
+
+    @Override
+    public void sendNewPasswordEmail(String to, String newPassword) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Cấp lại mật khẩu tài khoản");
+        message.setText("Xin chào,\n\nMật khẩu tạm thời của bạn là: " + newPassword +
+                "\n\nVui lòng đăng nhập và đổi mật khẩu ngay trong lần đăng nhập đầu tiên để bảo mật tài khoản.");
+        mailSender.send(message);
+    }
 }

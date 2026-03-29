@@ -51,6 +51,9 @@ public class User {
     @Column(name = "status", nullable = false)
     UserStatus status;
 
+    @Column(name = "requires_password_change")
+    boolean requiresPasswordChange;
+
     @Column(name = "failed_attempt")
     int failedAttempt;
 
