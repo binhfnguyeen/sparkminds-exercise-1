@@ -27,12 +27,6 @@ public class TokenRedisServiceImpl implements TokenRedisService {
     }
 
     @Override
-    public boolean isAccessTokenBlacklisted(String accessToken) {
-        String key = "blacklist:" + accessToken;
-        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
-    }
-
-    @Override
     public void saveRefreshToken(String email, String refreshToken, long durationInDays) {
         String key = "RT:" + email;
         redisTemplate.opsForValue().set(key, refreshToken, Duration.ofDays(durationInDays));

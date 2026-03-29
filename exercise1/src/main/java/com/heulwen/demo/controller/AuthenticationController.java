@@ -1,0 +1,66 @@
+package com.heulwen.demo.controller;
+
+import com.heulwen.demo.dto.ApiDto;
+import com.heulwen.demo.dto.AuthenticateDto;
+import com.heulwen.demo.dto.UserDto;
+import com.heulwen.demo.form.LoginForm;
+import com.heulwen.demo.form.UserCreateForm;
+import com.heulwen.demo.form.VerifyEmailForm;
+import com.heulwen.demo.service.AuthService;
+import com.heulwen.demo.service.UserService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
+public class AuthenticationController {
+    AuthService authService;
+    UserService userService;
+
+    @PostMapping("/login")
+    public ApiDto<AuthenticateDto> login(@RequestBody LoginForm form) {
+        return ApiDto.<AuthenticateDto>builder()
+                .code(1000)
+                .result(authService.login(form))
+                .build();
+    }
+
+    @PostMapping("/register")
+    public  ApiDto<UserDto> register(@RequestBody UserCreateForm form) {
+        return ApiDto.<UserDto>builder()
+                .code(1000)
+                .result(userService.createUser(form))
+                .build();
+    }
+
+    @PostMapping("/verify-email")
+    public ApiDto<UserDto> verifyEmail(@RequestBody VerifyEmailForm form) {
+        return ApiDto.<UserDto>builder()
+                .code(1000)
+                .result(userService.verifyEmailOtp(form))
+                .build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String authHeader) {
+        authService.logout(authHeader);
+        return ResponseEntity.ok(Map.of("message", "Logout successful."));
+    }
+
+    @PostMapping("/refresh-token")
+    public ApiDto<AuthenticateDto> refreshToken(@RequestHeader("Authorization") String authHeader) {
+        return ApiDto.<AuthenticateDto>builder()
+                .code(1000)
+                .result(authService.refreshToken(authHeader))
+                .build();
+    }
+}

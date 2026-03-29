@@ -5,4 +5,6 @@ import com.heulwen.demo.form.LoginForm;
 
 public interface AuthService {
     AuthenticateDto login(LoginForm form);
+    void logout(String accessToken);
+    AuthenticateDto refreshToken(String refreshToken);
 }
