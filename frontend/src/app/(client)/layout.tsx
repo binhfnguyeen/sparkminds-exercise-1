@@ -1,5 +1,5 @@
-import Header from "@/shared/components/Footer";
-import Footer from "@/shared/components/Header";
+import Header from "@/shared/components/Header";
+import Footer from "@/shared/components/Footer";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
     return (

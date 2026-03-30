@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import {redirectAfterLogin, setAuthCookies} from "@/features/auth/actions/auth.action";
 import {authService} from "@/features/auth/services/auth.services";
+import Link from "next/link";
 
 export default function LoginForm(){
     const [email, setEmail] = useState('');
@@ -57,71 +58,101 @@ export default function LoginForm(){
     };
 
     return (
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
-            <h2 className="text-2xl font-bold text-center">
-                {isMfaStep ? 'Xác thực 2 bước (MFA)' : 'Đăng Nhập'}
-            </h2>
+        <div className="w-full max-w-md p-8 sm:p-10 bg-white shadow-2xl rounded-3xl border border-gray-100">
 
-            {error && <div className="p-3 text-sm text-red-500 bg-red-100 rounded">{error}</div>}
+            <div className="mb-8 text-center">
+                <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                    {isMfaStep ? 'Xác thực 2 bước' : 'Chào mừng trở lại'}
+                </h2>
+                <p className="mt-2 text-sm text-gray-500">
+                    {isMfaStep ? 'Bảo vệ tài khoản của bạn với mã OTP' : 'Đăng nhập để tiếp tục truy cập hệ thống'}
+                </p>
+            </div>
+
+            {error && (
+                <div className="p-4 mb-6 text-sm text-red-700 bg-red-50 border-l-4 border-red-500 rounded-r-lg" role="alert">
+                    <p className="font-medium">Lỗi đăng nhập!</p>
+                    <p>{error}</p>
+                </div>
+            )}
 
             {!isMfaStep ? (
-                <form onSubmit={handleLoginSubmit} className="space-y-4">
+                <form onSubmit={handleLoginSubmit} className="space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Email của bạn</label>
                         <input
                             type="email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded focus:ring focus:ring-blue-200"
+                            className="w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                            placeholder="name@example.com"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Mật khẩu</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Mật khẩu</label>
                         <input
                             type="password"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-2 mt-1 border rounded focus:ring focus:ring-blue-200"
+                            className="w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                            placeholder="••••••••"
                         />
                     </div>
+
+                    <div className="flex items-center justify-between text-sm">
+                        <label className="flex items-center text-gray-600 cursor-pointer">
+                            <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                            <span className="ml-2">Ghi nhớ tôi</span>
+                        </label>
+                        <Link href="/client/forgot-password" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                            Quên mật khẩu?
+                        </Link>
+                    </div>
+
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full p-2 text-white bg-blue-600 rounded hover:bg-blue-700 disabled:bg-blue-300"
+                        className="w-full py-3.5 px-4 mt-4 font-bold text-white transition-all bg-blue-600 rounded-xl hover:bg-blue-700 hover:shadow-lg disabled:bg-blue-300 disabled:cursor-not-allowed focus:ring-4 focus:ring-blue-200"
                     >
-                        {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+                        {loading ? 'Đang xử lý...' : 'Đăng nhập hệ thống'}
                     </button>
                 </form>
             ) : (
-                <form onSubmit={handleMfaSubmit} className="space-y-4">
-                    <p className="text-sm text-gray-600">Vui lòng nhập mã 6 số từ ứng dụng Google Authenticator.</p>
+                <form onSubmit={handleMfaSubmit} className="space-y-6">
+                    <div className="bg-blue-50 p-4 rounded-xl text-center">
+                        <p className="text-sm text-blue-800">
+                            Mở ứng dụng <strong>Google Authenticator</strong> trên điện thoại và nhập mã 6 số để tiếp tục.
+                        </p>
+                    </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Mã OTP</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2 text-center">Mã bảo mật (OTP)</label>
                         <input
                             type="text"
                             required
                             maxLength={6}
                             value={otp}
-                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))} // Chỉ cho phép nhập số
-                            className="w-full p-2 mt-1 text-center tracking-widest border rounded focus:ring focus:ring-blue-200"
-                            placeholder="123456"
+                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                            className="w-full px-4 py-4 text-3xl font-bold tracking-[0.5em] text-center text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                            placeholder="------"
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={loading || otp.length !== 6}
-                        className="w-full p-2 text-white bg-blue-600 rounded hover:bg-blue-700 disabled:bg-blue-300"
+                        className="w-full py-3.5 px-4 font-bold text-white transition-all bg-green-600 rounded-xl hover:bg-green-700 hover:shadow-lg disabled:bg-green-300 disabled:cursor-not-allowed focus:ring-4 focus:ring-green-200"
                     >
-                        {loading ? 'Đang xác thực...' : 'Xác thực'}
+                        {loading ? 'Đang xác thực...' : 'Xác thực bảo mật'}
                     </button>
+
                     <button
                         type="button"
                         onClick={() => setIsMfaStep(false)}
-                        className="w-full p-2 text-sm text-gray-600 hover:underline"
+                        className="w-full py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
                     >
-                        Quay lại đăng nhập
+                        &larr; Quay lại đăng nhập
                     </button>
                 </form>
             )}
