@@ -8,10 +8,7 @@ import com.heulwen.demo.form.LoginForm;
 import com.heulwen.demo.model.User;
 import com.heulwen.demo.model.enumType.UserStatus;
 import com.heulwen.demo.repository.UserRepository;
-import com.heulwen.demo.service.AuthService;
-import com.heulwen.demo.service.EmailService;
-import com.heulwen.demo.service.JwtService;
-import com.heulwen.demo.service.TokenRedisService;
+import com.heulwen.demo.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -35,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
     JwtService jwtService;
     TokenRedisService tokenRedisService;
     EmailService emailService;
+    MfaService mfaService;
 
     @Override
     @Transactional(noRollbackFor = AppException.class)
@@ -71,6 +69,13 @@ public class AuthServiceImpl implements AuthService {
             user.setLockTime(null);
             user.setUpdatedAt(LocalDateTime.now());
             userRepository.save(user);
+        }
+
+        if (user.isMfaEnabled()) {
+            return AuthenticateDto.builder()
+                    .mfaRequired(true)
+                    .email(user.getEmail())
+                    .build();
         }
 
         if (user.isRequiresPasswordChange()) {
@@ -170,6 +175,26 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(form.getNewPassword()));
         user.setRequiresPasswordChange(false);
         userRepository.save(user);
+
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        tokenRedisService.saveRefreshToken(user.getEmail(), refreshToken, 7);
+
+        return AuthenticateDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Override
+    public AuthenticateDto verifyMfaLogin(String email, int code) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        boolean isValid = mfaService.verifyCode(user.getMfaSecret(), code);
+        if (!isValid) {
+            throw new AppException(ErrorCode.OTP_INVALID);
+        }
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);

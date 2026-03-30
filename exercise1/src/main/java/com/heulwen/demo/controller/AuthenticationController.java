@@ -5,6 +5,8 @@ import com.heulwen.demo.dto.AuthenticateDto;
 import com.heulwen.demo.dto.UserDto;
 import com.heulwen.demo.form.*;
 import com.heulwen.demo.service.AuthService;
+import com.heulwen.demo.service.JwtService;
+import com.heulwen.demo.service.MfaService;
 import com.heulwen.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/api")
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     AuthService authService;
     UserService userService;
+    private final JwtService jwtService;
+    private final MfaService mfaService;
 
     @PostMapping("/login")
     public ApiDto<AuthenticateDto> login(@RequestBody LoginForm form) {
@@ -129,6 +135,33 @@ public class AuthenticationController {
                 .code(1000)
                 .message("Change email successful")
                 .result(userService.changeMail(authHeader, form))
+                .build();
+    }
+
+    @PostMapping("/mfa/setup")
+    public ApiDto<String> setupMfa(@RequestHeader("Authorization") String authHeader) {
+        return ApiDto.<String>builder()
+                .code(1000)
+                .message("Scan this code using Google Authenticator.")
+                .result(mfaService.setupMfa(authHeader))
+                .build();
+    }
+
+    @PostMapping("/mfa/enable")
+    public ApiDto<String> enableMfa(@RequestHeader("Authorization") String authHeader, @RequestParam int code) {
+        return ApiDto.<String>builder()
+                .code(1000)
+                .message("Enable MFA successful")
+                .result(mfaService.enableMfa(authHeader, code))
+                .build();
+    }
+
+    @PostMapping("/login/mfa-verify")
+    public ApiDto<AuthenticateDto> verifyMfaLogin(@RequestParam String email, @RequestParam int code){
+        return ApiDto.<AuthenticateDto>builder()
+                .code(1000)
+                .message("MFA Verification successful")
+                .result(authService.verifyMfaLogin(email, code))
                 .build();
     }
 }

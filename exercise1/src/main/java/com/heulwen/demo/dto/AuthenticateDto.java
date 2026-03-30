@@ -11,4 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class AuthenticateDto {
     String accessToken;
     String refreshToken;
+    boolean mfaRequired;
+    String email;
 }

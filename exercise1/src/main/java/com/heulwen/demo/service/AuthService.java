@@ -11,4 +11,5 @@ public interface AuthService {
     AuthenticateDto refreshToken(String refreshToken);
     void forgotPassword(String email);
     AuthenticateDto changePasswordFirstTime(ChangePasswordFirstTimeForm form);
+    AuthenticateDto verifyMfaLogin(String email, int code);
 }
