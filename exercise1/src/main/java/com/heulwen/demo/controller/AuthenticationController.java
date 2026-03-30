@@ -3,10 +3,7 @@ package com.heulwen.demo.controller;
 import com.heulwen.demo.dto.ApiDto;
 import com.heulwen.demo.dto.AuthenticateDto;
 import com.heulwen.demo.dto.UserDto;
-import com.heulwen.demo.form.ChangePasswordFirstTimeForm;
-import com.heulwen.demo.form.ChangePasswordForm;
-import com.heulwen.demo.form.LoginForm;
-import com.heulwen.demo.form.UserCreateForm;
+import com.heulwen.demo.form.*;
 import com.heulwen.demo.service.AuthService;
 import com.heulwen.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -105,6 +102,33 @@ public class AuthenticationController {
                 .code(1000)
                 .message("Change password successful")
                 .result(userService.changePassword(authHeader, form))
+                .build();
+    }
+
+    @PostMapping("/change-phone")
+    public ApiDto<UserDto> changePhone(@RequestHeader("Authorization") String authHeader, @RequestBody @Valid ChangePhoneForm form){
+        return ApiDto.<UserDto>builder()
+                .code(1000)
+                .message("Change phone successful")
+                .result(userService.changePhone(authHeader, form))
+                .build();
+    }
+
+    @PostMapping("/send-otp-change-mail")
+    public ApiDto<String> sendOtpChangeMail(@RequestHeader("Authorization") String authHeader){
+        userService.sendMailOtp(authHeader);
+        return ApiDto.<String>builder()
+                .code(1000)
+                .message("Send OTP successful")
+                .build();
+    }
+
+    @PostMapping("/change-mail")
+    public ApiDto<UserDto> changeMail(@RequestHeader("Authorization") String authHeader, @RequestBody @Valid ChangeMailForm form){
+        return ApiDto.<UserDto>builder()
+                .code(1000)
+                .message("Change email successful")
+                .result(userService.changeMail(authHeader, form))
                 .build();
     }
 }

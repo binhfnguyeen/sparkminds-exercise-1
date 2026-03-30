@@ -37,4 +37,14 @@ public class EmailServiceImpl implements EmailService {
                 "\n\nVui lòng đăng nhập và đổi mật khẩu ngay trong lần đăng nhập đầu tiên để bảo mật tài khoản.");
         mailSender.send(message);
     }
+
+    @Override
+    public void sendOtpChangeMail(String to, String otp) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Xác thực thay đổi email");
+        message.setText("Xin chào,\n\n" +
+                "Mã OTP của bạn là: " + otp + "\n");
+        mailSender.send(message);
+    }
 }

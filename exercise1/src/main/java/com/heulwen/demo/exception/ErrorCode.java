@@ -22,6 +22,9 @@ public enum ErrorCode {
     INCORRECT_FORMAT_TOKEN(10016, "Incorrect format token.", HttpStatus.BAD_REQUEST),
     REQUIRE_PASSWORD_CHANGE(1017, "You must change your password before logging in.", HttpStatus.FORBIDDEN),
     NO_PASSWORD_CHANGE_REQUIRED(1018, "This account does not require a mandatory password change.", HttpStatus.FORBIDDEN),
+    SAME_PHONE(1019, "The old and new phone numbers are the same.", HttpStatus.BAD_REQUEST),
+    SAME_EMAIL(1020, "The old and new emails are the same.", HttpStatus.BAD_REQUEST),
+    OTP_INVALID(1021, "Invalid OTP.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

@@ -1,6 +1,7 @@
 package com.heulwen.demo.service;
 
 import com.heulwen.demo.dto.AuthenticateDto;
+import com.heulwen.demo.dto.UserDto;
 import com.heulwen.demo.form.ChangePasswordFirstTimeForm;
 import com.heulwen.demo.form.LoginForm;
 

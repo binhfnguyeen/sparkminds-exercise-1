@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     PasswordEncoder passwordEncoder;
     JwtService jwtService;
     TokenRedisService tokenRedisService;
-    private final EmailService emailService;
+    EmailService emailService;
 
     @Override
     @Transactional(noRollbackFor = AppException.class)

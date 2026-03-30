@@ -3,9 +3,10 @@ package com.heulwen.demo.service.impl;
 import com.heulwen.demo.dto.UserDto;
 import com.heulwen.demo.exception.AppException;
 import com.heulwen.demo.exception.ErrorCode;
+import com.heulwen.demo.form.ChangeMailForm;
 import com.heulwen.demo.form.ChangePasswordForm;
+import com.heulwen.demo.form.ChangePhoneForm;
 import com.heulwen.demo.form.UserCreateForm;
-import com.heulwen.demo.form.VerifyEmailForm;
 import com.heulwen.demo.mapper.UserMapper;
 import com.heulwen.demo.model.User;
 import com.heulwen.demo.model.VerificationToken;
@@ -15,6 +16,7 @@ import com.heulwen.demo.repository.UserRepository;
 import com.heulwen.demo.repository.VerificationTokenRepository;
 import com.heulwen.demo.service.EmailService;
 import com.heulwen.demo.service.JwtService;
+import com.heulwen.demo.service.TokenRedisService;
 import com.heulwen.demo.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +38,11 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
-    VerificationTokenRepository  verificationTokenRepository;
+    VerificationTokenRepository verificationTokenRepository;
     PasswordEncoder passwordEncoder;
     EmailService emailService;
     JwtService jwtService;
+    private final TokenRedisService tokenRedisService;
 
     @Override
     @Transactional
@@ -52,11 +55,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
 
-        sendVerification(savedUser);
+        sendVerification(savedUser, VerificationType.EMAIL_VERIFICATION_OTP, VerificationType.EMAIL_VERIFICATION_LINK);
 
         log.info("User account created successfully. Verification OTP sent to: {}", savedUser.getEmail());
 
-        return UserMapper.map(userRepository.save(user));
+        return UserMapper.map(savedUser);
     }
 
     @Override
@@ -105,7 +108,7 @@ public class UserServiceImpl implements UserService {
         oldTokens.forEach(t -> t.setExpiryDate(LocalDateTime.now()));
         verificationTokenRepository.saveAll(oldTokens);
 
-        sendVerification(user);
+        sendVerification(user, VerificationType.EMAIL_VERIFICATION_OTP, VerificationType.EMAIL_VERIFICATION_LINK);
     }
 
     @Override
@@ -120,6 +123,7 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findUserByEmail(email)
                     .orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
 
+            tokenRedisService.deleteRefreshToken(email);
             if (!passwordEncoder.matches(form.getOldPassword(), user.getPassword())) {
                 throw new AppException(ErrorCode.INVALID_PASSWORD);
             }
@@ -132,20 +136,111 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void sendVerification(User user) {
+    @Override
+    public UserDto changePhone(String token, ChangePhoneForm form) {
+        try {
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            String email = jwtService.extractEmail(token);
+            User user = userRepository.findUserByEmail(email)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+            if (form.getPhone().equals(user.getPhone())) {
+                throw new AppException(ErrorCode.SAME_PHONE);
+            }
+
+            user.setPhone(form.getPhone());
+            return UserMapper.map(userRepository.save(user));
+        } catch (ParseException e) {
+            throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
+        }
+    }
+
+    @Override
+    public void sendMailOtp(String token) {
+        try {
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            String email = jwtService.extractEmail(token);
+            User user = userRepository.findUserByEmail(email)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+            sendVerification(user, VerificationType.CHANGE_EMAIL_OTP);
+
+        } catch (ParseException e){
+            throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
+        }
+    }
+
+    @Override
+    public UserDto changeMail(String token, ChangeMailForm form) {
+        try {
+            String actualToken = token;
+            if (actualToken != null && actualToken.startsWith("Bearer ")) {
+                actualToken = actualToken.substring(7);
+            }
+
+            String currentEmail = jwtService.extractEmail(actualToken);
+            User user = userRepository.findUserByEmail(currentEmail)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+            if (currentEmail.equals(form.getNewEmail())){
+                throw new AppException(ErrorCode.SAME_EMAIL);
+            }
+
+            if (userRepository.existsByEmail(form.getNewEmail())) {
+                throw new AppException(ErrorCode.USER_EXISTED);
+            }
+
+            VerificationToken verificationToken = verificationTokenRepository
+                    .findByTokenAndUserAndType(form.getOtp(), user, VerificationType.CHANGE_EMAIL_OTP)
+                    .orElseThrow(() -> new AppException(ErrorCode.OTP_INVALID));
+
+            if (verificationToken.isUsed()){
+                throw new AppException(ErrorCode.OTP_USED);
+            }
+
+            if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+                throw new AppException(ErrorCode.OTP_EXPIRED);
+            }
+
+            verificationToken.setUsed(true);
+            verificationTokenRepository.save(verificationToken);
+
+            user.setEmail(form.getNewEmail());
+            User updatedUser = userRepository.save(user);
+
+            tokenRedisService.deleteRefreshToken(currentEmail);
+
+            long remainingTime = jwtService.getRemainingTimeInSeconds(actualToken);
+            if (remainingTime > 0){
+                tokenRedisService.blacklistAccessToken(actualToken, remainingTime);
+            }
+
+            return UserMapper.map(updatedUser);
+        } catch (ParseException e){
+            throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
+        }
+    }
+
+    private void sendVerification(User user, VerificationType otpType, VerificationType linkType) {
         String otp = String.valueOf(100000 + new SecureRandom().nextInt(900000));
         String linkToken = UUID.randomUUID().toString();
 
         VerificationToken otpEntity = new VerificationToken();
         otpEntity.setToken(otp);
-        otpEntity.setType(VerificationType.EMAIL_VERIFICATION_OTP);
+        otpEntity.setType(otpType);
         otpEntity.setExpiryDate(LocalDateTime.now().plusMinutes(5));
         otpEntity.setUsed(false);
         otpEntity.setUser(user);
 
         VerificationToken linkEntity = new VerificationToken();
         linkEntity.setToken(linkToken);
-        linkEntity.setType(VerificationType.EMAIL_VERIFICATION_LINK);
+        linkEntity.setType(linkType);
         linkEntity.setExpiryDate(LocalDateTime.now().plusMinutes(5));
         linkEntity.setUsed(false);
         linkEntity.setUser(user);
@@ -155,5 +250,19 @@ public class UserServiceImpl implements UserService {
         String verifyLink = "http://localhost:8081/api/verify-email-link?token=" + linkToken;
 
         emailService.sendOtpEmail(user.getEmail(), otp, verifyLink);
+    }
+
+    private void sendVerification(User user, VerificationType otpType){
+        String otp = String.valueOf(100000 + new SecureRandom().nextInt(900000));
+
+        VerificationToken otpEntity = new VerificationToken();
+        otpEntity.setToken(otp);
+        otpEntity.setType(otpType);
+        otpEntity.setExpiryDate(LocalDateTime.now().plusMinutes(5));
+        otpEntity.setUsed(false);
+        otpEntity.setUser(user);
+
+        verificationTokenRepository.save(otpEntity);
+        emailService.sendOtpChangeMail(user.getEmail(), otp);
     }
 }
