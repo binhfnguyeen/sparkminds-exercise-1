@@ -88,6 +88,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void logout(String accessToken) {
         try {
             if (accessToken != null && accessToken.startsWith("Bearer ")) {
@@ -109,6 +110,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AuthenticateDto refreshToken(String refreshToken) {
         try {
             if (refreshToken != null && refreshToken.startsWith("Bearer ")) {
@@ -136,6 +138,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public void forgotPassword(String email) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -151,6 +154,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public AuthenticateDto changePasswordFirstTime(ChangePasswordFirstTimeForm form) {
         User user = userRepository.findUserByEmail(form.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

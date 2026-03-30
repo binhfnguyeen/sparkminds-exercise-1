@@ -3,6 +3,7 @@ package com.heulwen.demo.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,7 +31,20 @@ public class SecurityConfig {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request
-                    -> request.anyRequest().permitAll()
+                    -> request.requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/verify-email-link").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/resend-verification").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/refresh-token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/logout").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/change-password").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/change-phone").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/send-otp-change-mail").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/change-mail").authenticated()
+                        .anyRequest().authenticated()
                 );
 
         httpSecurity.oauth2ResourceServer(oauth2

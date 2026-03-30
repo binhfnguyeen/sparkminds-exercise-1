@@ -25,6 +25,7 @@ public enum ErrorCode {
     SAME_PHONE(1019, "The old and new phone numbers are the same.", HttpStatus.BAD_REQUEST),
     SAME_EMAIL(1020, "The old and new emails are the same.", HttpStatus.BAD_REQUEST),
     OTP_INVALID(1021, "Invalid OTP.", HttpStatus.BAD_REQUEST),
+    PHONE_EXISTED(1022, "The phone already existed.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

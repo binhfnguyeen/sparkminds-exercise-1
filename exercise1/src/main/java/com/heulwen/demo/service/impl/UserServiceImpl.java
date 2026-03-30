@@ -51,6 +51,10 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
 
+        if (userRepository.existsByPhone(form.getPhone())) {
+            throw new AppException(ErrorCode.PHONE_EXISTED);
+        }
+
         User user = UserMapper.map(form);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
@@ -92,6 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void resendVerification(String email) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -112,6 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto changePassword(String token, ChangePasswordForm form) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -137,6 +143,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto changePhone(String token, ChangePhoneForm form) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -159,6 +166,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void sendMailOtp(String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -177,6 +185,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto changeMail(String token, ChangeMailForm form) {
         try {
             String actualToken = token;

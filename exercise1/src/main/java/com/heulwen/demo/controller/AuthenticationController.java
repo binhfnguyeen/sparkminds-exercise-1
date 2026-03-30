@@ -40,7 +40,7 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("/verify-email-link")
+    @GetMapping("/verify-email-link")
     public ApiDto<String> verifyEmailLink(@RequestParam("token") String token) {
         String result = userService.verifyEmailLink(token);
         return ApiDto.<String>builder()
