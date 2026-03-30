@@ -35,6 +35,9 @@ public class MfaServiceImpl implements MfaService {
             User user = userRepository.findUserByEmail(email)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
+            if (user.isMfaEnabled()) {
+                throw new AppException(ErrorCode.OTP_INVALID);
+            }
             String secret = generateSecret();
             user.setMfaSecret(secret);
             userRepository.save(user);

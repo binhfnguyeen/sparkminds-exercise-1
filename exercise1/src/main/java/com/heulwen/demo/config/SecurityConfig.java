@@ -39,13 +39,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/refresh-token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/reset-password").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/mfa/setup").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/mfa/enable").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/login/mfa-verify").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/logout").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-password").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-phone").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/send-otp-change-mail").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-mail").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/mfa/setup").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/mfa/enable").authenticated()
                         .anyRequest().authenticated()
                 );
 
