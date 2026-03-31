@@ -18,8 +18,12 @@ export const ForgotPasswordForm = () => {
         try {
             await authService.forgotPassword(email);
             setSuccess(true);
-        } catch (err: any) {
-            setError(err.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError('Đã xảy ra lỗi không xác định.');
+            }
         } finally {
             setLoading(false);
         }

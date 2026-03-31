@@ -36,3 +36,13 @@ export interface ResetPasswordForm {
     tempPassword: string;
     newPassword: string
 }
+
+export interface ChangePasswordForm {
+    oldPassword: string;
+    newPassword: string;
+}
+
+export interface ChangeMailForm {
+    otp: string;
+    newEmail: string;
+}

@@ -1,4 +1,11 @@
-import {ApiDto, AuthenticateDto, UserCreateForm, UserDto, ResetPasswordForm } from "@/shared/api/api";
+import {
+    ApiDto,
+    AuthenticateDto,
+    UserCreateForm,
+    UserDto,
+    ResetPasswordForm,
+    ChangePasswordForm, ChangeMailForm
+} from "@/shared/api/api";
 
 const API_BASE_URL = 'http://localhost:8081/api';
 
@@ -147,6 +154,44 @@ export const authService = {
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || 'Không thể gửi lại mã xác thực.');
+        }
+        return res.json();
+    },
+
+    async changePassword(token: string, data: ChangePasswordForm): Promise<ApiDto<UserDto>> {
+        const res = await fetch(`${API_BASE_URL}/change-password`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || "Đổi mật khẩu thất bại");
+        }
+        return res.json();
+    },
+
+    async sendChangeMailOtp(token: string): Promise<ApiDto<string>> {
+        const res = await fetch(`${API_BASE_URL}/send-otp-change-mail`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || "Không thể gửi OTP đổi email");
+        }
+        return res.json();
+    },
+
+    async changeMail(token: string, data: ChangeMailForm): Promise<ApiDto<UserDto>> {
+        const res = await fetch(`${API_BASE_URL}/change-mail`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || "Đổi email thất bại");
         }
         return res.json();
     }

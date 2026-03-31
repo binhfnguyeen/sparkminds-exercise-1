@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {revalidatePath} from "next/cache";
 import {authService} from "@/features/auth/services/auth.services";
+import {ChangeMailForm, ChangePasswordForm} from "@/shared/api/api";
 
 const API_BASE_URL = 'http://localhost:8081/api';
 
@@ -73,4 +74,25 @@ export async function enableMfaAction(code: number) {
     if (!token) throw new Error("Chưa xác thực");
 
     return authService.enableMfa(token, code);
+}
+
+export async function changePasswordAction(data: ChangePasswordForm) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('accessToken')?.value;
+    if (!token) throw new Error("Chưa xác thực");
+    return authService.changePassword(token, data);
+}
+
+export async function sendChangeMailOtpAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('accessToken')?.value;
+    if (!token) throw new Error("Chưa xác thực");
+    return authService.sendChangeMailOtp(token);
+}
+
+export async function changeMailAction(data: ChangeMailForm) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('accessToken')?.value;
+    if (!token) throw new Error("Chưa xác thực");
+    return authService.changeMail(token, data);
 }

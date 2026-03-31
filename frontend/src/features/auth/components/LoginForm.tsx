@@ -59,7 +59,8 @@ export const LoginForm = () => {
     // 2. XỬ LÝ XÁC THỰC MFA OTP
     const handleMfaSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true); setError('');
+        setLoading(true);
+        setError('');
 
         try {
             // Giả định bạn đã có hàm verifyMfa trong auth.services.ts
