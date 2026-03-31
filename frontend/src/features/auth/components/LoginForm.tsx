@@ -4,8 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { authService } from '../services/auth.services';
 import { setAuthCookies, redirectAfterLogin } from '../actions/auth.action';
+import {useAuth} from "@/features/auth/context/AuthContext";
 
 export const LoginForm = () => {
+    const { login } = useAuth();
     // State đăng nhập cơ bản
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,7 +25,8 @@ export const LoginForm = () => {
     // 1. XỬ LÝ ĐĂNG NHẬP CHÍNH
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true); setError('');
+        setLoading(true);
+        setError('');
 
         try {
             const response = await authService.login(email, password);
@@ -31,6 +34,7 @@ export const LoginForm = () => {
                 setStep(1); // Chuyển sang nhập OTP
             } else if (response.result.accessToken && response.result.refreshToken) {
                 await setAuthCookies(response.result.accessToken, response.result.refreshToken);
+                login();
                 await redirectAfterLogin();
             }
         } catch (err: any) {
@@ -70,6 +74,7 @@ export const LoginForm = () => {
 
             if (response.result.accessToken) {
                 await setAuthCookies(response.result.accessToken, response.result.refreshToken!);
+                login();
                 await redirectAfterLogin();
             }
         } catch (err: any) {

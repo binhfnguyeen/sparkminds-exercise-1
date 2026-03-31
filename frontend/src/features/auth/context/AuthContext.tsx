@@ -1,9 +1,10 @@
 'use client';
-import {createContext, type ReactNode, useContext, useState} from "react";
+import {createContext, type ReactNode, useContext, useEffect, useState} from "react";
 import {logoutAction} from "@/features/auth/actions/auth.action";
 
 interface AuthContextType {
     isAuthenticated: boolean;
+    login: () => void;
     logout: () => Promise<void>
 }
 
@@ -18,13 +19,21 @@ export const AuthProvider = ({
 }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);
 
-    const logout = async () => {
+    useEffect(() => {
+        setIsAuthenticated(initialIsAuthenticated);
+    }, [initialIsAuthenticated]);
+
+    const login = () => {
         setIsAuthenticated(true);
+    }
+    const logout = async () => {
+        setIsAuthenticated(false);
         await logoutAction();
+        window.location.href = '/client/login'
     }
 
     return (
-      <AuthContext.Provider value={{ isAuthenticated, logout }}>
+      <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
           {children}
       </AuthContext.Provider>
     );

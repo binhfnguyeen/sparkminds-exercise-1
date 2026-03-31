@@ -35,7 +35,10 @@ export default function Header() {
                         </div>
                     ) : (
                         <>
-                            <Link href="/client/register" className="hidden px-5 py-2 text-sm font-semibold text-gray-700 transition-colors sm:block hover:text-blue-600">
+                            <Link
+                                href="/client/register"
+                                className="px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:text-blue-600"
+                            >
                                 Đăng ký
                             </Link>
                             <Link href="/client/login" className="px-5 py-2 text-sm font-semibold text-white transition-all duration-200 bg-blue-600 rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
