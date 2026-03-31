@@ -34,6 +34,7 @@ public class SecurityConfig {
                     -> request.requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/verify-email").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/verify-email-link").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/resend-verification").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/refresh-token").permitAll()

@@ -15,8 +15,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -25,8 +23,7 @@ import java.text.ParseException;
 public class AuthenticationController {
     AuthService authService;
     UserService userService;
-    private final JwtService jwtService;
-    private final MfaService mfaService;
+    MfaService mfaService;
 
     @PostMapping("/login")
     public ApiDto<AuthenticateDto> login(@RequestBody LoginForm form) {
@@ -43,6 +40,16 @@ public class AuthenticationController {
                 .code(1000)
                 .message("Register successful")
                 .result(userService.createUser(form))
+                .build();
+    }
+
+    @PostMapping("/verify-email")
+    public ApiDto<String> verifyEmailOtp(@RequestBody @Valid VerifyEmailForm form) {
+        userService.verifyEmailOtp(form);
+        return ApiDto.<String>builder()
+                .code(1000)
+                .message("Verify email OTP successful")
+                .result("Tài khoản của bạn đã được xác thực.")
                 .build();
     }
 

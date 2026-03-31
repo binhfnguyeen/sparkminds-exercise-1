@@ -80,6 +80,49 @@ export const authService = {
             return Promise.reject(errorData);
         }
         return res.json();
-    }
+    },
 
+    async verifyEmailOtp(email: string, otp: string): Promise<ApiDto<any>> {
+        const res = await fetch(`${API_BASE_URL}/verify-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp }),
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || 'Xác thực OTP thất bại. Vui lòng thử lại.');
+        }
+        return res.json();
+    },
+
+    async verifyEmailLink(token: string): Promise<ApiDto<string>> {
+        const res = await fetch(`${API_BASE_URL}/verify-email-link?token=${encodeURIComponent(token)}`, {
+            method: 'GET',
+        });
+
+        if (!res.ok) {
+            let errorMessage = 'Xác thực tài khoản thất bại hoặc link đã hết hạn.';
+            try {
+                const errorData = await res.json();
+                if (errorData.message) errorMessage = errorData.message;
+            } catch (e) {
+                errorMessage = `Lỗi hệ thống (Mã lỗi: ${res.status})`;
+            }
+            throw new Error(errorMessage);
+        }
+
+        return res.json();
+    },
+
+    async resendVerification(email: string): Promise<ApiDto<string>> {
+        const res = await fetch(`${API_BASE_URL}/resend-verification?email=${encodeURIComponent(email)}`, {
+            method: 'POST',
+        });
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || 'Không thể gửi lại mã xác thực.');
+        }
+        return res.json();
+    }
 }

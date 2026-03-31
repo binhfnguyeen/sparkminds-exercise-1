@@ -3,10 +3,7 @@ package com.heulwen.demo.service.impl;
 import com.heulwen.demo.dto.UserDto;
 import com.heulwen.demo.exception.AppException;
 import com.heulwen.demo.exception.ErrorCode;
-import com.heulwen.demo.form.ChangeMailForm;
-import com.heulwen.demo.form.ChangePasswordForm;
-import com.heulwen.demo.form.ChangePhoneForm;
-import com.heulwen.demo.form.UserCreateForm;
+import com.heulwen.demo.form.*;
 import com.heulwen.demo.mapper.UserMapper;
 import com.heulwen.demo.model.User;
 import com.heulwen.demo.model.VerificationToken;
@@ -68,6 +65,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public String verifyEmailOtp(VerifyEmailForm form) {
+        User user = userRepository.findUserByEmail(form.getEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        VerificationToken verificationToken = verificationTokenRepository
+                .findByTokenAndUserAndType(form.getOtp(), user, VerificationType.EMAIL_VERIFICATION_OTP)
+                .orElseThrow(() -> new AppException(ErrorCode.OTP_INVALID));
+
+        if (verificationToken.isUsed()) {
+            throw new AppException(ErrorCode.OTP_USED);
+        }
+
+        if (verificationToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new AppException(ErrorCode.OTP_EXPIRED);
+        }
+
+        return getString(verificationToken, user);
+    }
+
+    @Override
+    @Transactional
     public String verifyEmailLink(String token) {
         VerificationToken verificationToken = verificationTokenRepository
                 .findByTokenAndType(token, VerificationType.EMAIL_VERIFICATION_LINK)
@@ -82,17 +100,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = verificationToken.getUser();
-        if (UserStatus.ACTIVE.equals(user.getStatus())) {
-            throw new AppException(ErrorCode.ACCOUNT_VERIFIED);
-        }
-
-        verificationToken.setUsed(true);
-        verificationTokenRepository.save(verificationToken);
-
-        user.setStatus(UserStatus.ACTIVE);
-        userRepository.save(user);
-
-        return "Account verification successful!";
+        return getString(verificationToken, user);
     }
 
     @Override
@@ -256,7 +264,7 @@ public class UserServiceImpl implements UserService {
 
         verificationTokenRepository.saveAll(List.of(otpEntity, linkEntity));
 
-        String verifyLink = "http://localhost:8081/api/verify-email-link?token=" + linkToken;
+        String verifyLink = "http://localhost:3000/client/verify?token=" + linkToken;
 
         emailService.sendOtpEmail(user.getEmail(), otp, verifyLink);
     }
@@ -273,5 +281,19 @@ public class UserServiceImpl implements UserService {
 
         verificationTokenRepository.save(otpEntity);
         emailService.sendOtpChangeMail(user.getEmail(), otp);
+    }
+
+    private String getString(VerificationToken verificationToken, User user) {
+        if (UserStatus.ACTIVE.equals(user.getStatus())) {
+            throw new AppException(ErrorCode.ACCOUNT_VERIFIED);
+        }
+
+        verificationToken.setUsed(true);
+        verificationTokenRepository.save(verificationToken);
+
+        user.setStatus(UserStatus.ACTIVE);
+        userRepository.save(user);
+
+        return "Account verification successful!";
     }
 }

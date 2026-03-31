@@ -1,13 +1,11 @@
 package com.heulwen.demo.service;
 
 import com.heulwen.demo.dto.UserDto;
-import com.heulwen.demo.form.ChangeMailForm;
-import com.heulwen.demo.form.ChangePasswordForm;
-import com.heulwen.demo.form.ChangePhoneForm;
-import com.heulwen.demo.form.UserCreateForm;
+import com.heulwen.demo.form.*;
 
 public interface UserService {
     UserDto createUser(UserCreateForm form);
+    String verifyEmailOtp(VerifyEmailForm form);
     String verifyEmailLink(String token);
     void resendVerification(String email);
     UserDto changePassword(String email, ChangePasswordForm form);
