@@ -12,7 +12,7 @@ export const authService = {
 
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || 'Login failed');
+            return Promise.reject(errorData);
         }
         return res.json();
     },
@@ -59,12 +59,12 @@ export const authService = {
 
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || 'Không thể gửi yêu cầu. Vui lòng thử lại.');
+            return Promise.reject(errorData);
         }
         return res.json();
     },
 
-    async resetPassword({ email, tempPassword, newPassword }: ResetPasswordForm): Promise<ApiDto<AuthenticateDto>> {
+    async changePasswordFirstTime({ email, tempPassword, newPassword }: ResetPasswordForm): Promise<ApiDto<AuthenticateDto>> {
         const res = await fetch(`${API_BASE_URL}/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -77,7 +77,7 @@ export const authService = {
 
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.message || 'Đổi mật khẩu thất bại. Vui lòng kiểm tra lại mã tạm thời.');
+            return Promise.reject(errorData);
         }
         return res.json();
     }
