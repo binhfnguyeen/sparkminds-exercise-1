@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import { authService } from '../services/auth.services';
 import { setAuthCookies, redirectAfterLogin } from '../actions/auth.action';
@@ -21,6 +21,14 @@ export const LoginForm = () => {
     const [step, setStep] = useState<0 | 1 | 2>(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        const savedMfaEmail = localStorage.getItem('savedMfaEmail');
+        if (savedMfaEmail) {
+            setEmail(savedMfaEmail);
+            setStep(1); // Chuyển thẳng tới bước nhập OTP
+        }
+    }, []);
 
     // 1. XỬ LÝ ĐĂNG NHẬP CHÍNH
     const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -49,9 +57,29 @@ export const LoginForm = () => {
         }
     };
 
-    // 2. XỬ LÝ XÁC THỰC MFA OTP (Giữ nguyên)
+    // 2. XỬ LÝ XÁC THỰC MFA OTP
     const handleMfaSubmit = async (e: React.FormEvent) => {
-        // ... (giữ nguyên code cũ của bạn) ...
+        e.preventDefault();
+        setLoading(true); setError('');
+
+        try {
+            // Giả định bạn đã có hàm verifyMfa trong auth.services.ts
+            const response = await authService.verifyMfa(email, Number(otp));
+
+            if (response.result.accessToken && response.result.refreshToken) {
+
+                // Ghi nhớ thiết bị/trình duyệt này cho lần đăng nhập sau
+                localStorage.setItem('savedMfaEmail', email);
+
+                await setAuthCookies(response.result.accessToken, response.result.refreshToken);
+                login();
+                await redirectAfterLogin();
+            }
+        } catch (err: any) {
+            setError(err.message || 'Mã xác thực không hợp lệ.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     // 3. XỬ LÝ ÉP BUỘC ĐỔI MẬT KHẨU LẦN ĐẦU (Hoặc sau khi reset)
@@ -108,7 +136,6 @@ export const LoginForm = () => {
             {/* RENDER FORM 0: ĐĂNG NHẬP */}
             {step === 0 && (
                 <form onSubmit={handleLoginSubmit} className="space-y-5">
-                    {/* Giữ nguyên các thẻ input email, password của bạn ở đây... */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Email của bạn</label>
                         <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
@@ -132,13 +159,50 @@ export const LoginForm = () => {
                 </form>
             )}
 
-            {/* RENDER FORM 1: OTP (Giữ nguyên của bạn) */}
+            {/* RENDER FORM 1: OTP */}
             {step === 1 && (
-                // ... giữ nguyên html OTP
-                <></>
+                <form onSubmit={handleMfaSubmit} className="space-y-6">
+                    <div className="bg-blue-50 p-4 rounded-xl text-center">
+                        <p className="text-sm text-blue-800">
+                            Xin chào <strong>{email}</strong>!
+                        </p>
+                        <p className="text-xs text-blue-600 mt-1">
+                            Mở ứng dụng Google Authenticator và nhập mã để tiếp tục.
+                        </p>
+                    </div>
+
+                    <div>
+                        <input
+                            type="text" required maxLength={6} value={otp}
+                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                            className="w-full px-4 py-4 text-3xl font-bold tracking-[0.5em] text-center text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all outline-none"
+                            placeholder="------"
+                        />
+                    </div>
+
+                    <button
+                        type="submit" disabled={loading || otp.length !== 6}
+                        className="w-full py-3.5 px-4 font-bold text-white transition-all bg-blue-600 rounded-xl hover:bg-blue-700 disabled:bg-blue-300"
+                    >
+                        {loading ? 'Đang xác thực...' : 'Đăng nhập hệ thống'}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                            localStorage.removeItem('savedMfaEmail');
+                            setEmail('');
+                            setOtp('');
+                            setStep(0);
+                        }}
+                        className="w-full py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
+                    >
+                        Đăng nhập bằng mật khẩu / Tài khoản khác
+                    </button>
+                </form>
             )}
 
-            {/* RENDER FORM 2: BẮT BUỘC ĐỔI MẬT KHẨU (1017) */}
+            {/* RENDER FORM 2: BẮT BUỘC ĐỔI MẬT KHẨU */}
             {step === 2 && (
                 <form onSubmit={handleForceChangeSubmit} className="space-y-5">
                     <div>
