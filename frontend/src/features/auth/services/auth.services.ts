@@ -30,6 +30,31 @@ export const authService = {
         return res.json();
     },
 
+    async setupMfa(token: string): Promise<ApiDto<string>> {
+        const res = await fetch(`${API_BASE_URL}/mfa/setup`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!res.ok) throw new Error("Lỗi khi lấy mã MFA");
+        return res.json();
+    },
+
+    async enableMfa(token: string, code: number): Promise<ApiDto<string>> {
+        const res = await fetch(`${API_BASE_URL}/mfa/enable?code=${code}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || "Mã OTP không hợp lệ");
+        }
+        return res.json();
+    },
+
     async register(
         { email, password, phone, firstName, lastName } : UserCreateForm
     ): Promise<ApiDto<UserDto>> {

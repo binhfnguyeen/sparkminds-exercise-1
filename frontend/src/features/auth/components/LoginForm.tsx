@@ -26,7 +26,7 @@ export const LoginForm = () => {
         const savedMfaEmail = localStorage.getItem('savedMfaEmail');
         if (savedMfaEmail) {
             setEmail(savedMfaEmail);
-            setStep(1); // Chuyển thẳng tới bước nhập OTP
+            setStep(1);
         }
     }, []);
 
@@ -46,9 +46,8 @@ export const LoginForm = () => {
                 await redirectAfterLogin();
             }
         } catch (err: any) {
-            // BẮT MÃ LỖI 1017: TÀI KHOẢN YÊU CẦU ĐỔI MẬT KHẨU (Do đang dùng mật khẩu tạm)
             if (err.code === 1017) {
-                setStep(2); // Chuyển sang form ép buộc đổi mật khẩu
+                setStep(2);
             } else {
                 setError(err.message || 'Đăng nhập thất bại.');
             }

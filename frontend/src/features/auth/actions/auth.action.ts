@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {revalidatePath} from "next/cache";
+import {authService} from "@/features/auth/services/auth.services";
 
 const API_BASE_URL = 'http://localhost:8081/api';
 
@@ -54,4 +55,22 @@ export async function logoutAction() {
     cookieStore.delete('refreshToken');
 
     redirect('/client/login');
+}
+
+export async function setupMfaAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('accessToken')?.value;
+
+    if (!token) throw new Error("Chưa xác thực, không tìm thấy Token");
+
+    return authService.setupMfa(token);
+}
+
+export async function enableMfaAction(code: number) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('accessToken')?.value;
+
+    if (!token) throw new Error("Chưa xác thực");
+
+    return authService.enableMfa(token, code);
 }

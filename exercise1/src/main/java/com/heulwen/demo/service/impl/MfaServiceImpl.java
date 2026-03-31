@@ -42,7 +42,7 @@ public class MfaServiceImpl implements MfaService {
             user.setMfaSecret(secret);
             userRepository.save(user);
 
-            return getQrCodeUrl(secret, user.getEmail());
+            return secret;
         } catch (ParseException e){
             throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
         }
@@ -77,10 +77,5 @@ public class MfaServiceImpl implements MfaService {
 
     private String generateSecret() {
         return gAuth.createCredentials().getKey();
-    }
-
-    private String getQrCodeUrl(String secret, String email) {
-        return String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s",
-                "SparkMinds-E1", email, secret, "SparkMinds");
     }
 }
