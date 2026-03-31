@@ -171,4 +171,13 @@ public class AuthenticationController {
                 .result(authService.verifyMfaLogin(email, code))
                 .build();
     }
+
+    @GetMapping("/profile")
+    public ApiDto<UserDto> getProfile(@RequestHeader("Authorization") String authHeader) {
+        return ApiDto.<UserDto>builder()
+                .code(1000)
+                .message("Get profile successful")
+                .result(userService.getProfile(authHeader))
+                .build();
+    }
 }

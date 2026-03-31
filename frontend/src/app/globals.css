@@ -1,3 +1,4 @@
 @import "tailwindcss";
 @source "../features/";
 @source "../shared/"
+@source "../features/auth/components/"

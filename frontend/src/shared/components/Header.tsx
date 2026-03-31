@@ -2,19 +2,15 @@
 
 import Link from 'next/link';
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { useState } from 'react';
 
 export default function Header() {
-    const { isAuthenticated, logout } = useAuth();
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const { isAuthenticated, user, logout } = useAuth();
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 shadow-sm backdrop-blur-md bg-white/90">
+        <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 shadow-sm backdrop-blur-md">
             <div className="container flex items-center justify-between h-16 px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-
-                {/* Logo & Navigation */}
                 <div className="flex items-center gap-8">
-                    <Link href="/" className="text-2xl font-extrabold tracking-tight text-blue-600 transition-transform hover:scale-105">
+                    <Link href="/client/" className="text-2xl font-extrabold tracking-tight text-blue-600 transition-transform hover:scale-105">
                         Book<span className="text-gray-900">Book</span>
                     </Link>
 
@@ -25,47 +21,25 @@ export default function Header() {
                     </nav>
                 </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 h-full">
                     {isAuthenticated ? (
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm font-medium text-gray-700">Chào mừng bạn!</span>
+                        <div className="flex items-center gap-4 h-full">
+                            <span className="text-sm font-medium text-gray-700 hidden sm:block">Chào mừng {user?.lastName} <span className="font-bold">{user?.firstName}</span> !</span>
 
-                            {/* KHỐI CÀI ĐẶT (Đã bọc lại cẩn thận) */}
-                            <div
-                                className="relative"
-                                onMouseEnter={() => setIsSettingsOpen(true)}
-                                onMouseLeave={() => setIsSettingsOpen(false)}
+                            <Link
+                                href="/client/settings?tab=mfa"
+                                className="flex items-center gap-1.5 py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
                             >
-                                {/* Nút bấm */}
-                                <button className="flex items-center gap-1 py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-                                    Cài đặt
-                                    <svg className={`w-4 h-4 transition-transform duration-200 ${isSettingsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </button>
-
-                                {/* BÍ QUYẾT Ở ĐÂY: Chỉ sinh ra Menu khi biến isSettingsOpen = true */}
-                                {isSettingsOpen && (
-                                    <div className="absolute right-0 top-full w-48 pt-2 z-50">
-                                        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 py-2 flex flex-col overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                                            <Link href="/client/settings?tab=mfa" className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                                                Bảo mật & MFA
-                                            </Link>
-                                            <Link href="/client/settings?tab=password" className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                                                Đổi Mật Khẩu
-                                            </Link>
-                                            <Link href="/client/settings?tab=email" className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                                                Đổi Email
-                                            </Link>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                                Cài đặt
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </Link>
 
                             <button
                                 onClick={logout}
-                                className="px-5 py-2 text-sm font-semibold text-gray-600 transition-all duration-200 bg-gray-100 rounded-full hover:bg-red-50 hover:text-red-600 focus:ring-2 focus:ring-red-200"
+                                className="px-5 py-2 text-sm font-semibold text-gray-600 transition-all duration-200 bg-gray-100 rounded-full hover:bg-red-50 hover:text-red-600"
                             >
                                 Đăng xuất
                             </button>
@@ -77,7 +51,6 @@ export default function Header() {
                         </>
                     )}
                 </div>
-
             </div>
         </header>
     );

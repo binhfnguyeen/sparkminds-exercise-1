@@ -12,4 +12,5 @@ public interface UserService {
     UserDto changePhone(String token, ChangePhoneForm form);
     void sendMailOtp(String token);
     UserDto changeMail(String token, ChangeMailForm form);
+    UserDto getProfile(String token);
 }

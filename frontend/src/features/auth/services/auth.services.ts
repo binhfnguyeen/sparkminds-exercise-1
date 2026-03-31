@@ -194,5 +194,18 @@ export const authService = {
             throw new Error(error.message || "Đổi email thất bại");
         }
         return res.json();
+    },
+
+    async getProfile(token: string): Promise<ApiDto<UserDto>> {
+        const res = await fetch(`${API_BASE_URL}/profile`, {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+        });
+
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.message || "Lấy thông tin thất bại");
+        }
+        return res.json();
     }
 }

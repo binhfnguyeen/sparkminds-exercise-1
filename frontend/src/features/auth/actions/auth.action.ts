@@ -96,3 +96,10 @@ export async function changeMailAction(data: ChangeMailForm) {
     if (!token) throw new Error("Chưa xác thực");
     return authService.changeMail(token, data);
 }
+
+export async function getProfileAction() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('accessToken')?.value;
+    if (!token) throw new Error("Chưa xác thực");
+    return authService.getProfile(token);
+}

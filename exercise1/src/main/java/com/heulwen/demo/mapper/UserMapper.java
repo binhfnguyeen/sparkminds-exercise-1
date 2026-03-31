@@ -39,6 +39,7 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .role(user.getRole())
                 .status(user.getStatus())
+                .mfaEnabled(user.isMfaEnabled())
                 .build();
     }
 }

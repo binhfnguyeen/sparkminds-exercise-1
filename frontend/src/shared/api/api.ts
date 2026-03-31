@@ -27,6 +27,7 @@ export interface UserDto {
     lastName: string | null;
     role: string | null;
     status: string | null;
+    mfaEnabled: boolean | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 }

@@ -20,6 +20,7 @@ public class UserDto {
     String lastName;
     Role role;
     UserStatus status;
+    boolean mfaEnabled;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

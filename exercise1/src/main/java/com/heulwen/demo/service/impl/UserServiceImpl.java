@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void sendMailOtp(String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -240,6 +240,23 @@ public class UserServiceImpl implements UserService {
 
             return UserMapper.map(updatedUser);
         } catch (ParseException e){
+            throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
+        }
+    }
+
+    @Override
+    public UserDto getProfile(String token) {
+        try {
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            String email = jwtService.extractEmail(token);
+            User user = userRepository.findUserByEmail(email)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+            return UserMapper.map(user);
+        } catch (ParseException e) {
             throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
         }
     }

@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/change-mail").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/mfa/setup").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/mfa/enable").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/profile").authenticated()
                         .anyRequest().authenticated()
                 );
 
