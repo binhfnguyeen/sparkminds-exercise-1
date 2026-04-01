@@ -28,7 +28,12 @@ public enum ErrorCode {
     PHONE_EXISTED(1022, "The phone already existed.", HttpStatus.BAD_REQUEST),
     AUTHENTICATED_FAILED(1023, "Authentication failed.", HttpStatus.UNAUTHORIZED),
     INVALID_TOKEN(1024, "Invalid token.", HttpStatus.BAD_REQUEST),
-    EMAIL_NOT_VERIFIED(1024, "Email not verified.", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_VERIFIED(1025, "Email not verified.", HttpStatus.BAD_REQUEST),
+    EMPTY_FILE(1026, "File is empty.", HttpStatus.BAD_REQUEST),
+    INVALID_FILE_FORMAT(1027, "Invalid file format.", HttpStatus.BAD_REQUEST),
+    UPLOAD_FAILED(1028, "Upload failed.", HttpStatus.BAD_REQUEST),
+    CATEGORY_EXISTED(1030, "Category already existed.", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_EXISTED(1031, "Category not existed.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

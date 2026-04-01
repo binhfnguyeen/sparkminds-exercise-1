@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login/mfa-verify").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login/google").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/upload-image").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/upload-image").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/logout").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-password").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-phone").authenticated()
@@ -50,6 +52,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/mfa/setup").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/mfa/enable").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/profile").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 

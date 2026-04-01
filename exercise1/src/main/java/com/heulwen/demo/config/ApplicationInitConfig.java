@@ -1,0 +1,40 @@
+package com.heulwen.demo.config;
+
+import com.heulwen.demo.model.User;
+import com.heulwen.demo.model.enumType.Role;
+import com.heulwen.demo.model.enumType.UserStatus;
+import com.heulwen.demo.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
+
+@Configuration
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
+public class ApplicationInitConfig {
+    PasswordEncoder passwordEncoder;
+
+    @Bean
+    ApplicationRunner applicationRunner(UserRepository userRepository){
+        return args -> {
+            if (!userRepository.existsByEmail("admin_bookbook@yopmail.com")) {
+                User user = User.builder()
+                        .email("admin_bookbook@yopmail.com")
+                        .password(passwordEncoder.encode("admin_bookbook"))
+                        .role(Role.ADMIN)
+                        .status(UserStatus.ACTIVE)
+                        .createdAt(LocalDateTime.now()).build();
+                userRepository.save(user);
+                log.warn(">>admin user has been created with default password: admin_bookbook, please change it!");
+            }
+        };
+    }
+}

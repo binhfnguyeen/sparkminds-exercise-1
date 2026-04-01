@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class User {
     @Column(name = "last_name")
     String lastName;
 
+    @Column(name = "date_of_birth")
+    LocalDate dateOfBirth;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     Role role;
@@ -65,6 +69,9 @@ public class User {
 
     @Column(name = "mfa_secret")
     String mfaSecret;
+
+    @Column(name = "is_deleted")
+    boolean deleted;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
