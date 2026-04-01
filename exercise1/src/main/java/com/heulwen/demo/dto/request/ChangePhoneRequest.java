@@ -1,4 +1,4 @@
-package com.heulwen.demo.form;
+package com.heulwen.demo.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangePhoneForm {
+public class ChangePhoneRequest {
     @Pattern(regexp = "^0\\d{9}$", message = "Invalid phone number format.")
     String phone;
 

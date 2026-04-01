@@ -26,6 +26,9 @@ public enum ErrorCode {
     SAME_EMAIL(1020, "The old and new emails are the same.", HttpStatus.BAD_REQUEST),
     OTP_INVALID(1021, "Invalid OTP.", HttpStatus.BAD_REQUEST),
     PHONE_EXISTED(1022, "The phone already existed.", HttpStatus.BAD_REQUEST),
+    AUTHENTICATED_FAILED(1023, "Authentication failed.", HttpStatus.UNAUTHORIZED),
+    INVALID_TOKEN(1024, "Invalid token.", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_VERIFIED(1024, "Email not verified.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

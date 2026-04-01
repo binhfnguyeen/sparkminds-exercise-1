@@ -1,4 +1,4 @@
-package com.heulwen.demo.form;
+package com.heulwen.demo.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LoginForm {
+public class AuthenticateResponse {
+    String accessToken;
+    String refreshToken;
+    boolean mfaRequired;
     String email;
-    String password;
 }

@@ -1,4 +1,4 @@
-package com.heulwen.demo.dto;
+package com.heulwen.demo.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,9 +8,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticateDto {
-    String accessToken;
-    String refreshToken;
-    boolean mfaRequired;
-    String email;
+public class GoogleLoginRequest {
+    String idToken;
 }

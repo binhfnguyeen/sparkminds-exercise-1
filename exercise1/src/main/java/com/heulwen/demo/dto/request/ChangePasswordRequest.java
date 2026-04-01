@@ -1,6 +1,5 @@
-package com.heulwen.demo.form;
+package com.heulwen.demo.dto.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -11,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangePasswordForm {
+public class ChangePasswordRequest {
 
     @NotBlank(message = "Old password cannot be empty")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",

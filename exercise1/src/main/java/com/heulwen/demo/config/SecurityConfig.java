@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login/mfa-verify").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/login/google").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/logout").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-password").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-phone").authenticated()

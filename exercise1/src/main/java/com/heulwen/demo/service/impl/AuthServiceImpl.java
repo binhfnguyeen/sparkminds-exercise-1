@@ -1,18 +1,26 @@
 package com.heulwen.demo.service.impl;
 
-import com.heulwen.demo.dto.AuthenticateDto;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.heulwen.demo.dto.request.GoogleLoginRequest;
+import com.heulwen.demo.dto.response.AuthenticateResponse;
 import com.heulwen.demo.exception.AppException;
 import com.heulwen.demo.exception.ErrorCode;
-import com.heulwen.demo.form.ChangePasswordFirstTimeForm;
-import com.heulwen.demo.form.LoginForm;
+import com.heulwen.demo.dto.request.ChangePasswordFirstTimeRequest;
+import com.heulwen.demo.dto.request.LoginRequest;
 import com.heulwen.demo.model.User;
+import com.heulwen.demo.model.enumType.Role;
 import com.heulwen.demo.model.enumType.UserStatus;
 import com.heulwen.demo.repository.UserRepository;
 import com.heulwen.demo.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +38,9 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthServiceImpl implements AuthService {
 
+    @Value("${google.client.id}")
+    @NonFinal
+    String googleClientId;
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     JwtService jwtService;
@@ -36,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional(noRollbackFor = AppException.class)
-    public AuthenticateDto login(LoginForm form) {
+    public AuthenticateResponse login(LoginRequest form) {
         User user = userRepository.findUserByEmail(form.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_EMAIL));
 
@@ -72,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (user.isMfaEnabled()) {
-            return AuthenticateDto.builder()
+            return AuthenticateResponse.builder()
                     .mfaRequired(true)
                     .email(user.getEmail())
                     .build();
@@ -86,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(user);
 
         tokenRedisService.saveRefreshToken(user.getEmail(), refreshToken, 7);
-        return AuthenticateDto.builder()
+        return AuthenticateResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -116,7 +130,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional(readOnly = true)
-    public AuthenticateDto refreshToken(String refreshToken) {
+    public AuthenticateResponse refreshToken(String refreshToken) {
         try {
             if (refreshToken != null && refreshToken.startsWith("Bearer ")) {
                 refreshToken = refreshToken.substring(7);
@@ -133,7 +147,7 @@ public class AuthServiceImpl implements AuthService {
 
             String newAccessToken = jwtService.generateAccessToken(user);
 
-            return AuthenticateDto.builder()
+            return AuthenticateResponse.builder()
                     .accessToken(newAccessToken)
                     .refreshToken(refreshToken)
                     .build();
@@ -160,7 +174,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public AuthenticateDto changePasswordFirstTime(ChangePasswordFirstTimeForm form) {
+    public AuthenticateResponse changePasswordFirstTime(ChangePasswordFirstTimeRequest form) {
         User user = userRepository.findUserByEmail(form.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -180,14 +194,14 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(user);
         tokenRedisService.saveRefreshToken(user.getEmail(), refreshToken, 7);
 
-        return AuthenticateDto.builder()
+        return AuthenticateResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
     @Override
-    public AuthenticateDto verifyMfaLogin(String email, int code) {
+    public AuthenticateResponse verifyMfaLogin(String email, int code) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -200,10 +214,64 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(user);
         tokenRedisService.saveRefreshToken(user.getEmail(), refreshToken, 7);
 
-        return AuthenticateDto.builder()
+        return AuthenticateResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @Override
+    public AuthenticateResponse loginWithGoogle(GoogleLoginRequest request) {
+        try {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+                    .setAudience(Collections.singletonList(googleClientId))
+                    .build();
+
+            GoogleIdToken idToken = verifier.verify(request.getIdToken());
+
+            if (idToken == null) {
+                throw new AppException(ErrorCode.INVALID_TOKEN);
+            }
+
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+
+            Boolean emailVerified = payload.getEmailVerified();
+            if (!emailVerified) {
+                throw new AppException(ErrorCode.EMAIL_NOT_VERIFIED);
+            }
+
+            Optional<User> userOptional = userRepository.findUserByEmail(email);
+            User user;
+
+            if (userOptional.isPresent()) {
+                user = userOptional.get();
+
+                if (UserStatus.UNVERIFIED.equals(user.getStatus())) {
+                    user.setStatus(UserStatus.ACTIVE);
+                    userRepository.save(user);
+                }
+            } else {
+                user = new User();
+                user.setEmail(email);
+                user.setFirstName((String) payload.get("given_name"));
+                user.setLastName((String) payload.get("family_name"));
+
+                user.setPassword(generateTempPassword());
+                user.setRole(Role.USER);
+                user.setStatus(UserStatus.ACTIVE);
+                userRepository.save(user);
+            }
+
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
+            return AuthenticateResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.AUTHENTICATED_FAILED);
+        }
     }
 
     private String generateTempPassword(){

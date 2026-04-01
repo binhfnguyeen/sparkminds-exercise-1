@@ -1,11 +1,10 @@
 package com.heulwen.demo.controller;
 
-import com.heulwen.demo.dto.ApiDto;
-import com.heulwen.demo.dto.AuthenticateDto;
-import com.heulwen.demo.dto.UserDto;
-import com.heulwen.demo.form.*;
+import com.heulwen.demo.dto.response.ApiResponse;
+import com.heulwen.demo.dto.response.AuthenticateResponse;
+import com.heulwen.demo.dto.response.UserResponse;
+import com.heulwen.demo.dto.request.*;
 import com.heulwen.demo.service.AuthService;
-import com.heulwen.demo.service.JwtService;
 import com.heulwen.demo.service.MfaService;
 import com.heulwen.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -26,8 +25,8 @@ public class AuthenticationController {
     MfaService mfaService;
 
     @PostMapping("/login")
-    public ApiDto<AuthenticateDto> login(@RequestBody LoginForm form) {
-        return ApiDto.<AuthenticateDto>builder()
+    public ApiResponse<AuthenticateResponse> login(@RequestBody LoginRequest form) {
+        return ApiResponse.<AuthenticateResponse>builder()
                 .code(1000)
                 .message("Login successful")
                 .result(authService.login(form))
@@ -35,8 +34,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public  ApiDto<UserDto> register(@RequestBody @Valid UserCreateForm form) {
-        return ApiDto.<UserDto>builder()
+    public ApiResponse<UserResponse> register(@RequestBody @Valid UserCreateRequest form) {
+        return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .message("Register successful")
                 .result(userService.createUser(form))
@@ -44,9 +43,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/verify-email")
-    public ApiDto<String> verifyEmailOtp(@RequestBody @Valid VerifyEmailForm form) {
+    public ApiResponse<String> verifyEmailOtp(@RequestBody @Valid VerifyEmailRequest form) {
         userService.verifyEmailOtp(form);
-        return ApiDto.<String>builder()
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Verify email OTP successful")
                 .result("Tài khoản của bạn đã được xác thực.")
@@ -54,9 +53,9 @@ public class AuthenticationController {
     }
 
     @GetMapping("/verify-email-link")
-    public ApiDto<String> verifyEmailLink(@RequestParam("token") String token) {
+    public ApiResponse<String> verifyEmailLink(@RequestParam("token") String token) {
         String result = userService.verifyEmailLink(token);
-        return ApiDto.<String>builder()
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Verify email link successful")
                 .result(result)
@@ -64,9 +63,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/resend-verification")
-    public ApiDto<String> resendVerification(@RequestParam("email") String email) {
+    public ApiResponse<String> resendVerification(@RequestParam("email") String email) {
         userService.resendVerification(email);
-        return ApiDto.<String>builder()
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Resend verification successful")
                 .result("OTP and verification link have been resent.")
@@ -74,17 +73,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ApiDto<String> logout(@RequestHeader("Authorization") String authHeader) {
+    public ApiResponse<String> logout(@RequestHeader("Authorization") String authHeader) {
         authService.logout(authHeader);
-        return ApiDto.<String>builder()
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Logout successful")
                 .build();
     }
 
     @PostMapping("/refresh-token")
-    public ApiDto<AuthenticateDto> refreshToken(@RequestHeader("Authorization") String authHeader) {
-        return ApiDto.<AuthenticateDto>builder()
+    public ApiResponse<AuthenticateResponse> refreshToken(@RequestHeader("Authorization") String authHeader) {
+        return ApiResponse.<AuthenticateResponse>builder()
                 .code(1000)
                 .message("Refresh token successful")
                 .result(authService.refreshToken(authHeader))
@@ -92,17 +91,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgot-password")
-    public ApiDto<String> forgotPassword(@RequestParam String email) {
+    public ApiResponse<String> forgotPassword(@RequestParam String email) {
         authService.forgotPassword(email);
-        return ApiDto.<String>builder()
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("A temporary password has been sent via email.")
                 .build();
     }
 
     @PostMapping("/reset-password")
-    public ApiDto<AuthenticateDto> resetPassword(@RequestBody ChangePasswordFirstTimeForm form){
-        return ApiDto.<AuthenticateDto>builder()
+    public ApiResponse<AuthenticateResponse> resetPassword(@RequestBody ChangePasswordFirstTimeRequest form){
+        return ApiResponse.<AuthenticateResponse>builder()
                 .code(1000)
                 .message("Reset password successful")
                 .result(authService.changePasswordFirstTime(form))
@@ -110,8 +109,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/change-password")
-    public ApiDto<UserDto> changePassword(@RequestHeader("Authorization") String authHeader, @RequestBody ChangePasswordForm form){
-        return ApiDto.<UserDto>builder()
+    public ApiResponse<UserResponse> changePassword(@RequestHeader("Authorization") String authHeader, @RequestBody ChangePasswordRequest form){
+        return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .message("Change password successful")
                 .result(userService.changePassword(authHeader, form))
@@ -119,8 +118,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/change-phone")
-    public ApiDto<UserDto> changePhone(@RequestHeader("Authorization") String authHeader, @RequestBody @Valid ChangePhoneForm form){
-        return ApiDto.<UserDto>builder()
+    public ApiResponse<UserResponse> changePhone(@RequestHeader("Authorization") String authHeader, @RequestBody @Valid ChangePhoneRequest form){
+        return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .message("Change phone successful")
                 .result(userService.changePhone(authHeader, form))
@@ -128,17 +127,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/send-otp-change-mail")
-    public ApiDto<String> sendOtpChangeMail(@RequestHeader("Authorization") String authHeader){
+    public ApiResponse<String> sendOtpChangeMail(@RequestHeader("Authorization") String authHeader){
         userService.sendMailOtp(authHeader);
-        return ApiDto.<String>builder()
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Send OTP successful")
                 .build();
     }
 
     @PostMapping("/change-mail")
-    public ApiDto<UserDto> changeMail(@RequestHeader("Authorization") String authHeader, @RequestBody @Valid ChangeMailForm form){
-        return ApiDto.<UserDto>builder()
+    public ApiResponse<UserResponse> changeMail(@RequestHeader("Authorization") String authHeader, @RequestBody @Valid ChangeMailRequest form){
+        return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .message("Change email successful")
                 .result(userService.changeMail(authHeader, form))
@@ -146,8 +145,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/mfa/setup")
-    public ApiDto<String> setupMfa(@RequestHeader("Authorization") String authHeader) {
-        return ApiDto.<String>builder()
+    public ApiResponse<String> setupMfa(@RequestHeader("Authorization") String authHeader) {
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Scan this code using Google Authenticator.")
                 .result(mfaService.setupMfa(authHeader))
@@ -155,8 +154,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/mfa/enable")
-    public ApiDto<String> enableMfa(@RequestHeader("Authorization") String authHeader, @RequestParam int code) {
-        return ApiDto.<String>builder()
+    public ApiResponse<String> enableMfa(@RequestHeader("Authorization") String authHeader, @RequestParam int code) {
+        return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Enable MFA successful")
                 .result(mfaService.enableMfa(authHeader, code))
@@ -164,8 +163,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login/mfa-verify")
-    public ApiDto<AuthenticateDto> verifyMfaLogin(@RequestParam String email, @RequestParam int code){
-        return ApiDto.<AuthenticateDto>builder()
+    public ApiResponse<AuthenticateResponse> verifyMfaLogin(@RequestParam String email, @RequestParam int code){
+        return ApiResponse.<AuthenticateResponse>builder()
                 .code(1000)
                 .message("MFA Verification successful")
                 .result(authService.verifyMfaLogin(email, code))
@@ -173,11 +172,20 @@ public class AuthenticationController {
     }
 
     @GetMapping("/profile")
-    public ApiDto<UserDto> getProfile(@RequestHeader("Authorization") String authHeader) {
-        return ApiDto.<UserDto>builder()
+    public ApiResponse<UserResponse> getProfile(@RequestHeader("Authorization") String authHeader) {
+        return ApiResponse.<UserResponse>builder()
                 .code(1000)
                 .message("Get profile successful")
                 .result(userService.getProfile(authHeader))
+                .build();
+    }
+
+    @PostMapping("/login/google")
+    public ApiResponse<AuthenticateResponse> loginWithGoogle(@RequestBody GoogleLoginRequest request){
+        return ApiResponse.<AuthenticateResponse>builder()
+                .code(1000)
+                .message("Google Login successful")
+                .result(authService.loginWithGoogle(request))
                 .build();
     }
 }

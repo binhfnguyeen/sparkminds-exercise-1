@@ -1,7 +1,7 @@
 package com.heulwen.demo.mapper;
 
-import com.heulwen.demo.dto.UserDto;
-import com.heulwen.demo.form.UserCreateForm;
+import com.heulwen.demo.dto.response.UserResponse;
+import com.heulwen.demo.dto.request.UserCreateRequest;
 import com.heulwen.demo.model.User;
 import com.heulwen.demo.model.enumType.Role;
 import com.heulwen.demo.model.enumType.UserStatus;
@@ -9,29 +9,29 @@ import com.heulwen.demo.model.enumType.UserStatus;
 import java.time.LocalDateTime;
 
 public class UserMapper {
-    public static User map(UserCreateForm form) {
-        if (form == null) {
+    public static User map(UserCreateRequest from) {
+        if (from == null) {
             return null;
         }
 
         return User.builder()
-                .email(form.getEmail())
-                .password(form.getPassword())
-                .phone(form.getPhone())
-                .firstName(form.getFirstName())
-                .lastName(form.getLastName())
+                .email(from.getEmail())
+                .password(from.getPassword())
+                .phone(from.getPhone())
+                .firstName(from.getFirstName())
+                .lastName(from.getLastName())
                 .role(Role.USER)
                 .status(UserStatus.UNVERIFIED)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
 
-    public static UserDto map(User user) {
+    public static UserResponse map(User user) {
         if (user == null) {
             return null;
         }
 
-        return UserDto.builder()
+        return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .phone(user.getPhone())

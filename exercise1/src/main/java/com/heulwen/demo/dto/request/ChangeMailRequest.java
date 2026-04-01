@@ -1,4 +1,4 @@
-package com.heulwen.demo.form;
+package com.heulwen.demo.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangeMailForm {
+public class ChangeMailRequest {
     @NotBlank(message = "Email cannot be empty")
     @Email(message = "Invalid email format")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", message = "Invalid email format")

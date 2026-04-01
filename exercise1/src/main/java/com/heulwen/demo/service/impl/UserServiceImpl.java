@@ -1,9 +1,9 @@
 package com.heulwen.demo.service.impl;
 
-import com.heulwen.demo.dto.UserDto;
+import com.heulwen.demo.dto.response.UserResponse;
+import com.heulwen.demo.dto.request.*;
 import com.heulwen.demo.exception.AppException;
 import com.heulwen.demo.exception.ErrorCode;
-import com.heulwen.demo.form.*;
 import com.heulwen.demo.mapper.UserMapper;
 import com.heulwen.demo.model.User;
 import com.heulwen.demo.model.VerificationToken;
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto createUser(UserCreateForm form) {
+    public UserResponse createUser(UserCreateRequest form) {
         if (userRepository.existsByEmail(form.getEmail())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String verifyEmailOtp(VerifyEmailForm form) {
+    public String verifyEmailOtp(VerifyEmailRequest form) {
         User user = userRepository.findUserByEmail(form.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto changePassword(String token, ChangePasswordForm form) {
+    public UserResponse changePassword(String token, ChangePasswordRequest form) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto changePhone(String token, ChangePhoneForm form) {
+    public UserResponse changePhone(String token, ChangePhoneRequest form) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);
@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto changeMail(String token, ChangeMailForm form) {
+    public UserResponse changeMail(String token, ChangeMailRequest form) {
         try {
             String actualToken = token;
             if (actualToken != null && actualToken.startsWith("Bearer ")) {
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getProfile(String token) {
+    public UserResponse getProfile(String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);

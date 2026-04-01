@@ -1,16 +1,16 @@
 package com.heulwen.demo.service;
 
-import com.heulwen.demo.dto.UserDto;
-import com.heulwen.demo.form.*;
+import com.heulwen.demo.dto.response.UserResponse;
+import com.heulwen.demo.dto.request.*;
 
 public interface UserService {
-    UserDto createUser(UserCreateForm form);
-    String verifyEmailOtp(VerifyEmailForm form);
+    UserResponse createUser(UserCreateRequest form);
+    String verifyEmailOtp(VerifyEmailRequest form);
     String verifyEmailLink(String token);
     void resendVerification(String email);
-    UserDto changePassword(String email, ChangePasswordForm form);
-    UserDto changePhone(String token, ChangePhoneForm form);
+    UserResponse changePassword(String email, ChangePasswordRequest form);
+    UserResponse changePhone(String token, ChangePhoneRequest form);
     void sendMailOtp(String token);
-    UserDto changeMail(String token, ChangeMailForm form);
-    UserDto getProfile(String token);
+    UserResponse changeMail(String token, ChangeMailRequest form);
+    UserResponse getProfile(String token);
 }

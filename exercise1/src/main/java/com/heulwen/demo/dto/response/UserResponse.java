@@ -1,4 +1,4 @@
-package com.heulwen.demo.dto;
+package com.heulwen.demo.dto.response;
 
 import com.heulwen.demo.model.enumType.Role;
 import com.heulwen.demo.model.enumType.UserStatus;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDto {
+public class UserResponse {
     Long id;
     String email;
     String phone;
