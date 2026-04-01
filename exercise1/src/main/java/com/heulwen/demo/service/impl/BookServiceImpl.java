@@ -12,6 +12,8 @@ import com.heulwen.demo.repository.BookRepository;
 import com.heulwen.demo.repository.CategoryRepository;
 import com.heulwen.demo.service.BookService;
 import com.heulwen.demo.specification.BookSpecification;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,10 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +76,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void importBooksFromCsv(MultipartFile file) {
+    public List<BookResponse> importBooksFromCsv(MultipartFile file) {
         if (file.isEmpty()) {
             throw new AppException(ErrorCode.FILE_EMPTY);
         }
@@ -81,35 +86,43 @@ public class BookServiceImpl implements BookService {
             throw new AppException(ErrorCode.INVALID_FILE_FORMAT);
         }
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            String line;
-            boolean isFirstLine = true;
+        List<Book> books = new ArrayList<>();
 
-            while ((line = br.readLine()) != null) {
-                if (isFirstLine) {
-                    isFirstLine = false;
-                    continue;
-                }
-
-                String[] data = line.split(",");
-                if (data.length >= 5) {
-                    Long categoryId = Long.parseLong(data[4].trim());
-                    Category category = categoryRepository.findById(categoryId)
-                            .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
-
-                    Book book = Book.builder()
-                            .title(data[0].trim())
-                            .author(data[1].trim())
-                            .description(data[2].trim())
-                            .quantity(Integer.parseInt(data[3].trim()))
-                            .category(category)
-                            .deleted(false)
-                            .build();
-
-                    bookRepository.save(book);
-                }
+        try (
+                BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+                CSVReader csvReader = new CSVReader(reader)
+        ) {
+            String[] line;
+            csvReader.readNext();
+            while ((line = csvReader.readNext()) != null) {
+                if (line.length < 6) continue;
+                BookCreateRequest request = BookCreateRequest.builder()
+                        .title(line[0].trim())
+                        .author(line[1].trim())
+                        .description(line[2].trim())
+                        .quantity(Integer.parseInt(line[3].trim()))
+                        .imgUrl(line[4].trim())
+                        .categoryId(Long.parseLong(line[5].trim()))
+                        .build();
+                Category category = categoryRepository.findById(request.getCategoryId())
+                        .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+                Book book = Book.builder()
+                        .title(request.getTitle())
+                        .author(request.getAuthor())
+                        .description(request.getDescription())
+                        .quantity(request.getQuantity())
+                        .imgUrl(request.getImgUrl())
+                        .category(category)
+                        .deleted(false)
+                        .build();
+                books.add(book);
             }
-        } catch (Exception e) {
+            bookRepository.saveAll(books);
+            return books.stream()
+                    .map(BookMapper::map)
+                    .toList();
+
+        } catch (IOException | CsvValidationException e) {
             throw new AppException(ErrorCode.UPLOAD_FAILED);
         }
     }

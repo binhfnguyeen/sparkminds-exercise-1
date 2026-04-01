@@ -63,7 +63,7 @@ export const authService = {
     },
 
     async register(
-        { email, password, phone, firstName, lastName } : UserCreateForm
+        { email, password, phone, firstName, lastName, dateOfBirth } : UserCreateForm
     ): Promise<ApiDto<UserDto>> {
         const res = await fetch(`${API_BASE_URL}/register`, {
             method: 'POST',
@@ -73,7 +73,8 @@ export const authService = {
                 password,
                 phone,
                 firstName,
-                lastName
+                lastName,
+                dateOfBirth
             }),
         });
 

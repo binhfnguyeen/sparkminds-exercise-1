@@ -21,6 +21,7 @@ public class UserMapper {
                 .firstName(from.getFirstName())
                 .lastName(from.getLastName())
                 .role(Role.USER)
+                .dateOfBirth(from.getDateOfBirth())
                 .status(UserStatus.UNVERIFIED)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -38,6 +39,7 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .role(user.getRole())
+                .dateOfBirth(user.getDateOfBirth())
                 .status(user.getStatus())
                 .mfaEnabled(user.isMfaEnabled())
                 .build();

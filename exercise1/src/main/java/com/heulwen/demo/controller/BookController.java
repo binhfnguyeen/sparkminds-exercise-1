@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -43,11 +45,11 @@ public class BookController {
     }
 
     @PostMapping(value = "/books/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<String> importBooks(@RequestParam("file") MultipartFile file) {
-        bookService.importBooksFromCsv(file);
-        return ApiResponse.<String>builder()
+    public ApiResponse<List<BookResponse>> importBooks(@RequestParam("file") MultipartFile file) {
+        return ApiResponse.<List<BookResponse>>builder()
                 .code(1000)
                 .message("Import csv successful")
+                .result(bookService.importBooksFromCsv(file))
                 .build();
     }
 

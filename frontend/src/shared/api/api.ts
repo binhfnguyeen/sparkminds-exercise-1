@@ -17,6 +17,7 @@ export interface UserCreateForm {
     phone: string | null;
     firstName: string | null;
     lastName: string | null;
+    dateOfBirth: string | null;
 }
 
 export interface UserDto {
@@ -26,6 +27,7 @@ export interface UserDto {
     firstName: string | null;
     lastName: string | null;
     role: string | null;
+    dateOfBirth: Date | null;
     status: string | null;
     mfaEnabled: boolean | null;
     createdAt: Date | null;

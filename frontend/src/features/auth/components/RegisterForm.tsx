@@ -15,6 +15,7 @@ export const RegisterForm = () => {
         email: '',
         password: '',
         confirmPassword: '',
+        dateOfBirth: ''
     });
 
     const [loading, setLoading] = useState(false);
@@ -180,17 +181,30 @@ export const RegisterForm = () => {
                     </div>
                 </div>
 
-                <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Số điện thoại</label>
-                    <input
-                        type="tel"
-                        name="phone"
-                        required
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                        placeholder="09xxxxxxxx"
-                    />
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Số điện thoại</label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            required
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                            placeholder="09xxxxxxxx"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Ngày sinh</label>
+                        <input
+                            type="date"
+                            name="dateOfBirth"
+                            required
+                            value={formData.dateOfBirth}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 text-gray-900 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
+                        />
+                    </div>
                 </div>
 
                 <div>

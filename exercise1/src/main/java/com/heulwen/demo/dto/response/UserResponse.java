@@ -5,6 +5,7 @@ import com.heulwen.demo.model.enumType.UserStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,6 +20,7 @@ public class UserResponse {
     String firstName;
     String lastName;
     Role role;
+    LocalDate dateOfBirth;
     UserStatus status;
     boolean mfaEnabled;
     LocalDateTime createdAt;
