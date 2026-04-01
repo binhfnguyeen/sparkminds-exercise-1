@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookRequest {
+public class BookCreateRequest {
 
     @NotBlank(message = "The book title cannot be empty.")
     String title;

@@ -1,5 +1,6 @@
 package com.heulwen.demo.mapper;
 
+import com.heulwen.demo.dto.request.BookUpdateRequest;
 import com.heulwen.demo.dto.response.BookResponse;
 import com.heulwen.demo.dto.response.CategoryResponse;
 import com.heulwen.demo.model.Book;
@@ -30,5 +31,31 @@ public class BookMapper {
                 .updatedAt(book.getUpdatedAt())
                 .category(categoryResponse)
                 .build();
+    }
+
+    public static void map(BookUpdateRequest request, Book book){
+        if (request == null || book == null) {
+            return;
+        }
+
+        if (request.getTitle() != null) {
+            book.setTitle(request.getTitle());
+        }
+
+        if (request.getAuthor() != null) {
+            book.setAuthor(request.getAuthor());
+        }
+
+        if (request.getDescription() != null) {
+            book.setDescription(request.getDescription());
+        }
+
+        if (request.getQuantity() != null) {
+            book.setQuantity(request.getQuantity());
+        }
+
+        if (request.getImgUrl() != null) {
+            book.setImgUrl(request.getImgUrl());
+        }
     }
 }

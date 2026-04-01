@@ -34,6 +34,10 @@ public enum ErrorCode {
     UPLOAD_FAILED(1028, "Upload failed.", HttpStatus.BAD_REQUEST),
     CATEGORY_EXISTED(1030, "Category already existed.", HttpStatus.BAD_REQUEST),
     CATEGORY_NOT_EXISTED(1031, "Category not existed.", HttpStatus.BAD_REQUEST),
+    INVALID_DATE_FORMAT(1032, "Invalid date format.", HttpStatus.BAD_REQUEST),
+    INVALID_DATE_RANGE(1033, "Invalid date range", HttpStatus.BAD_REQUEST),
+    FILE_EMPTY(1034, "File is empty.", HttpStatus.BAD_REQUEST),
+    BOOK_NOT_EXISTED(1035, "Book not existed.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

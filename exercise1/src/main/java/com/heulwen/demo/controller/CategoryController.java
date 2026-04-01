@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class CategoryController {
                 .build();
     }
 
-    @PostMapping("/categories/{category_id}")
+    @PutMapping("/categories/{category_id}")
     public ApiResponse<CategoryResponse> updateCategory(@PathVariable Long category_id, @RequestBody CategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .code(1000)
@@ -60,8 +59,11 @@ public class CategoryController {
     }
 
     @DeleteMapping("/categories/{category_id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long category_id){
+    public ApiResponse<String> deleteCategory(@PathVariable Long category_id){
         categoryService.delete(category_id);
-        return ResponseEntity.ok("Deleted category successful.");
+        return ApiResponse.<String>builder()
+                .code(1000)
+                .message("Deleted category successful")
+                .build();
     }
 }

@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.google.common.io.Files.getFileExtension;
-
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
