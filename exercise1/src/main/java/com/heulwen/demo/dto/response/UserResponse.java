@@ -1,5 +1,6 @@
 package com.heulwen.demo.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.heulwen.demo.model.enumType.Role;
 import com.heulwen.demo.model.enumType.UserStatus;
 import lombok.*;
@@ -20,6 +21,7 @@ public class UserResponse {
     String firstName;
     String lastName;
     Role role;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     LocalDate dateOfBirth;
     UserStatus status;
     boolean mfaEnabled;
