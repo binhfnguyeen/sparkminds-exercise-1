@@ -99,7 +99,9 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
-        tokenRedisService.saveRefreshToken(user.getEmail(), refreshToken, 7);
+        long ttlDays = form.isRememberMe() ? 7 : 1;
+
+        tokenRedisService.saveRefreshToken(user.getEmail(), refreshToken, ttlDays);
         return AuthenticateResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -257,14 +259,19 @@ public class AuthServiceImpl implements AuthService {
                 user.setFirstName((String) payload.get("given_name"));
                 user.setLastName((String) payload.get("family_name"));
 
-                user.setPassword(generateTempPassword());
+                String tempPassword = generateTempPassword();
+                user.setPassword(passwordEncoder.encode(tempPassword));
                 user.setRole(Role.USER);
                 user.setStatus(UserStatus.ACTIVE);
                 userRepository.save(user);
+                emailService.sendNewPasswordEmail(email, tempPassword);
             }
 
             String accessToken = jwtService.generateAccessToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
+
+            long ttlDays = request.isRememberMe() ? 7 : 1;
+            tokenRedisService.saveRefreshToken(user.getEmail(), refreshToken, ttlDays);
             return AuthenticateResponse.builder()
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)

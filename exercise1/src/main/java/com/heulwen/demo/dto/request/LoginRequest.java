@@ -11,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class LoginRequest {
     String email;
     String password;
+    boolean rememberMe;
 }
