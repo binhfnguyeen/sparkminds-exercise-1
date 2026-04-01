@@ -39,7 +39,7 @@ export const LoginForm = () => {
         setError('');
 
         try {
-            const response = await authService.login(email, password);
+            const response = await authService.login(email, password, rememberMe);
             if (response.result.mfaRequired) {
                 setStep(1); // Chuyển sang nhập OTP
             } else if (response.result.accessToken && response.result.refreshToken) {
@@ -118,7 +118,7 @@ export const LoginForm = () => {
         try {
             const idToken = credentialResponse.credential;
             if (idToken != null){
-                const response = await loginWithGoogle(idToken);
+                const response = await loginWithGoogle(idToken, rememberMe);
 
                 if (response.result.mfaRequired) {
                     setStep(1);

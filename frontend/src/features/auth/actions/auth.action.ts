@@ -118,6 +118,6 @@ export async function getProfileAction() {
     return authService.getProfile(token);
 }
 
-export async function loginWithGoogle(idToken: string) {
-    return authService.loginWithGoogle(idToken);
+export async function loginWithGoogle(idToken: string, rememberMe: boolean) {
+    return authService.loginWithGoogle(idToken, rememberMe);
 }
