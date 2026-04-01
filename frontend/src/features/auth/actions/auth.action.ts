@@ -8,7 +8,16 @@ import {ChangeMailForm, ChangePasswordForm} from "@/shared/api/api";
 
 const API_BASE_URL = 'http://localhost:8081/api';
 
-export async function setAuthCookies(accessToken: string, refreshToken: string){
+type CookieOptions = {
+    httpOnly?: boolean;
+    secure?: boolean;
+    sameSite?: 'lax' | 'strict' | 'none';
+    path?: string;
+    maxAge?: number;
+    expires?: Date;
+};
+
+export async function setAuthCookies(accessToken: string, refreshToken: string, rememberMe: boolean = false){
     const cookieStore = await cookies();
 
     cookieStore.set('accessToken', accessToken, {
@@ -19,13 +28,18 @@ export async function setAuthCookies(accessToken: string, refreshToken: string){
         maxAge: 60 * 60,
     });
 
-    cookieStore.set('refreshToken', refreshToken, {
+    const refreshTokenOptions: CookieOptions = {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        maxAge: 7 * 24 * 60 * 60,
-    });
+    };
+
+    if (rememberMe) {
+        refreshTokenOptions.maxAge = 7 * 24 * 60 * 60;
+    }
+
+    cookieStore.set('refreshToken', refreshToken, refreshTokenOptions);
 
     revalidatePath('/client', 'layout');
 }
@@ -102,4 +116,8 @@ export async function getProfileAction() {
     const token = cookieStore.get('accessToken')?.value;
     if (!token) throw new Error("Chưa xác thực");
     return authService.getProfile(token);
+}
+
+export async function loginWithGoogle(idToken: string) {
+    return authService.loginWithGoogle(idToken);
 }

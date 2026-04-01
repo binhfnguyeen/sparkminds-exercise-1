@@ -10,11 +10,11 @@ import {
 const API_BASE_URL = 'http://localhost:8081/api';
 
 export const authService = {
-    async login(email: string, password: string): Promise<ApiDto<AuthenticateDto>> {
+    async login(email: string, password: string, rememberMe: boolean): Promise<ApiDto<AuthenticateDto>> {
         const res = await fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password, rememberMe}),
         });
 
         if (!res.ok) {
@@ -207,5 +207,28 @@ export const authService = {
             throw new Error(error.message || "Lấy thông tin thất bại");
         }
         return res.json();
-    }
+    },
+
+    async loginWithGoogle(idToken: string, rememberMe: boolean): Promise<ApiDto<AuthenticateDto>> {
+      const res = await fetch(`${API_BASE_URL}/login/google`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({idToken, rememberMe}),
+      });
+
+        if (!res.ok) {
+            let errorMessage = 'Đăng nhập Google thất bại';
+            try {
+                const error = await res.json();
+                errorMessage = error.message || errorMessage;
+            } catch (e) {
+                console.error("Lỗi không thể parse JSON:", e);
+                errorMessage = `Lỗi máy chủ: ${res.status}`;
+            }
+            throw new Error(errorMessage);
+        }
+      return res.json();
+    },
 }

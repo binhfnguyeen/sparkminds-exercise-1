@@ -3,14 +3,16 @@
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import { authService } from '../services/auth.services';
-import { setAuthCookies, redirectAfterLogin } from '../actions/auth.action';
+import {setAuthCookies, redirectAfterLogin, loginWithGoogle} from '../actions/auth.action';
 import {useAuth} from "@/features/auth/context/AuthContext";
+import {GoogleLogin, CredentialResponse} from "@react-oauth/google";
 
 export const LoginForm = () => {
     const { login } = useAuth();
     // State đăng nhập cơ bản
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
 
     // State bảo mật
     const [otp, setOtp] = useState('');
@@ -41,7 +43,7 @@ export const LoginForm = () => {
             if (response.result.mfaRequired) {
                 setStep(1); // Chuyển sang nhập OTP
             } else if (response.result.accessToken && response.result.refreshToken) {
-                await setAuthCookies(response.result.accessToken, response.result.refreshToken);
+                await setAuthCookies(response.result.accessToken, response.result.refreshToken, rememberMe);
                 login();
                 await redirectAfterLogin();
             }
@@ -112,6 +114,27 @@ export const LoginForm = () => {
         }
     };
 
+    const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+        try {
+            const idToken = credentialResponse.credential;
+            if (idToken != null){
+                const response = await loginWithGoogle(idToken);
+
+                if (response.result.mfaRequired) {
+                    setStep(1);
+                } else if (response.result.accessToken && response.result.refreshToken) {
+                    await setAuthCookies(response.result.accessToken, response.result.refreshToken, rememberMe);
+                    login();
+                    await redirectAfterLogin();
+                }
+            } else {
+                console.error("Không lấy được Google Client:", error);
+            }
+        } catch (error) {
+            console.error("Lỗi đăng nhập bằng Google:", error);
+        }
+    }
+
     return (
         <div className="w-full max-w-md p-8 sm:p-10 bg-white shadow-2xl rounded-3xl border border-gray-100">
             <div className="mb-8 text-center">
@@ -135,28 +158,53 @@ export const LoginForm = () => {
 
             {/* RENDER FORM 0: ĐĂNG NHẬP */}
             {step === 0 && (
-                <form onSubmit={handleLoginSubmit} className="space-y-5">
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Email của bạn</label>
-                        <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Mật khẩu</label>
-                        <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
+                <div className="space-y-5"> {/* Đổi form thành div để bao bọc cả form cũ và nút Google */}
+                    <form onSubmit={handleLoginSubmit} className="space-y-5">
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Email của bạn</label>
+                            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Mật khẩu</label>
+                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
+                        </div>
+
+                        <div className="flex items-center justify-between text-sm">
+                            <label className="flex items-center text-gray-600 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    className="w-4 h-4 text-blue-600 rounded"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                />
+                                <span className="ml-2">Ghi nhớ tôi</span>
+                            </label>
+                            <Link href="/client/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">Quên mật khẩu?</Link>
+                        </div>
+
+                        <button type="submit" disabled={loading} className="w-full py-3.5 px-4 mt-4 font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700">
+                            {loading ? 'Đang xử lý...' : 'Đăng nhập hệ thống'}
+                        </button>
+                    </form>
+
+                    {/* --- BỔ SUNG PHẦN GOOGLE LOGIN TẠI ĐÂY --- */}
+                    <div className="relative flex items-center py-2">
+                        <div className="flex-grow border-t border-gray-200"></div>
+                        <span className="flex-shrink-0 mx-4 text-sm text-gray-500">Hoặc tiếp tục với</span>
+                        <div className="flex-grow border-t border-gray-200"></div>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm">
-                        <label className="flex items-center text-gray-600 cursor-pointer">
-                            <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" />
-                            <span className="ml-2">Ghi nhớ tôi</span>
-                        </label>
-                        <Link href="/client/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">Quên mật khẩu?</Link>
+                    <div className="flex justify-center w-full">
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => {
+                                console.error('Đăng nhập Google thất bại');
+                                setError('Không thể đăng nhập bằng Google. Vui lòng thử lại.');
+                            }}
+                            width="100%"
+                        />
                     </div>
-
-                    <button type="submit" disabled={loading} className="w-full py-3.5 px-4 mt-4 font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700">
-                        {loading ? 'Đang xử lý...' : 'Đăng nhập hệ thống'}
-                    </button>
-                </form>
+                </div>
             )}
 
             {/* RENDER FORM 1: OTP */}
@@ -197,7 +245,7 @@ export const LoginForm = () => {
                         }}
                         className="w-full py-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
                     >
-                        Đăng nhập bằng mật khẩu / Tài khoản khác
+                        Đăng nhập bằng tài khoản khác
                     </button>
                 </form>
             )}
