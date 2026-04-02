@@ -40,11 +40,10 @@ public class MemberServiceImpl implements MemberService {
     public Page<UserResponse> searchMembers(String keyword, String dobFromStr, String dobToStr, int page, int size, String sortBy, String sortDir) {
         LocalDate dobFrom = null;
         LocalDate dobTo = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
 
         try {
-            if (dobFromStr != null && !dobFromStr.isEmpty()) dobFrom = LocalDate.parse(dobFromStr, formatter);
-            if (dobToStr != null && !dobToStr.isEmpty()) dobTo = LocalDate.parse(dobToStr, formatter);
+            if (dobFromStr != null && !dobFromStr.isEmpty()) dobFrom = LocalDate.parse(dobFromStr);
+            if (dobToStr != null && !dobToStr.isEmpty()) dobTo = LocalDate.parse(dobToStr);
         } catch (DateTimeParseException e) {
             throw new AppException(ErrorCode.INVALID_DATE_FORMAT);
         }

@@ -10,14 +10,14 @@ export default function Header() {
         <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 shadow-sm backdrop-blur-md">
             <div className="container flex items-center justify-between h-16 px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
                 <div className="flex items-center gap-8">
-                    <Link href="/client/" className="text-2xl font-extrabold tracking-tight text-blue-600 transition-transform hover:scale-105">
+                    <Link href="/client" className="text-2xl font-extrabold tracking-tight text-blue-600 transition-transform hover:scale-105">
                         Book<span className="text-gray-900">Book</span>
                     </Link>
 
                     <nav className="hidden md:flex gap-6">
-                        <Link href="/" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Trang chủ</Link>
-                        <Link href="#" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Khóa học</Link>
-                        <Link href="#" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Về chúng tôi</Link>
+                        <Link href="/client" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Trang chủ</Link>
+                        <Link href="#" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Mượn sách</Link>
+                        <Link href="#" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Trả sách</Link>
                     </nav>
                 </div>
 

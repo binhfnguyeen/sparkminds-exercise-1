@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
     long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
     @Override
-    public Page<BookResponse> searchBooks(String keyword, String fromTimeStr, String toTimeStr,
+    public Page<BookResponse> searchBooks(String keyword, Long categoryId, String fromTimeStr, String toTimeStr,
                                    int page, int size, String sortBy, String sortDir) {
         LocalDateTime fromTime = null;
         LocalDateTime toTime = null;
@@ -70,7 +70,7 @@ public class BookServiceImpl implements BookService {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Book> books = bookRepository.findAll(BookSpecification.searchBooks(keyword, fromTime, toTime), pageable);
+        Page<Book> books = bookRepository.findAll(BookSpecification.searchBooks(keyword, categoryId, fromTime, toTime), pageable);
 
         return books.map(BookMapper::map);
     }

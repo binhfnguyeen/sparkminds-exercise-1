@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface BookService {
-    Page<BookResponse> searchBooks(String keyword, String fromTimeStr, String toTimeStr,
+    Page<BookResponse> searchBooks(String keyword, Long categoryId, String fromTimeStr, String toTimeStr,
                                    int page, int size, String sortBy, String sortDir);
     List<BookResponse> importBooksFromCsv(MultipartFile file);
     BookResponse createBook(BookCreateRequest request);

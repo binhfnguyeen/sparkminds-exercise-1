@@ -27,6 +27,7 @@ export interface BookCreateRequest {
 
 export interface SearchBookParams {
     keyword?: string;
+    categoryId?: number;
     fromTime?: string;
     toTime?: string;
     page?: number;

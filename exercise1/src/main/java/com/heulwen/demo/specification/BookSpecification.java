@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BookSpecification {
 
-    public static Specification<Book> searchBooks(String keyword, LocalDateTime fromTime, LocalDateTime toTime){
+    public static Specification<Book> searchBooks(String keyword, Long categoryId, LocalDateTime fromTime, LocalDateTime toTime){
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.isFalse(root.get("deleted")));
@@ -28,6 +28,10 @@ public class BookSpecification {
 
             if (toTime != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("createdAt"), toTime));
+            }
+
+            if (categoryId != null) {
+                predicates.add(cb.equal(root.get("category").get("id"), categoryId));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

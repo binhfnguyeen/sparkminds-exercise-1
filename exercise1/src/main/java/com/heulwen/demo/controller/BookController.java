@@ -30,6 +30,7 @@ public class BookController {
     @GetMapping("/books/search")
     public ApiResponse<Page<BookResponse>> searchBooks(
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String fromTime,
             @RequestParam(required = false) String toTime,
             @RequestParam(defaultValue = "0") int page,
@@ -40,7 +41,7 @@ public class BookController {
         return ApiResponse.<Page<BookResponse>>builder()
                 .code(1000)
                 .message("Get books successful")
-                .result(bookService.searchBooks(keyword, fromTime, toTime, page, size, sortBy, sortDir))
+                .result(bookService.searchBooks(keyword, categoryId, fromTime, toTime, page, size, sortBy, sortDir))
                 .build();
     }
 

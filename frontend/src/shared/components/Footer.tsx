@@ -12,7 +12,7 @@ export default function Footer() {
                             Book<span className="text-gray-900">Book</span>
                         </Link>
                         <p className="mt-4 text-sm leading-relaxed text-gray-500 max-w-sm">
-                            Nền tảng đào tạo và quản lý học tập toàn diện. Khám phá tiềm năng của bạn và xây dựng sự nghiệp vững chắc cùng hệ thống của chúng tôi.
+                            Hệ thống thư viện trực tuyến cho phép người dùng tìm kiếm, mượn và trả sách nhanh chóng, tiện lợi.
                         </p>
                     </div>
 
@@ -20,9 +20,8 @@ export default function Footer() {
                     <div>
                         <h3 className="text-sm font-bold tracking-wider text-gray-900 uppercase">Liên kết</h3>
                         <ul className="mt-4 space-y-3">
-                            <li><Link href="#" className="text-sm text-gray-600 transition-colors hover:text-blue-600">Trang chủ</Link></li>
+                            <li><Link href="/client" className="text-sm text-gray-600 transition-colors hover:text-blue-600">Trang chủ</Link></li>
                             <li><Link href="#" className="text-sm text-gray-600 transition-colors hover:text-blue-600">Về chúng tôi</Link></li>
-                            <li><Link href="#" className="text-sm text-gray-600 transition-colors hover:text-blue-600">Tuyển dụng</Link></li>
                         </ul>
                     </div>
 
