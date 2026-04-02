@@ -18,7 +18,7 @@ export default function Header() {
                         <Link href="/client" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Trang chủ</Link>
                         {isAuthenticated && (
                             <>
-                                <Link href="#" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Mượn sách</Link>
+                                <Link href="/client/borrowed-books" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Sách đã mượn</Link>
                                 <Link href="#" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Trả sách</Link>
                             </>
                         )}

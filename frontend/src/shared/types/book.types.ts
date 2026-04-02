@@ -44,3 +44,12 @@ export interface BookUpdateRequest {
     categoryId: number;
     imgUrl?: string;
 }
+
+export interface BorrowBookResponse {
+    borrowId: number;
+    bookId: number;
+    title: string;
+    author: string;
+    imgUrl?: string;
+    borrowedAt: string;
+}

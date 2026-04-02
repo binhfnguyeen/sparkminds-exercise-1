@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import { BookResponse } from '@/shared/types/book.types';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/features/auth/context/AuthContext";
+import {borrowBookAction} from "@/features/book/actions/book.action";
 
 interface BookDetailDisplayProps {
     book: BookResponse;
@@ -12,8 +13,9 @@ interface BookDetailDisplayProps {
 export const BookDetailDisplay: React.FC<BookDetailDisplayProps> = ({ book }) => {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
+    const [isBorrowing, setIsBorrowing] = useState(false);
 
-    const handleBorrowBook = () => {
+    const handleBorrowBook = async () => {
         if (!isAuthenticated) {
             const confirmLogin = window.confirm("Bạn cần đăng nhập để mượn sách. Đi đến trang đăng nhập ngay?");
             if (confirmLogin) {
@@ -21,22 +23,32 @@ export const BookDetailDisplay: React.FC<BookDetailDisplayProps> = ({ book }) =>
             }
             return;
         }
-        alert(`Bạn đang yêu cầu mượn cuốn: "${book.title}". (Tính năng đang phát triển)`);
+
+        try {
+            setIsBorrowing(true);
+            const res = await borrowBookAction(book.id);
+            if (res.code === 1000) {
+                alert(`Chúc mừng! Bạn đã mượn thành công cuốn: "${book.title}".`);
+                router.push('/client/borrowed-books');
+            } else {
+                alert(res.message || "Không thể mượn sách lúc này.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Có lỗi xảy ra trong quá trình mượn sách.");
+        } finally {
+            setIsBorrowing(false);
+        }
     };
 
     return (
-        // Tăng chiều rộng lên max-w-7xl để có khoảng trống đẩy ảnh và chữ về 2 phía
         <div className="max-w-7xl mx-auto relative rounded-[2rem]">
 
             <div className="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-blue-200/40 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-indigo-200/40 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="flex flex-col md:flex-row relative z-10 min-h-[600px]">
-
-                {/* --- NỬA TRÁI --- */}
-                {/* Dùng justify-start để ép ảnh nằm sát lề trái */}
                 <div className="w-full md:w-1/2 flex items-center justify-start p-8 lg:p-10">
-                    {/* Phóng to ảnh từ 400px lên 500px */}
                     <div className="relative group w-full max-w-[500px]">
 
                         {book.imgUrl ? (
@@ -77,8 +89,6 @@ export const BookDetailDisplay: React.FC<BookDetailDisplayProps> = ({ book }) =>
                     </div>
                 </div>
 
-                {/* --- NỬA PHẢI --- */}
-                {/* Dùng lg:pl-24 để tạo khoảng cách lớn bên trái, đẩy khối nội dung dạt sang bên phải */}
                 <div className="w-full md:w-1/2 p-8 lg:p-10 lg:pl-24 flex flex-col justify-center">
                     <div className="mb-8">
                         <span className="inline-block px-3 py-1.5 bg-blue-100/50 text-blue-700 text-xs font-bold uppercase tracking-wider rounded-lg mb-4 shadow-sm">
@@ -124,10 +134,12 @@ export const BookDetailDisplay: React.FC<BookDetailDisplayProps> = ({ book }) =>
                     <div className="mt-8 pt-8 border-blue-100/50 flex flex-col sm:flex-row gap-4">
                         <button
                             onClick={handleBorrowBook}
-                            disabled={book.quantity <= 0}
+                            disabled={book.quantity <= 0 || isBorrowing}
                             className="flex-1 px-8 py-4 bg-blue-600 text-white text-base font-bold rounded-xl hover:bg-blue-700 transition-all disabled:bg-blue-200 disabled:text-blue-400 disabled:cursor-not-allowed shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 active:scale-[0.98] flex justify-center items-center gap-2"
                         >
-                            {isAuthenticated ? (
+                            {isBorrowing ? (
+                                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                            ) : isAuthenticated ? (
                                 <>
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                                     Mượn sách ngay

@@ -61,3 +61,15 @@ export async function updateBookAction(id: number, data: BookUpdateRequest, file
 export async function getDetailBookAction(id: number){
     return bookService.getDetailBook(id);
 }
+
+export async function borrowBookAction(bookId: number) {
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.borrowBook(token, bookId);
+}
+
+export async function getBorrowedBooksAction() {
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.getBorrowedBooks(token);
+}

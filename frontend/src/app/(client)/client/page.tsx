@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { BookResponse, CategoryResponse } from '@/shared/types/book.types';
-import { getAllCategoriesAction, searchBooksAction } from '@/features/book/actions/book.action';
+import {borrowBookAction, getAllCategoriesAction, searchBooksAction} from '@/features/book/actions/book.action';
 import { useAuth } from "@/features/auth/context/AuthContext";
 import Link from "next/link";
 
@@ -22,6 +22,8 @@ export default function ClientHomePage() {
 
     const [keyword, setKeyword] = useState('');
     const [appliedKeyword, setAppliedKeyword] = useState('');
+
+    const [isBorrowing, setIsBorrowing] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -81,18 +83,32 @@ export default function ClientHomePage() {
         setPage(0);
     };
 
-    const handleBorrowBook = (book: BookResponse) => {
-        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-
-        if (!token) {
+    const handleBorrowBook = async (bookId: number) => {
+        if (!isAuthenticated) {
             const confirmLogin = window.confirm("Bạn cần đăng nhập để mượn sách. Đi đến trang đăng nhập ngay?");
             if (confirmLogin) {
                 router.push('/client/login');
             }
             return;
         }
-        alert(`Bạn đang yêu cầu mượn cuốn: "${book.title}". (Tính năng đang phát triển)`);
+
+        try {
+            setIsBorrowing(true);
+            const res = await borrowBookAction(bookId);
+            if (res.code === 1000) {
+                alert(`Chúc mừng! Bạn đã mượn thành công cuốn: "${bookId}".`);
+                router.push('/client/borrowed-books');
+            } else {
+                alert(res.message || "Không thể mượn sách lúc này.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Có lỗi xảy ra trong quá trình mượn sách.");
+        } finally {
+            setIsBorrowing(false);
+        }
     };
+
 
     return (
         <div className="min-h-screen bg-gray-50/30 pb-12">
@@ -223,7 +239,7 @@ export default function ClientHomePage() {
 
                                         <div className="mt-auto pt-4 border-t border-gray-100">
                                             <button
-                                                onClick={ isAuthenticated ? (() => handleBorrowBook(book)) : (() => router.push(`/client/login`))}
+                                                onClick={ isAuthenticated ? (() => handleBorrowBook(book.id)) : (() => router.push(`/client/login`))}
                                                 disabled={book.quantity <= 0 }
                                                 className="w-full py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-all disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-600/30 active:scale-95 flex justify-center items-center gap-2"
                                             >

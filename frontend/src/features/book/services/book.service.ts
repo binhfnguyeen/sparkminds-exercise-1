@@ -2,7 +2,7 @@ import {
     BookCreateRequest,
     BookResponse,
     CategoryResponse,
-    SearchBookParams, BookUpdateRequest
+    SearchBookParams, BookUpdateRequest, BorrowBookResponse
 } from '@/shared/types/book.types';
 import {ApiResponse, PageResponse} from "@/shared/types/api.types";
 
@@ -159,5 +159,29 @@ export const bookService = {
         if (!res.ok) throw new Error('Lỗi khi lấy chi tiết sách');
 
         return res.json()
+    },
+
+    borrowBook: async (token: string, bookId: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/books/${bookId}/borrow?book_id=${bookId}`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) throw new Error('Lỗi khi mượn sách');
+        return res.json();
+    },
+
+    getBorrowedBooks: async (token: string): Promise<ApiResponse<BorrowBookResponse[]>> => {
+        const res = await fetch(`${API_URL}/borrow/books`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) throw new Error('Lỗi khi lấy danh sách mượn sách');
+        return res.json();
     }
 };
