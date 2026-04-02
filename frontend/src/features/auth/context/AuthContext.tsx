@@ -9,7 +9,7 @@ interface AuthContextType {
     setUser: (user: UserDto | null) => void;
     isLoading: boolean;
     login: () => void;
-    logout: () => Promise<void>;
+    logout: (redirectUrl: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,10 +57,10 @@ export const AuthProvider = ({
     const login = () => {
         setIsAuthenticated(true);
     }
-    const logout = async () => {
+    const logout = async (redirectUrl: string) => {
         setIsAuthenticated(false);
         await logoutAction();
-        window.location.href = '/client/login'
+        window.location.href = redirectUrl;
     }
 
     return (

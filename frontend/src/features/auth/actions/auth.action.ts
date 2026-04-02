@@ -50,7 +50,8 @@ export async function redirectAfterLogin() {
 
 export async function logoutAction() {
     const cookieStore = await cookies();
-    const accessToken = cookieStore.get('accessToken')?.value;
+    const accessToken =
+        cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
 
     if (accessToken) {
         try {
@@ -68,8 +69,14 @@ export async function logoutAction() {
 
     cookieStore.delete('accessToken');
     cookieStore.delete('refreshToken');
-
-    redirect('/client/login');
+    cookieStore.delete({
+        name: 'adminAccessToken',
+        path: '/admin'
+    });
+    cookieStore.delete({
+        name: 'adminRefreshToken',
+        path: '/admin'
+    });
 }
 
 export async function setupMfaAction() {
@@ -92,32 +99,52 @@ export async function enableMfaAction(code: number) {
 
 export async function changePasswordAction(data: ChangePasswordForm) {
     const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value;
+    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
     if (!token) throw new Error("Chưa xác thực");
     return authService.changePassword(token, data);
 }
 
 export async function sendChangeMailOtpAction() {
     const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value;
+    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
     if (!token) throw new Error("Chưa xác thực");
     return authService.sendChangeMailOtp(token);
 }
 
 export async function changeMailAction(data: ChangeMailForm) {
     const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value;
+    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
     if (!token) throw new Error("Chưa xác thực");
     return authService.changeMail(token, data);
 }
 
 export async function getProfileAction() {
     const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value;
+    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
     if (!token) throw new Error("Chưa xác thực");
     return authService.getProfile(token);
 }
 
 export async function loginWithGoogle(idToken: string, rememberMe: boolean) {
     return authService.loginWithGoogle(idToken, rememberMe);
+}
+
+export async function setAdminAuthCookies(accessToken: string, refreshToken: string) {
+    const cookieStore = await cookies();
+
+    const sessionCookieOptions: CookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/admin',
+    };
+
+    cookieStore.set('adminAccessToken', accessToken, sessionCookieOptions);
+    cookieStore.set('adminRefreshToken', refreshToken, sessionCookieOptions);
+
+    revalidatePath('/admin', 'layout');
+}
+
+export async function redirectAfterAdminLogin() {
+    redirect('/admin');
 }

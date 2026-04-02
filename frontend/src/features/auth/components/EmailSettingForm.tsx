@@ -6,12 +6,11 @@ import { changeMailAction, sendChangeMailOtpAction } from '@/features/auth/actio
 export const EmailSettingForm = () => {
     const [newEmail, setNewEmail] = useState('');
     const [otp, setOtp] = useState('');
-    const [step, setStep] = useState<1 | 2>(1); // Step 1: Nhập email mới & Gửi OTP -> Step 2: Nhập OTP
+    const [step, setStep] = useState<1 | 2>(1);
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
 
-    // BƯỚC 1: Yêu cầu backend gửi OTP (Backend sẽ gửi vào email cũ/hiện tại)
     const handleRequestOtp = async (e: React.FormEvent) => {
         e.preventDefault();
         setMessage({ type: '', text: '' });
@@ -23,7 +22,7 @@ export const EmailSettingForm = () => {
 
         setLoading(true);
         try {
-            await sendChangeMailOtpAction(); // API không cần body, tự lấy token để gửi mail cũ
+            await sendChangeMailOtpAction();
             setStep(2);
             setMessage({
                 type: 'success',
@@ -36,7 +35,6 @@ export const EmailSettingForm = () => {
         }
     };
 
-    // BƯỚC 2: Gửi Email mới + OTP để cập nhật
     const handleSubmitChangeMail = async (e: React.FormEvent) => {
         e.preventDefault();
         setMessage({ type: '', text: '' });
@@ -48,13 +46,12 @@ export const EmailSettingForm = () => {
 
         setLoading(true);
         try {
-            // Truyền cả email mới và otp xuống backend
             await changeMailAction({
                 newEmail: newEmail,
                 otp: otp
             });
             setMessage({ type: 'success', text: 'Cập nhật địa chỉ email thành công!' });
-            setStep(1); // Reset form về ban đầu
+            setStep(1);
             setNewEmail('');
             setOtp('');
         } catch (error: any) {
@@ -91,7 +88,6 @@ export const EmailSettingForm = () => {
                     </div>
                 )}
 
-                {/* Ô nhập Email mới */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Địa chỉ Email mới</label>
                     <input
@@ -105,7 +101,6 @@ export const EmailSettingForm = () => {
                     />
                 </div>
 
-                {/* Ô nhập OTP (Chỉ hiện ra khi đã bấm Gửi mã OTP ở Bước 1) */}
                 {step === 2 && (
                     <div className="animate-in slide-in-from-top-2 fade-in duration-300">
                         <div className="h-px bg-gray-100 my-5"></div>
@@ -145,7 +140,6 @@ export const EmailSettingForm = () => {
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                         )}
-                        {/* Text nút bấm thay đổi linh hoạt theo từng bước */}
                         {step === 1 ? (loading ? 'Đang gửi mã...' : 'Gửi mã OTP xác nhận') : (loading ? 'Đang xử lý...' : 'Xác nhận Đổi Email')}
                     </button>
                 </div>

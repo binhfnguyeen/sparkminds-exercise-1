@@ -1,19 +1,17 @@
-import {AdminHeader} from "@/shared/components/AdminHeader";
-import {AdminFooter} from "@/shared/components/AdminFooter";
+import { AuthProvider } from "@/features/auth/context/AuthContext";
+import { cookies } from "next/headers";
+import {AdminLayoutWrapper} from "@/features/auth/components/AdminLayoutWrapper";
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+    const cookieStore = await cookies();
+
+    const isAuthenticated = cookieStore.has('adminAccessToken');
+
     return (
-        <div className="flex min-h-screen">
-            <AdminHeader />
-
-            <div className="flex flex-col flex-1 ml-64">
-
-                <main className="flex-1 p-6 bg-gray-50">
-                    {children}
-                </main>
-
-                <AdminFooter />
-            </div>
-        </div>
+        <AuthProvider initialIsAuthenticated={isAuthenticated}>
+            <AdminLayoutWrapper>
+                {children}
+            </AdminLayoutWrapper>
+        </AuthProvider>
     );
 }

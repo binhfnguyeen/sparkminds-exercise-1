@@ -37,7 +37,7 @@ export default function Header() {
                             </Link>
 
                             <button
-                                onClick={logout}
+                                onClick={() => logout('/client/login')}
                                 className="px-5 py-2 text-sm font-semibold text-gray-600 transition-all duration-200 bg-gray-100 rounded-full hover:bg-red-50 hover:text-red-600"
                             >
                                 Đăng xuất
