@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { BookResponse, CategoryResponse } from '@/shared/types/book.types';
 import { getAllCategoriesAction, searchBooksAction } from '@/features/book/actions/book.action';
 import { useAuth } from "@/features/auth/context/AuthContext";
+import Link from "next/link";
 
 export default function ClientHomePage() {
     const router = useRouter();
@@ -192,23 +193,25 @@ export default function ClientHomePage() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                             {books.map(book => (
                                 <div key={book.id} className="group flex flex-col bg-white rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-blue-900/5 transition-all duration-300 border border-gray-100 hover:-translate-y-1.5">
-                                    <div className="aspect-[2/3] w-full overflow-hidden bg-gray-100 relative">
-                                        <img
-                                            src={book.imgUrl || '/file.svg'}
-                                            alt={book.title}
-                                            onError={(e) => { e.currentTarget.src = '/file.svg'; }}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <Link href={`/client/books/${book.id}`}>
+                                        <div className="aspect-[2/3] w-full overflow-hidden bg-gray-100 relative">
+                                            <img
+                                                src={book.imgUrl || '/file.svg'}
+                                                alt={book.title}
+                                                onError={(e) => { e.currentTarget.src = '/file.svg'; }}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                                        {book.quantity <= 0 && (
-                                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
-                                                <span className="bg-rose-500 text-white text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-full shadow-lg">
-                                                    Hết sách
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
+                                            {book.quantity <= 0 && (
+                                                <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-[2px]">
+                                                    <span className="bg-rose-500 text-white text-xs font-black uppercase tracking-wider px-4 py-1.5 rounded-full shadow-lg">
+                                                        Hết sách
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </Link>
                                     <div className="p-5 flex flex-col flex-1 relative bg-white">
                                         <span className="inline-block px-2.5 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider rounded-md mb-3 w-fit">
                                             {book.category?.name || 'Chưa phân loại'}

@@ -12,6 +12,6 @@ public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long
 
     boolean existsByUser_IdAndBook_IdAndStatus(Long userId, Long bookId, BorrowStatus status);
 
-    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book WHERE br.user.id == :userId AND br.status == :status")
+    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book WHERE br.user.id = :userId AND br.status = :status")
     List<BorrowRecord> findByUserIdAndStatusWithBook(@Param("userId") Long userId, @Param("status") BorrowStatus status);
 }

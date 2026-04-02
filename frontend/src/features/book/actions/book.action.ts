@@ -57,3 +57,7 @@ export async function updateBookAction(id: number, data: BookUpdateRequest, file
     revalidatePath('/admin/books');
     return result;
 }
+
+export async function getDetailBookAction(id: number){
+    return bookService.getDetailBook(id);
+}

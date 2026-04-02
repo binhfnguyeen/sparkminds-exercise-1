@@ -148,4 +148,16 @@ export const bookService = {
         if (!res.ok) throw new Error('Lỗi khi cập nhật sách');
         return res.json();
     },
+
+    getDetailBook: async (id: number): Promise<ApiResponse<BookResponse>> => {
+        const res = await fetch(`${API_URL}/books/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!res.ok) throw new Error('Lỗi khi lấy chi tiết sách');
+
+        return res.json()
+    }
 };

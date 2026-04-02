@@ -160,6 +160,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponse getBookById(Long id) {
         Book book = bookRepository.findById(id)
+                .filter(b -> !b.isDeleted())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
         return BookMapper.map(book);
     }
