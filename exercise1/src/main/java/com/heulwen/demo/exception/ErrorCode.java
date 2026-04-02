@@ -39,6 +39,8 @@ public enum ErrorCode {
     FILE_EMPTY(1034, "File is empty.", HttpStatus.BAD_REQUEST),
     BOOK_NOT_EXISTED(1035, "Book not existed.", HttpStatus.BAD_REQUEST),
     FILE_TOO_LARGE(1036, "File is too large.", HttpStatus.BAD_REQUEST),
+    OUT_OF_STOCK(1037, "Out of stock.", HttpStatus.BAD_REQUEST),
+    ALREADY_BORROWED(1038, "You are already borrowing this book and have not returned it yet.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;
