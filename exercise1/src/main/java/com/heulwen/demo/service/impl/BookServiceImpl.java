@@ -43,6 +43,7 @@ public class BookServiceImpl implements BookService {
 
     BookRepository bookRepository;
     CategoryRepository categoryRepository;
+    long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
     @Override
     public Page<BookResponse> searchBooks(String keyword, String fromTimeStr, String toTimeStr,
@@ -79,6 +80,10 @@ public class BookServiceImpl implements BookService {
     public List<BookResponse> importBooksFromCsv(MultipartFile file) {
         if (file.isEmpty()) {
             throw new AppException(ErrorCode.FILE_EMPTY);
+        }
+
+        if (file.getSize() > MAX_FILE_SIZE) {
+            throw new AppException(ErrorCode.FILE_TOO_LARGE);
         }
 
         String fileName = file.getOriginalFilename();

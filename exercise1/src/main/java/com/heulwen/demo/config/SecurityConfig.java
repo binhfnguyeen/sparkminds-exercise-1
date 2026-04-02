@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request
                     -> request.requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/verify-email").permitAll()
@@ -43,7 +44,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/login/mfa-verify").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login/google").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/upload-image").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/upload-image").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/logout").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-password").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/change-phone").authenticated()

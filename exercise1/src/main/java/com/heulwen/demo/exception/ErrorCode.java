@@ -38,6 +38,7 @@ public enum ErrorCode {
     INVALID_DATE_RANGE(1033, "Invalid date range", HttpStatus.BAD_REQUEST),
     FILE_EMPTY(1034, "File is empty.", HttpStatus.BAD_REQUEST),
     BOOK_NOT_EXISTED(1035, "Book not existed.", HttpStatus.BAD_REQUEST),
+    FILE_TOO_LARGE(1036, "File is too large.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

@@ -21,6 +21,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private final Path fileStorageLocation;
     private final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "webp");
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
     public FileStorageServiceImpl(@Value("${file.upload-dir}") String uploadDir) {
         this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
@@ -35,6 +36,10 @@ public class FileStorageServiceImpl implements FileStorageService {
     public String storeFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new AppException(ErrorCode.EMPTY_FILE);
+        }
+
+        if (file.getSize() > MAX_FILE_SIZE) {
+            throw new AppException(ErrorCode.FILE_TOO_LARGE);
         }
 
         String originalFilename = file.getOriginalFilename();

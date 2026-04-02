@@ -1,34 +1,38 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import {NextRequest, NextResponse} from "next/server";
 
-// BẮT BUỘC ĐỔI TÊN HÀM THÀNH proxy
 export function proxy(request: NextRequest) {
+    if (request.headers.has('next-action')) {
+        return NextResponse.next();
+    }
+
     const { pathname } = request.nextUrl;
 
     if (pathname.startsWith('/admin')) {
         const token = request.cookies.get('adminAccessToken')?.value;
 
-        // 1. Đang ở trang Login
         if (pathname.startsWith('/admin/login')) {
             if (token) {
-                return NextResponse.redirect(new URL('/admin', request.url));
+                return NextResponse.redirect(new URL('/admin/vocabularies', request.url));
             }
             return NextResponse.next();
         }
 
-        // 2. Không có token -> Bắt đăng nhập
         if (!token) {
             return NextResponse.redirect(new URL('/admin/login', request.url));
         }
 
-        // 3. Có token -> Giải mã và check Role
         try {
-            const payloadBase64 = token.split('.')[1];
+            let payloadBase64 = token.split('.')[1];
+
+            payloadBase64 = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
+            while (payloadBase64.length % 4 !== 0) {
+                payloadBase64 += '=';
+            }
+
             const decodedJson = atob(payloadBase64);
             const payload = JSON.parse(decodedJson);
 
-            // Kiểm tra Role, nếu KHÔNG phải ADMIN -> Xóa Cookie trình duyệt và đá về Login
-            if (payload.scope !== 'ADMIN') {
+            if (payload.scope !== 'ROLE_ADMIN') {
                 const response = NextResponse.redirect(new URL('/admin/login', request.url));
                 response.cookies.delete('adminAccessToken');
                 response.cookies.delete('adminRefreshToken');
@@ -36,7 +40,6 @@ export function proxy(request: NextRequest) {
             }
 
         } catch (error) {
-            // Token hỏng/rác -> Xóa Cookie trình duyệt và đá về Login
             const response = NextResponse.redirect(new URL('/admin/login', request.url));
             response.cookies.delete('adminAccessToken');
             response.cookies.delete('adminRefreshToken');

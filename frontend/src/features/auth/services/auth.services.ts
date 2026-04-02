@@ -5,7 +5,7 @@ import {
     UserDto,
     ResetPasswordForm,
     ChangePasswordForm, ChangeMailForm
-} from "@/shared/api/api";
+} from "@/shared/types/auth.types";
 
 const API_BASE_URL = 'http://localhost:8081/api';
 

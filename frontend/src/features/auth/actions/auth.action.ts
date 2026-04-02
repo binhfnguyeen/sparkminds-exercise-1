@@ -2,11 +2,11 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import {revalidatePath} from "next/cache";
-import {authService} from "@/features/auth/services/auth.services";
-import {ChangeMailForm, ChangePasswordForm} from "@/shared/api/api";
+import { revalidatePath } from "next/cache";
+import { authService } from "@/features/auth/services/auth.services";
+import { ChangeMailForm, ChangePasswordForm } from "@/shared/types/auth.types";
 
-const API_BASE_URL = 'http://localhost:8081/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081/api';
 
 type CookieOptions = {
     httpOnly?: boolean;
@@ -17,7 +17,12 @@ type CookieOptions = {
     expires?: Date;
 };
 
-export async function setAuthCookies(accessToken: string, refreshToken: string, rememberMe: boolean = false){
+const getActiveToken = async () => {
+    const cookieStore = await cookies();
+    return cookieStore.get('adminAccessToken')?.value || cookieStore.get('accessToken')?.value;
+};
+
+export async function setAuthCookies(accessToken: string, refreshToken: string, rememberMe: boolean = false) {
     const cookieStore = await cookies();
 
     cookieStore.set('accessToken', accessToken, {
@@ -50,8 +55,7 @@ export async function redirectAfterLogin() {
 
 export async function logoutAction() {
     const cookieStore = await cookies();
-    const accessToken =
-        cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
+    const accessToken = await getActiveToken();
 
     if (accessToken) {
         try {
@@ -80,47 +84,37 @@ export async function logoutAction() {
 }
 
 export async function setupMfaAction() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value;
-
+    const token = await getActiveToken();
     if (!token) throw new Error("Chưa xác thực, không tìm thấy Token");
-
     return authService.setupMfa(token);
 }
 
 export async function enableMfaAction(code: number) {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value;
-
+    const token = await getActiveToken();
     if (!token) throw new Error("Chưa xác thực");
-
     return authService.enableMfa(token, code);
 }
 
 export async function changePasswordAction(data: ChangePasswordForm) {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
+    const token = await getActiveToken();
     if (!token) throw new Error("Chưa xác thực");
     return authService.changePassword(token, data);
 }
 
 export async function sendChangeMailOtpAction() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
+    const token = await getActiveToken();
     if (!token) throw new Error("Chưa xác thực");
     return authService.sendChangeMailOtp(token);
 }
 
 export async function changeMailAction(data: ChangeMailForm) {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
+    const token = await getActiveToken();
     if (!token) throw new Error("Chưa xác thực");
     return authService.changeMail(token, data);
 }
 
 export async function getProfileAction() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('accessToken')?.value || cookieStore.get('adminAccessToken')?.value;
+    const token = await getActiveToken();
     if (!token) throw new Error("Chưa xác thực");
     return authService.getProfile(token);
 }

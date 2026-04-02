@@ -1,7 +1,7 @@
 'use client';
 import {createContext, type ReactNode, useContext, useEffect, useState} from "react";
 import {getProfileAction, logoutAction} from "@/features/auth/actions/auth.action";
-import { UserDto} from "@/shared/api/api";
+import { UserDto} from "@/shared/types/auth.types";
 
 interface AuthContextType {
     isAuthenticated: boolean;
