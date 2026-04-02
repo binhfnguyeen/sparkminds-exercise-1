@@ -183,9 +183,9 @@ export const BookFormModal = ({ isOpen, onClose, editingBook, categories, setCat
                             disabled={submitLoading}
                             className={`px-6 py-2.5 text-white font-bold rounded-xl transition shadow-sm flex items-center gap-2
                             ${editingBook
-                                ? 'bg-orange-500 hover:bg-orange-600'
+                                ? 'bg-green-600 hover:bg-green-700'
                                 : 'bg-blue-600 hover:bg-blue-700'}
-                            disabled:bg-gray-400 disabled:cursor-not-allowed`}
+                                disabled:bg-gray-400 disabled:cursor-not-allowed`}
                         >
                             {submitLoading
                                 ? 'Đang xử lý...'

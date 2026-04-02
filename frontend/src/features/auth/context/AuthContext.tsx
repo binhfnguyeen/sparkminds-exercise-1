@@ -1,12 +1,12 @@
 'use client';
 import {createContext, type ReactNode, useContext, useEffect, useState} from "react";
 import {getProfileAction, logoutAction} from "@/features/auth/actions/auth.action";
-import { UserDto} from "@/shared/types/auth.types";
+import { UserResponse} from "@/shared/types/auth.types";
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    user: UserDto | null;
-    setUser: (user: UserDto | null) => void;
+    user: UserResponse | null;
+    setUser: (user: UserResponse | null) => void;
     isLoading: boolean;
     login: () => void;
     logout: (redirectUrl: string) => Promise<void>;
@@ -22,7 +22,7 @@ export const AuthProvider = ({
     initialIsAuthenticated: boolean;
 }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);
-    const [user, setUser] = useState<UserDto | null>(null);
+    const [user, setUser] = useState<UserResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

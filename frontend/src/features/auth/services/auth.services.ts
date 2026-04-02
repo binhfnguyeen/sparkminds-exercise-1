@@ -1,16 +1,15 @@
 import {
-    ApiDto,
-    AuthenticateDto,
     UserCreateForm,
-    UserDto,
+    UserResponse,
     ResetPasswordForm,
     ChangePasswordForm, ChangeMailForm
 } from "@/shared/types/auth.types";
+import {ApiResponse, AuthenticateResponse} from "@/shared/types/api.types";
 
 const API_BASE_URL = 'http://localhost:8081/api';
 
 export const authService = {
-    async login(email: string, password: string, rememberMe: boolean): Promise<ApiDto<AuthenticateDto>> {
+    async login(email: string, password: string, rememberMe: boolean): Promise<ApiResponse<AuthenticateResponse>> {
         const res = await fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -24,7 +23,7 @@ export const authService = {
         return res.json();
     },
 
-    async verifyMfa(email: string, code: number): Promise<ApiDto<AuthenticateDto>> {
+    async verifyMfa(email: string, code: number): Promise<ApiResponse<AuthenticateResponse>> {
         const res = await fetch(`${API_BASE_URL}/login/mfa-verify?email=${email}&code=${code}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -37,7 +36,7 @@ export const authService = {
         return res.json();
     },
 
-    async setupMfa(token: string): Promise<ApiDto<string>> {
+    async setupMfa(token: string): Promise<ApiResponse<string>> {
         const res = await fetch(`${API_BASE_URL}/mfa/setup`, {
             method: 'POST',
             headers: {
@@ -48,7 +47,7 @@ export const authService = {
         return res.json();
     },
 
-    async enableMfa(token: string, code: number): Promise<ApiDto<string>> {
+    async enableMfa(token: string, code: number): Promise<ApiResponse<string>> {
         const res = await fetch(`${API_BASE_URL}/mfa/enable?code=${code}`, {
             method: 'POST',
             headers: {
@@ -64,7 +63,7 @@ export const authService = {
 
     async register(
         { email, password, phone, firstName, lastName, dateOfBirth } : UserCreateForm
-    ): Promise<ApiDto<UserDto>> {
+    ): Promise<ApiResponse<UserResponse>> {
         const res = await fetch(`${API_BASE_URL}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -85,7 +84,7 @@ export const authService = {
         return res.json();
     },
 
-    async forgotPassword(email: string): Promise<ApiDto<string>> {
+    async forgotPassword(email: string): Promise<ApiResponse<string>> {
         const res = await fetch(`${API_BASE_URL}/forgot-password?email=${encodeURIComponent(email)}`, {
             method: 'POST',
         });
@@ -97,7 +96,7 @@ export const authService = {
         return res.json();
     },
 
-    async changePasswordFirstTime({ email, tempPassword, newPassword }: ResetPasswordForm): Promise<ApiDto<AuthenticateDto>> {
+    async changePasswordFirstTime({ email, tempPassword, newPassword }: ResetPasswordForm): Promise<ApiResponse<AuthenticateResponse>> {
         const res = await fetch(`${API_BASE_URL}/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -115,7 +114,7 @@ export const authService = {
         return res.json();
     },
 
-    async verifyEmailOtp(email: string, otp: string): Promise<ApiDto<any>> {
+    async verifyEmailOtp(email: string, otp: string): Promise<ApiResponse<any>> {
         const res = await fetch(`${API_BASE_URL}/verify-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -129,7 +128,7 @@ export const authService = {
         return res.json();
     },
 
-    async verifyEmailLink(token: string): Promise<ApiDto<string>> {
+    async verifyEmailLink(token: string): Promise<ApiResponse<string>> {
         const res = await fetch(`${API_BASE_URL}/verify-email-link?token=${encodeURIComponent(token)}`, {
             method: 'GET',
         });
@@ -148,7 +147,7 @@ export const authService = {
         return res.json();
     },
 
-    async resendVerification(email: string): Promise<ApiDto<string>> {
+    async resendVerification(email: string): Promise<ApiResponse<string>> {
         const res = await fetch(`${API_BASE_URL}/resend-verification?email=${encodeURIComponent(email)}`, {
             method: 'POST',
         });
@@ -159,7 +158,7 @@ export const authService = {
         return res.json();
     },
 
-    async changePassword(token: string, data: ChangePasswordForm): Promise<ApiDto<UserDto>> {
+    async changePassword(token: string, data: ChangePasswordForm): Promise<ApiResponse<UserResponse>> {
         const res = await fetch(`${API_BASE_URL}/change-password`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -172,7 +171,7 @@ export const authService = {
         return res.json();
     },
 
-    async sendChangeMailOtp(token: string): Promise<ApiDto<string>> {
+    async sendChangeMailOtp(token: string): Promise<ApiResponse<string>> {
         const res = await fetch(`${API_BASE_URL}/send-otp-change-mail`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` }
@@ -184,7 +183,7 @@ export const authService = {
         return res.json();
     },
 
-    async changeMail(token: string, data: ChangeMailForm): Promise<ApiDto<UserDto>> {
+    async changeMail(token: string, data: ChangeMailForm): Promise<ApiResponse<UserResponse>> {
         const res = await fetch(`${API_BASE_URL}/change-mail`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -197,7 +196,7 @@ export const authService = {
         return res.json();
     },
 
-    async getProfile(token: string): Promise<ApiDto<UserDto>> {
+    async getProfile(token: string): Promise<ApiResponse<UserResponse>> {
         const res = await fetch(`${API_BASE_URL}/profile`, {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
@@ -210,7 +209,7 @@ export const authService = {
         return res.json();
     },
 
-    async loginWithGoogle(idToken: string, rememberMe: boolean): Promise<ApiDto<AuthenticateDto>> {
+    async loginWithGoogle(idToken: string, rememberMe: boolean): Promise<ApiResponse<AuthenticateResponse>> {
       const res = await fetch(`${API_BASE_URL}/login/google`, {
           method: 'POST',
           headers: {

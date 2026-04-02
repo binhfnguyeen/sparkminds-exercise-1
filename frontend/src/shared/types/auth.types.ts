@@ -1,16 +1,3 @@
-export interface ApiDto<T> {
-    code: number;
-    message: string;
-    result: T;
-}
-
-export interface AuthenticateDto {
-    accessToken: string | null;
-    refreshToken: string | null;
-    mfaRequired: boolean;
-    email: string | null;
-}
-
 export interface UserCreateForm {
     email: string | null;
     password: string | null;
@@ -20,7 +7,7 @@ export interface UserCreateForm {
     dateOfBirth: string | null;
 }
 
-export interface UserDto {
+export interface UserResponse {
     id: number | null;
     email: string | null;
     phone: string | null;

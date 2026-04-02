@@ -2,10 +2,10 @@ import {
     ApiResponse,
     BookCreateRequest,
     BookResponse,
-    PageResponse,
     CategoryResponse,
     SearchBookParams, BookUpdateRequest
 } from '@/shared/types/book.types';
+import {PageResponse} from "@/shared/types/api.types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081/api';
 
