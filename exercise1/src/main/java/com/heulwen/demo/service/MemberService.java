@@ -11,4 +11,6 @@ public interface MemberService {
     UserResponse createMember(MemberCreateRequest request);
     UserResponse updateMember(Long id, MemberUpdateRequest request);
     void deleteMemberSoft(Long id);
+    void unblockMember(Long id);
+    void blockMember(Long id);
 }

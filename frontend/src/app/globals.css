@@ -2,3 +2,5 @@
 @source "../features/";
 @source "../shared/"
 @source "../features/auth/components/"
+@source "../features/book/components/"
+@source "../features/member/components/"

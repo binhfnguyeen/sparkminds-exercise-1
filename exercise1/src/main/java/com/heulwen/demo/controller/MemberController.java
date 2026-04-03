@@ -63,7 +63,24 @@ public class MemberController {
         return ApiResponse.<String>builder()
                 .code(1000)
                 .message("Delete member successfully!")
-                .result(null)
+                .build();
+    }
+
+    @PutMapping("/members/{id}/unblock")
+    public ApiResponse<String> unblockMember(@PathVariable Long id) {
+        memberService.unblockMember(id);
+        return ApiResponse.<String>builder()
+                .code(1000)
+                .message("Unblock member successfully!")
+                .build();
+    }
+
+    @PutMapping("/members/{id}/block")
+    public ApiResponse<String> blockMember(@PathVariable Long id) {
+        memberService.blockMember(id);
+        return ApiResponse.<String>builder()
+                .code(1000)
+                .message("Unblock member successfully!")
                 .build();
     }
 }

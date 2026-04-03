@@ -41,6 +41,9 @@ public class BorrowRecord {
     @Column(name = "due_date")
     LocalDateTime dueDate;
 
+    @Column(name = "returned_at")
+    LocalDateTime returnedAt;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     LocalDateTime createdAt;

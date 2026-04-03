@@ -41,6 +41,10 @@ public enum ErrorCode {
     FILE_TOO_LARGE(1036, "File is too large.", HttpStatus.BAD_REQUEST),
     OUT_OF_STOCK(1037, "Out of stock.", HttpStatus.BAD_REQUEST),
     ALREADY_BORROWED(1038, "You are already borrowing this book and have not returned it yet.", HttpStatus.BAD_REQUEST),
+    RECORD_NOT_EXISTED(1039, "Record not existed.", HttpStatus.BAD_REQUEST),
+    RECORD_INVALID_STATUS(1040, "Record invalid status.", HttpStatus.BAD_REQUEST),
+    USER_NOT_BLOCKED(1041, "User is not blocked.",  HttpStatus.BAD_REQUEST),
+    USER_IS_ACTIVE(1042, "User is active.",  HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;

@@ -78,4 +78,34 @@ export const memberService = {
 
         return res.json();
     },
+
+    unblockMember: async (token: string, id: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/members/${id}/unblock`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi khi mở khóa thành viên');
+        }
+        return res.json();
+    },
+
+    blockMember: async (token: string, id: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/members/${id}/block`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi khi khóa thành viên');
+        }
+        return res.json();
+    }
 };

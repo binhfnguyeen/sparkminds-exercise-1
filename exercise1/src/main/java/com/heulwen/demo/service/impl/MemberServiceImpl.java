@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -104,6 +105,36 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         user.setDeleted(true);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void unblockMember(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!UserStatus.BLOCKED.equals(user.getStatus())) {
+            throw new AppException(ErrorCode.USER_NOT_BLOCKED);
+        }
+
+        user.setStatus(UserStatus.ACTIVE);
+        user.setLockTime(null);
+        user.setFailedAttempt(0);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void blockMember(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!UserStatus.ACTIVE.equals(user.getStatus())) {
+            throw new AppException(ErrorCode.USER_IS_ACTIVE);
+        }
+
+        user.setStatus(UserStatus.BLOCKED);
+        user.setLockTime(LocalDateTime.now());
+        user.setFailedAttempt(3);
         userRepository.save(user);
     }
 }

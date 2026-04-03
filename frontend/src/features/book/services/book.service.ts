@@ -2,7 +2,7 @@ import {
     BookCreateRequest,
     BookResponse,
     CategoryResponse,
-    SearchBookParams, BookUpdateRequest, BorrowBookResponse
+    SearchBookParams, BookUpdateRequest, BorrowBookResponse, SearchBorrowParams
 } from '@/shared/types/book.types';
 import {ApiResponse, PageResponse} from "@/shared/types/api.types";
 
@@ -162,14 +162,19 @@ export const bookService = {
     },
 
     borrowBook: async (token: string, bookId: number): Promise<ApiResponse<string>> => {
-        const res = await fetch(`${API_URL}/books/${bookId}/borrow?book_id=${bookId}`, {
+        const res = await fetch(`${API_URL}/books/${bookId}/borrow`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
         });
-        if (!res.ok) throw new Error('Lỗi khi mượn sách');
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi hệ thống khi mượn sách');
+        }
+
         return res.json();
     },
 
@@ -182,6 +187,79 @@ export const bookService = {
             },
         });
         if (!res.ok) throw new Error('Lỗi khi lấy danh sách mượn sách');
+        return res.json();
+    },
+
+    approveBorrowRequest: async (token: string, borrowId: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/borrow/${borrowId}/approve`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi khi duyệt yêu cầu');
+        }
+        return res.json();
+    },
+
+    rejectBorrowRequest: async (token: string, borrowId: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/borrow/${borrowId}/reject`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi khi từ chối yêu cầu');
+        }
+        return res.json();
+    },
+
+    deleteCategory: async (token: string, id: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/categories/${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error('Lỗi khi xóa thể loại');
+        return res.json();
+    },
+
+    returnBook: async (token: string, borrowId: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/borrow/${borrowId}/return`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi khi xác nhận trả sách');
+        }
+        return res.json();
+    },
+
+    searchBorrowRecordsAdmin: async (token: string, params: SearchBorrowParams): Promise<ApiResponse<PageResponse<BorrowBookResponse>>> => {
+        const query = new URLSearchParams();
+        if (params.email) query.append('email', params.email);
+        if (params.title) query.append('title', params.title);
+        if (params.status) query.append('status', params.status);
+        if (params.fromDate) query.append('fromDate', params.fromDate);
+        if (params.toDate) query.append('toDate', params.toDate);
+        if (params.page !== undefined) query.append('page', params.page.toString());
+        if (params.size !== undefined) query.append('size', params.size.toString());
+        if (params.sortBy) query.append('sortBy', params.sortBy);
+        if (params.sortDir) query.append('sortDir', params.sortDir);
+
+        const res = await fetch(`${API_URL}/admin/borrow/books/search?${query}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Lỗi khi tìm kiếm yêu cầu mượn sách');
         return res.json();
     }
 };

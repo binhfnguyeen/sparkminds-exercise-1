@@ -3,13 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { BookResponse, CategoryResponse } from '@/shared/types/book.types';
-import {borrowBookAction, getAllCategoriesAction, searchBooksAction} from '@/features/book/actions/book.action';
-import { useAuth } from "@/features/auth/context/AuthContext";
+import { getAllCategoriesAction, searchBooksAction } from '@/features/book/actions/book.action';
+// Đã loại bỏ useAuth và borrowBookAction vì không còn dùng ở trang này nữa
 import Link from "next/link";
 
 export default function ClientHomePage() {
     const router = useRouter();
-    const { isAuthenticated } = useAuth();
 
     const [categories, setCategories] = useState<CategoryResponse[]>([]);
     const [books, setBooks] = useState<BookResponse[]>([]);
@@ -22,8 +21,6 @@ export default function ClientHomePage() {
 
     const [keyword, setKeyword] = useState('');
     const [appliedKeyword, setAppliedKeyword] = useState('');
-
-    const [isBorrowing, setIsBorrowing] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -83,36 +80,10 @@ export default function ClientHomePage() {
         setPage(0);
     };
 
-    const handleBorrowBook = async (bookId: number) => {
-        if (!isAuthenticated) {
-            const confirmLogin = window.confirm("Bạn cần đăng nhập để mượn sách. Đi đến trang đăng nhập ngay?");
-            if (confirmLogin) {
-                router.push('/client/login');
-            }
-            return;
-        }
-
-        try {
-            setIsBorrowing(true);
-            const res = await borrowBookAction(bookId);
-            if (res.code === 1000) {
-                alert(`Chúc mừng! Bạn đã mượn thành công cuốn: "${bookId}".`);
-                router.push('/client/borrowed-books');
-            } else {
-                alert(res.message || "Không thể mượn sách lúc này.");
-            }
-        } catch (error) {
-            console.error(error);
-            alert("Có lỗi xảy ra trong quá trình mượn sách.");
-        } finally {
-            setIsBorrowing(false);
-        }
-    };
-
-
     return (
         <div className="min-h-screen bg-gray-50/30 pb-12">
             <div className="max-w-7xl mx-auto px-4 pt-8">
+                {/* HERO SECTION */}
                 <div className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 rounded-3xl p-8 md:p-12 mb-8 border border-gray-100 shadow-md shadow-blue-100/40 text-center relative overflow-hidden">
                     <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-blue-400 rounded-full blur-3xl opacity-10"></div>
                     <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-indigo-400 rounded-full blur-3xl opacity-10"></div>
@@ -125,11 +96,11 @@ export default function ClientHomePage() {
                     </p>
                 </div>
 
-                <div className="sticky top-4 z-40 bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm rounded-2xl p-4 mb-8 flex flex-col lg:flex-row lg:items-center gap-4 transition-all">
+                {/* SEARCH & FILTER BAR */}
+                <div className="sticky top-20 z-40 bg-white/80 backdrop-blur-xl border border-gray-200 shadow-sm rounded-2xl p-4 mb-8 flex flex-col lg:flex-row lg:items-center gap-4 transition-all">
 
                     <form onSubmit={handleSearchSubmit} className="flex gap-2 shrink-0 lg:w-96">
                         <div className="flex items-center w-full max-w-xl bg-gray-100 rounded-xl p-1 shadow-sm focus-within:bg-white focus-within:shadow-md transition-all">
-
                             <input
                                 type="text"
                                 value={keyword}
@@ -137,7 +108,6 @@ export default function ClientHomePage() {
                                 placeholder="Tìm kiếm sách, tác giả..."
                                 className="flex-1 px-4 py-2.5 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400"
                             />
-
                             <button
                                 type="submit"
                                 className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all"
@@ -189,6 +159,7 @@ export default function ClientHomePage() {
                     </div>
                 </div>
 
+                {/* MAIN CONTENT (BOOK LIST) */}
                 {loading ? (
                     <div className="flex flex-col justify-center items-center h-64 gap-4">
                         <div className="animate-spin rounded-full h-12 w-12 border-[4px] border-gray-200 border-t-blue-600"></div>
@@ -228,6 +199,7 @@ export default function ClientHomePage() {
                                             )}
                                         </div>
                                     </Link>
+
                                     <div className="p-5 flex flex-col flex-1 relative bg-white">
                                         <span className="inline-block px-2.5 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider rounded-md mb-3 w-fit">
                                             {book.category?.name || 'Chưa phân loại'}
@@ -238,24 +210,21 @@ export default function ClientHomePage() {
                                         <p className="text-sm text-gray-500 mb-4 font-medium">{book.author}</p>
 
                                         <div className="mt-auto pt-4 border-t border-gray-100">
-                                            <button
-                                                onClick={ isAuthenticated ? (() => handleBorrowBook(book.id)) : (() => router.push(`/client/login`))}
-                                                disabled={book.quantity <= 0 }
-                                                className="w-full py-2.5 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-all disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-600/30 active:scale-95 flex justify-center items-center gap-2"
+                                            {/* THAY ĐỔI: Dùng thẻ Link điều hướng thay vì button mượn sách */}
+                                            <Link
+                                                href={`/client/books/${book.id}`}
+                                                className="w-full py-2.5 bg-gray-50 text-blue-600 border border-blue-100 text-sm font-bold rounded-xl hover:bg-blue-600 hover:text-white transition-all hover:shadow-md hover:shadow-blue-600/20 active:scale-95 flex justify-center items-center gap-2"
                                             >
-                                                { isAuthenticated ? (
-                                                    <>
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                                                        Mượn sách
-                                                    </>
-                                                ) : "Đăng nhập để mượn" }
-                                            </button>
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                                Xem chi tiết
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
+                        {/* PAGINATION */}
                         {totalPages > 1 && (
                             <div className="flex justify-center items-center gap-3 mt-12 mb-8">
                                 <button

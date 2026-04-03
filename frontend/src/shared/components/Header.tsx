@@ -17,10 +17,7 @@ export default function Header() {
                     <nav className="hidden md:flex gap-6">
                         <Link href="/client" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Trang chủ</Link>
                         {isAuthenticated && (
-                            <>
                                 <Link href="/client/borrowed-books" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Sách đã mượn</Link>
-                                <Link href="#" className="text-sm font-medium text-gray-600 transition-colors hover:text-blue-600">Trả sách</Link>
-                            </>
                         )}
                     </nav>
                 </div>

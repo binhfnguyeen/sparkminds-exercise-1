@@ -41,3 +41,19 @@ export async function deleteMemberAction(id: number) {
     revalidatePath('/admin/members');
     return result;
 }
+
+export async function unblockMemberAction(id: number){
+    const token = await getToken();
+    const result = await memberService.unblockMember(token, id);
+
+    revalidatePath('/admin/members');
+    return result;
+}
+
+export async function blockMemberAction(id: number){
+    const token = await getToken();
+    const result = await memberService.blockMember(token, id);
+
+    revalidatePath('/admin/members');
+    return result;
+}

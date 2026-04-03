@@ -51,7 +51,21 @@ export interface BorrowBookResponse {
     title: string;
     author: string;
     imgUrl?: string;
+    status: 'PENDING' | 'BORROWED' | 'RETURNED' | 'REJECTED';
     borrowedAt: string;
     dueDate: string;
     isOverDue: boolean;
+    userEmail?: string;
+}
+
+export interface SearchBorrowParams {
+    email?: string;
+    title?: string;
+    status?: string;
+    fromDate?: string;
+    toDate?: string;
+    page?: number;
+    size?: number;
+    sortBy?: string;
+    sortDir?: string;
 }
