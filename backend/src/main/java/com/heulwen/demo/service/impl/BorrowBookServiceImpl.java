@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Transactional
 public class BorrowBookServiceImpl implements BorrowBookService {
 
     BookRepository bookRepository;
@@ -154,6 +156,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BorrowBookResponse> getAllBookRequestsForAdmin() {
         List<BorrowRecord> records = borrowRecordRepository.findAllWithBookAndUser();
         return records.stream().map(
@@ -173,6 +176,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void returnBook(Long borrowId) {
         BorrowRecord record = borrowRecordRepository.findById(borrowId)
                 .orElseThrow(()->new AppException(ErrorCode.RECORD_NOT_EXISTED));
@@ -191,6 +195,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<BorrowBookResponse> searchBorrowRecordsAdmin(String email, String title, BorrowStatus status, LocalDateTime fromDate, LocalDateTime toDate, int page, int size, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);

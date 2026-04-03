@@ -33,6 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Transactional
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     VerificationTokenRepository verificationTokenRepository;
@@ -42,7 +43,6 @@ public class UserServiceImpl implements UserService {
     private final TokenRedisService tokenRedisService;
 
     @Override
-    @Transactional
     public UserResponse createUser(UserCreateRequest form) {
         if (userRepository.existsByEmail(form.getEmail())) {
             throw new AppException(ErrorCode.USER_EXISTED);
@@ -64,7 +64,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public String verifyEmailOtp(VerifyEmailRequest form) {
         User user = userRepository.findUserByEmail(form.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -85,7 +84,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public String verifyEmailLink(String token) {
         VerificationToken verificationToken = verificationTokenRepository
                 .findByTokenAndType(token, VerificationType.EMAIL_VERIFICATION_LINK)
@@ -104,7 +102,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void resendVerification(String email) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -125,7 +122,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserResponse changePassword(String token, ChangePasswordRequest form) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -151,7 +147,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserResponse changePhone(String token, ChangePhoneRequest form) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -174,7 +169,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void sendMailOtp(String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {
@@ -193,7 +187,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserResponse changeMail(String token, ChangeMailRequest form) {
         try {
             String actualToken = token;
@@ -245,6 +238,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getProfile(String token) {
         try {
             if (token != null && token.startsWith("Bearer ")) {

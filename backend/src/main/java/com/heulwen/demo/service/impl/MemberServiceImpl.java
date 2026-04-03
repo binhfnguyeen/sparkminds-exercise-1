@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,12 +33,14 @@ import java.time.format.DateTimeParseException;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<UserResponse> searchMembers(String keyword, String dobFromStr, String dobToStr, int page, int size, String sortBy, String sortDir) {
         LocalDate dobFrom = null;
         LocalDate dobTo = null;

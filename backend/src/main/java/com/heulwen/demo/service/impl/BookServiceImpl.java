@@ -39,6 +39,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Transactional
 public class BookServiceImpl implements BookService {
 
     BookRepository bookRepository;
@@ -76,7 +77,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public List<BookResponse> importBooksFromCsv(MultipartFile file) {
         if (file.isEmpty()) {
             throw new AppException(ErrorCode.FILE_EMPTY);
@@ -151,6 +151,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<BookResponse> getAllBooks(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Book> books = bookRepository.findByDeletedFalse(pageable);
@@ -158,6 +159,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BookResponse getBookById(Long id) {
         Book book = bookRepository.findById(id)
                 .filter(b -> !b.isDeleted())
