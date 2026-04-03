@@ -70,6 +70,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/borrow/{borrow_id}/reject").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/borrow/{borrow_id}/return").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/admin/borrow/books/search").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/admin/config/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/admin/config/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 

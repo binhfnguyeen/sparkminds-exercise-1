@@ -11,7 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +80,19 @@ public class EmailServiceImpl implements EmailService {
             log.info("Successfully sent the book borrowing notification email to {}", to);
         } catch (MessagingException e) {
             log.error("Error sending book borrowing confirmation email to {}: {}", to, e.getMessage());
+        }
+    }
+
+    @Override
+    @Async
+    public void sendMaintenanceEmailToAll(List<String> emails) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("[Thông báo] Hệ thống bảo trì");
+        message.setText("Chào bạn, hệ thống BookBook sẽ tiến hành bảo trì định kỳ. Quý khách vui lòng quay lại sau.");
+
+        for (String email : emails) {
+            message.setTo(email);
+            mailSender.send(message);
         }
     }
 }

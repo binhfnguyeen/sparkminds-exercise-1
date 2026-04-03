@@ -3,6 +3,8 @@ package com.heulwen.demo.service;
 import com.heulwen.demo.dto.response.UserResponse;
 import com.heulwen.demo.dto.request.*;
 
+import java.util.List;
+
 public interface UserService {
     UserResponse createUser(UserCreateRequest form);
     String verifyEmailOtp(VerifyEmailRequest form);
@@ -13,4 +15,5 @@ public interface UserService {
     void sendMailOtp(String token);
     UserResponse changeMail(String token, ChangeMailRequest form);
     UserResponse getProfile(String token);
+    List<String> allEmails();
 }

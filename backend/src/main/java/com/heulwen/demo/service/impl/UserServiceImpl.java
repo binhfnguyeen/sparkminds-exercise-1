@@ -255,6 +255,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> allEmails() {
+        return userRepository.findAll().stream().map(User::getEmail).toList();
+    }
+
     private void sendVerification(User user, VerificationType otpType, VerificationType linkType) {
         String otp = String.valueOf(100000 + new SecureRandom().nextInt(900000));
         String linkToken = UUID.randomUUID().toString();

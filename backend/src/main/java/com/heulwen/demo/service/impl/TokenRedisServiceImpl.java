@@ -18,7 +18,6 @@ public class TokenRedisServiceImpl implements TokenRedisService {
 
     StringRedisTemplate redisTemplate;
 
-
     @Override
     public void blacklistAccessToken(String accessToken, long remainingTimeInSeconds) {
         String key = "blacklist:" + accessToken;
