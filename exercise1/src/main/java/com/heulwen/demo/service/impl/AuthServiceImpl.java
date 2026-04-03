@@ -250,7 +250,14 @@ public class AuthServiceImpl implements AuthService {
                 user = userOptional.get();
 
                 if (UserStatus.BLOCKED.equals(user.getStatus())) {
-                    throw new AppException(ErrorCode.TEMPORARY_BLOCKED);
+                    if (user.getLockTime() != null && user.getLockTime().plusMinutes(30).isBefore(LocalDateTime.now())){
+                        user.setStatus(UserStatus.ACTIVE);
+                        user.setFailedAttempt(0);
+                        user.setLockTime(null);
+                        userRepository.save(user);
+                    } else {
+                        throw new AppException(ErrorCode.TEMPORARY_BLOCKED);
+                    }
                 }
 
                 if (UserStatus.UNVERIFIED.equals(user.getStatus())) {
