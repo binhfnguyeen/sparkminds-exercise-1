@@ -231,4 +231,19 @@ export const authService = {
         }
       return res.json();
     },
+
+    refreshToken: async (refreshToken: string): Promise<ApiResponse<AuthenticateResponse>> => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/refresh-token`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: refreshToken })
+        });
+
+        if (!res.ok) {
+            throw new Error('Phiên đăng nhập hết hạn');
+        }
+        return res.json();
+    }
 }

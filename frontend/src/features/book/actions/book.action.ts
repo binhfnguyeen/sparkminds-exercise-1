@@ -1,18 +1,9 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { bookService } from '../services/book.service';
 import {BookCreateRequest, BookUpdateRequest, SearchBookParams} from '@/shared/types/book.types';
 import {revalidatePath} from "next/cache";
-
-const getToken = async (): Promise<string> => {
-    const cookieStore = await cookies();
-    return (
-        cookieStore.get('adminAccessToken')?.value ||
-        cookieStore.get('accessToken')?.value ||
-        ''
-    );
-};
+import {getToken} from "@/features/auth/actions/auth.action";
 
 export async function searchBooksAction(params: SearchBookParams) {
     const token = await getToken();

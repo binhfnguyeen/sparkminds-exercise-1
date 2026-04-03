@@ -115,7 +115,7 @@ export async function changeMailAction(data: ChangeMailForm) {
 
 export async function getProfileAction() {
     const token = await getActiveToken();
-    if (!token) throw new Error("Chưa xác thực");
+    if (!token) return;
     return authService.getProfile(token);
 }
 
@@ -142,3 +142,82 @@ export async function setAdminAuthCookies(accessToken: string, refreshToken: str
 export async function redirectAfterAdminLogin() {
     redirect('/admin');
 }
+
+function isTokenExpired(token: string): boolean {
+    try {
+        const payloadBase64 = token.split('.')[1];
+        const decodedJson = typeof atob === 'function'
+            ? atob(payloadBase64)
+            : Buffer.from(payloadBase64, 'base64').toString('utf-8');
+
+        const decoded = JSON.parse(decodedJson);
+        return (Date.now() + 10000) > (decoded.exp * 1000);
+    } catch (e) {
+        return true;
+    }
+}
+
+export const getToken = async (): Promise<string> => {
+    const cookieStore = await cookies();
+    // ADMIN
+    const adminAccessToken = cookieStore.get('adminAccessToken')?.value;
+    const adminRefreshToken = cookieStore.get('adminRefreshToken')?.value;
+
+    if (adminAccessToken || adminRefreshToken) {
+        if (adminAccessToken && !isTokenExpired(adminAccessToken)) {
+            return adminAccessToken;
+        }
+
+        if (adminRefreshToken) {
+            try {
+                const response = await authService.refreshToken(adminRefreshToken);
+                if (response.code === 1000 && response.result) {
+                    const newAccess = response.result.accessToken;
+                    const newRefresh = response.result.refreshToken || adminRefreshToken;
+
+                    if (newAccess && newRefresh) {
+                        cookieStore.set('adminAccessToken', newAccess, { httpOnly: true, path: '/admin' });
+                        cookieStore.set('adminRefreshToken', newRefresh, { httpOnly: true, path: '/admin' });
+                        return newAccess;
+                    }
+                }
+            } catch (error) {
+                console.error("Refresh Token Admin thất bại:", error);
+                cookieStore.delete({ name: 'adminAccessToken', path: '/admin' });
+                cookieStore.delete({ name: 'adminRefreshToken', path: '/admin' });
+            }
+        }
+    }
+
+    // CLIENT
+    const accessToken = cookieStore.get('accessToken')?.value;
+    const refreshToken = cookieStore.get('refreshToken')?.value;
+
+    if (accessToken || refreshToken) {
+        if (accessToken && !isTokenExpired(accessToken)) {
+            return accessToken;
+        }
+
+        if (refreshToken) {
+            try {
+                const response = await authService.refreshToken(refreshToken);
+                if (response.code === 1000 && response.result) {
+                    const newAccess = response.result.accessToken;
+                    const newRefresh = response.result.refreshToken || refreshToken;
+
+                    if (newAccess && newRefresh) {
+                        cookieStore.set('accessToken', newAccess, { httpOnly: true, path: '/' });
+                        cookieStore.set('refreshToken', newRefresh, { httpOnly: true, path: '/' });
+                        return newAccess;
+                    }
+                }
+            } catch (error) {
+                console.error("Refresh Token User thất bại:", error);
+                cookieStore.delete('accessToken');
+                cookieStore.delete('refreshToken');
+            }
+        }
+    }
+
+    return '';
+};
