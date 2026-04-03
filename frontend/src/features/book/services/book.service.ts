@@ -162,14 +162,19 @@ export const bookService = {
     },
 
     borrowBook: async (token: string, bookId: number): Promise<ApiResponse<string>> => {
-        const res = await fetch(`${API_URL}/books/${bookId}/borrow?book_id=${bookId}`, {
+        const res = await fetch(`${API_URL}/books/${bookId}/borrow`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
         });
-        if (!res.ok) throw new Error('Lỗi khi mượn sách');
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi hệ thống khi mượn sách');
+        }
+
         return res.json();
     },
 
@@ -183,5 +188,56 @@ export const bookService = {
         });
         if (!res.ok) throw new Error('Lỗi khi lấy danh sách mượn sách');
         return res.json();
-    }
+    },
+
+    getAllBorrowRequestsAdmin: async (token: string): Promise<ApiResponse<BorrowBookResponse[]>> => {
+        const res = await fetch(`${API_URL}/admin/borrow/books`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) throw new Error('Lỗi lấy danh sách mượn sách của Admin');
+        return res.json();
+    },
+
+    approveBorrowRequest: async (token: string, borrowId: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/borrow/${borrowId}/approve`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi khi duyệt yêu cầu');
+        }
+        return res.json();
+    },
+
+    rejectBorrowRequest: async (token: string, borrowId: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/borrow/${borrowId}/reject`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            throw new Error(errorData?.message || 'Lỗi khi từ chối yêu cầu');
+        }
+        return res.json();
+    },
+
+    deleteCategory: async (token: string, id: number): Promise<ApiResponse<string>> => {
+        const res = await fetch(`${API_URL}/categories/${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error('Lỗi khi xóa thể loại');
+        return res.json();
+    },
 };

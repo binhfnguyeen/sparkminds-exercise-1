@@ -1,5 +1,6 @@
 package com.heulwen.demo.dto.response;
 
+import com.heulwen.demo.model.enumType.BorrowStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,6 +17,8 @@ public class BorrowBookResponse {
     String title;
     String author;
     String imgUrl;
+    BorrowStatus status;
+    String userEmail;
     LocalDateTime borrowedAt;
     LocalDateTime dueDate;
     boolean isOverDue;

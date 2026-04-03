@@ -1,6 +1,7 @@
 package com.heulwen.demo.controller;
 
 import com.heulwen.demo.dto.response.ApiResponse;
+import com.heulwen.demo.dto.response.BookResponse;
 import com.heulwen.demo.dto.response.BorrowBookResponse;
 import com.heulwen.demo.service.BorrowBookService;
 import lombok.AccessLevel;
@@ -21,7 +22,7 @@ public class BorrowBookController {
     BorrowBookService borrowBookService;
 
     @PostMapping("/books/{book_id}/borrow")
-    public ApiResponse<String> borrowBook(@RequestHeader("Authorization") String authHeader, @RequestParam("book_id") Long book_id){
+    public ApiResponse<String> borrowBook(@RequestHeader("Authorization") String authHeader, @PathVariable("book_id") Long book_id){
         borrowBookService.borrowBook(authHeader, book_id);
         return ApiResponse.<String>builder()
                 .code(1000)
@@ -35,6 +36,33 @@ public class BorrowBookController {
                 .code(1000)
                 .message("Get list borrow successfully")
                 .result(borrowBookService.getBorrowedBooks(authHeader))
+                .build();
+    }
+
+    @PutMapping("/borrow/{borrow_id}/approve")
+    public ApiResponse<String> approveBorrowRequest(@PathVariable("borrow_id") Long borrowId){
+        borrowBookService.approveBorrowRequest(borrowId);
+        return ApiResponse.<String>builder()
+                .code(1000)
+                .message("Approve borrow request successfully")
+                .build();
+    }
+
+    @PutMapping("/borrow/{borrow_id}/reject")
+    public ApiResponse<String> rejectBorrowRequest(@PathVariable("borrow_id") Long bookId){
+        borrowBookService.rejectBorrowRequest(bookId);
+        return ApiResponse.<String>builder()
+                .code(1000)
+                .message("Reject borrow request successfully")
+                .build();
+    }
+
+    @GetMapping("/admin/borrow/books")
+    public ApiResponse<List<BorrowBookResponse>> getAllBookRequestsAdmin(){
+        return ApiResponse.<List<BorrowBookResponse>>builder()
+                .code(1000)
+                .message("Get all book requests successfully")
+                .result(borrowBookService.getAllBookRequestsForAdmin())
                 .build();
     }
 }

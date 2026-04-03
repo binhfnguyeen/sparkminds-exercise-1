@@ -33,7 +33,11 @@ export const AuthProvider = ({
                 try {
                     setIsLoading(true);
                     const response = await getProfileAction();
-                    setUser(response.result);
+                    if (response?.code === 1000 && response.result) {
+                        setUser(response.result);
+                    } else {
+                        setUser(null);
+                    }
                 } catch (error) {
                     console.error("Không thể lấy thông tin user:", error);
                     setIsAuthenticated(false);

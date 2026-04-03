@@ -64,3 +64,27 @@ export async function getBorrowedBooksAction() {
     if (!token) throw new Error("Chưa xác thực");
     return bookService.getBorrowedBooks(token);
 }
+
+export async function getAllBorrowRequestsAdminAction() {
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.getAllBorrowRequestsAdmin(token);
+}
+
+export async function approveBorrowRequestAction(borrowId: number){
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.approveBorrowRequest(token, borrowId);
+}
+
+export async function rejectBorrowRequestAction(borrowId: number){
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.rejectBorrowRequest(token, borrowId)
+}
+
+export async function deleteCategoryAction(id: number) {
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.deleteCategory(token, id);
+}

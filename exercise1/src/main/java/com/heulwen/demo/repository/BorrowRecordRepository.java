@@ -10,8 +10,11 @@ import java.util.List;
 
 public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long> {
 
-    boolean existsByUser_IdAndBook_IdAndStatus(Long userId, Long bookId, BorrowStatus status);
+    boolean existsByUser_IdAndBook_IdAndStatusIn(Long userId, Long bookId, List<BorrowStatus> statuses);
 
-    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book WHERE br.user.id = :userId AND br.status = :status")
-    List<BorrowRecord> findByUserIdAndStatusWithBook(@Param("userId") Long userId, @Param("status") BorrowStatus status);
+    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book WHERE br.user.id = :userId")
+    List<BorrowRecord> findByUserIdAndStatusWithBook(@Param("userId") Long userIds);
+
+    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book JOIN FETCH br.user ORDER BY br.createdAt DESC")
+    List<BorrowRecord> findAllWithBookAndUser();
 }

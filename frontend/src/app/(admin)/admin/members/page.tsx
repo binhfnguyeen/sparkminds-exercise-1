@@ -1,7 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { searchMembersAction, deleteMemberAction } from '@/features/member/actions/member.action';
+import {
+    searchMembersAction,
+    deleteMemberAction,
+    blockMemberAction,
+    unblockMemberAction
+} from '@/features/member/actions/member.action';
 import { MemberFilterForm } from '@/features/member/components/MemberFilterForm';
 import {UserResponse} from "@/shared/types/auth.types";
 import {SearchMemberParams} from "@/shared/types/member.types";
@@ -63,6 +68,32 @@ export default function MembersPage() {
         }
     };
 
+    const handleBlock = async (id: number) => {
+        if (!confirm('Bạn có chắc chắn muốn khóa thành viên này?')) return;
+
+        try {
+            const res = await blockMemberAction(id);
+            if (res.code === 1000) {
+                fetchMembers();
+            }
+        } catch (error) {
+            alert('Lỗi khi khóa thành viên. Vui lòng thử lại.');
+        }
+    }
+
+    const handleUnblock = async (id: number) => {
+        if (!confirm('Bạn có chắc chắn muốn mở khóa thành viên này?')) return;
+
+        try {
+            const res = await unblockMemberAction(id);
+            if (res.code === 1000) {
+                fetchMembers();
+            }
+        } catch (error) {
+            alert('Lỗi khi mở khóa thành viên. Vui lòng thử lại.');
+        }
+    }
+
     const handleOpenCreate = () => {
         setEditingMember(null);
         setIsModalOpen(true);
@@ -100,6 +131,8 @@ export default function MembersPage() {
                     setPage={setPage}
                     onEdit={handleOpenEdit}
                     onDelete={handleDelete}
+                    onBlock={handleBlock}
+                    onUnblock={handleUnblock}
                 />
             </div>
 

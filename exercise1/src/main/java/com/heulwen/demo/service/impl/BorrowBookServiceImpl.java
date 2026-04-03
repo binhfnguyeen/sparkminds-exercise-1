@@ -13,7 +13,6 @@ import com.heulwen.demo.repository.UserRepository;
 import com.heulwen.demo.service.BorrowBookService;
 import com.heulwen.demo.service.EmailService;
 import com.heulwen.demo.service.JwtService;
-import com.heulwen.demo.service.TokenRedisService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -56,23 +55,19 @@ public class BorrowBookServiceImpl implements BorrowBookService {
                 throw new AppException(ErrorCode.OUT_OF_STOCK);
             }
 
-            boolean isAlreadyBorrowed = borrowRecordRepository.existsByUser_IdAndBook_IdAndStatus(user.getId(), bookId, BorrowStatus.BORROWED);
+            boolean isAlreadyBorrowed = borrowRecordRepository.existsByUser_IdAndBook_IdAndStatusIn(
+                    user.getId(), bookId, List.of(BorrowStatus.BORROWED, BorrowStatus.PENDING)
+            );
             if (isAlreadyBorrowed) {
                 throw new AppException(ErrorCode.ALREADY_BORROWED);
             }
 
-            book.setQuantity(book.getQuantity() - 1);
-            bookRepository.save(book);
-
             BorrowRecord borrowRecord = BorrowRecord.builder()
                     .user(user)
                     .book(book)
-                    .status(BorrowStatus.BORROWED)
-                    .dueDate(LocalDateTime.now().plusDays(14))
+                    .status(BorrowStatus.PENDING)
                     .build();
             borrowRecordRepository.save(borrowRecord);
-
-            emailService.sendBorrowSuccessMail(user.getEmail(), book.getTitle(), book.getImgUrl());
         } catch (ParseException e) {
             log.error("Error parsing token upon logout", e);
             throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
@@ -89,7 +84,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
             String email = jwtService.extractEmail(token);
             User user = userRepository.findUserByEmail(email)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-            List<BorrowRecord> records = borrowRecordRepository.findByUserIdAndStatusWithBook(user.getId(), BorrowStatus.BORROWED);
+            List<BorrowRecord> records = borrowRecordRepository.findByUserIdAndStatusWithBook(user.getId());
 
             return records.stream()
                     .map(record -> BorrowBookResponse.builder()
@@ -98,6 +93,8 @@ public class BorrowBookServiceImpl implements BorrowBookService {
                             .author(record.getBook().getAuthor())
                             .title(record.getBook().getTitle())
                             .imgUrl(record.getBook().getImgUrl())
+                            .status(record.getStatus())
+                            .userEmail(record.getUser().getEmail())
                             .borrowedAt(record.getCreatedAt())
                             .dueDate(record.getDueDate())
                             .isOverDue(record.getDueDate() != null && LocalDateTime.now().isAfter(record.getDueDate()))
@@ -107,5 +104,64 @@ public class BorrowBookServiceImpl implements BorrowBookService {
             log.error("Error parsing token upon logout", e);
             throw new AppException(ErrorCode.INCORRECT_FORMAT_TOKEN);
         }
+    }
+
+    @Override
+    public void approveBorrowRequest(Long borrowId) {
+        BorrowRecord record = borrowRecordRepository
+                .findById(borrowId).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
+
+        if (!BorrowStatus.PENDING.equals(record.getStatus())) {
+            throw new AppException(ErrorCode.RECORD_INVALID_STATUS);
+        }
+
+        Book book = record.getBook();
+
+        if (book.getQuantity() <= 0) {
+            record.setStatus(BorrowStatus.REJECTED);
+            borrowRecordRepository.save(record);
+            throw new AppException(ErrorCode.OUT_OF_STOCK);
+        }
+
+        book.setQuantity(book.getQuantity() - 1);
+        bookRepository.save(book);
+
+        record.setStatus(BorrowStatus.BORROWED);
+        record.setDueDate(LocalDateTime.now().plusDays(14));
+        borrowRecordRepository.save(record);
+
+        emailService.sendBorrowSuccessMail(record.getUser().getEmail(), book.getTitle(), book.getImgUrl());
+    }
+
+    @Override
+    public void rejectBorrowRequest(Long borrowId) {
+        BorrowRecord record = borrowRecordRepository.findById(borrowId)
+                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_EXISTED));
+
+        if (!BorrowStatus.PENDING.equals(record.getStatus())) {
+            throw new AppException(ErrorCode.RECORD_INVALID_STATUS);
+        }
+
+        record.setStatus(BorrowStatus.REJECTED);
+        borrowRecordRepository.save(record);
+    }
+
+    @Override
+    public List<BorrowBookResponse> getAllBookRequestsForAdmin() {
+        List<BorrowRecord> records = borrowRecordRepository.findAllWithBookAndUser();
+        return records.stream().map(
+                record -> BorrowBookResponse.builder()
+                        .borrowId(record.getId())
+                        .bookId(record.getBook().getId())
+                        .title(record.getBook().getTitle())
+                        .author(record.getBook().getAuthor())
+                        .imgUrl(record.getBook().getImgUrl())
+                        .status(record.getStatus())
+                        .borrowedAt(record.getCreatedAt())
+                        .dueDate(record.getDueDate())
+                        .isOverDue(record.getDueDate() != null && LocalDateTime.now().isAfter(record.getDueDate()))
+                        .userEmail(record.getUser().getEmail())
+                        .build()
+        ).collect(Collectors.toList());
     }
 }

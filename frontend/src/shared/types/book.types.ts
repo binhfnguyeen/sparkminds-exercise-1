@@ -51,7 +51,9 @@ export interface BorrowBookResponse {
     title: string;
     author: string;
     imgUrl?: string;
+    status: 'PENDING' | 'BORROWED' | 'RETURNED' | 'REJECTED';
     borrowedAt: string;
     dueDate: string;
     isOverDue: boolean;
+    userEmail?: string;
 }

@@ -77,12 +77,12 @@ export const MemberFormModal = ({ isOpen, onClose, editingMember, onSuccess }: P
                 <form onSubmit={handleSubmitForm} className="space-y-4">
                     <div className="flex gap-4">
                         <div className="w-1/2">
-                            <label className="block text-sm font-semibold mb-1 text-gray-700">Họ (First Name)</label>
+                            <label className="block text-sm font-semibold mb-1 text-gray-700">Họ</label>
                             <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                                    value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} placeholder="Nhập họ..." />
                         </div>
                         <div className="w-1/2">
-                            <label className="block text-sm font-semibold mb-1 text-gray-700">Tên (Last Name)</label>
+                            <label className="block text-sm font-semibold mb-1 text-gray-700">Tên</label>
                             <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                                    value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} placeholder="Nhập tên..." />
                         </div>
@@ -106,7 +106,7 @@ export const MemberFormModal = ({ isOpen, onClose, editingMember, onSuccess }: P
                         <div className="w-1/2">
                             <label className="block text-sm font-semibold mb-1 text-gray-700">Số điện thoại</label>
                             <input type="tel" className="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                                   value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="VD: 0912345678" />
+                                   value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="09xxxxxxxx" />
                         </div>
                         <div className="w-1/2">
                             <label className="block text-sm font-semibold mb-1 text-gray-700">Ngày sinh</label>
