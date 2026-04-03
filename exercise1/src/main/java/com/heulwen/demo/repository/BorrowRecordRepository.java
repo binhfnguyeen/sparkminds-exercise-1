@@ -3,12 +3,13 @@ package com.heulwen.demo.repository;
 import com.heulwen.demo.model.BorrowRecord;
 import com.heulwen.demo.model.enumType.BorrowStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long> {
+public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long>, JpaSpecificationExecutor<BorrowRecord> {
 
     boolean existsByUser_IdAndBook_IdAndStatusIn(Long userId, Long bookId, List<BorrowStatus> statuses);
 

@@ -66,9 +66,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/members/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/members/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/borrow/books").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/api/admin/borrow/books").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/borrow/{borrow_id}/approve").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/borrow/{borrow_id}/reject").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/borrow/{borrow_id}/return").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/admin/borrow/books/search").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 

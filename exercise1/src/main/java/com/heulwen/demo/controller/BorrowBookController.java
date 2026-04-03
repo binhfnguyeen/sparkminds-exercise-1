@@ -1,15 +1,18 @@
 package com.heulwen.demo.controller;
 
 import com.heulwen.demo.dto.response.ApiResponse;
-import com.heulwen.demo.dto.response.BookResponse;
 import com.heulwen.demo.dto.response.BorrowBookResponse;
+import com.heulwen.demo.dto.response.PageResponse;
+import com.heulwen.demo.model.enumType.BorrowStatus;
 import com.heulwen.demo.service.BorrowBookService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -57,12 +60,31 @@ public class BorrowBookController {
                 .build();
     }
 
-    @GetMapping("/admin/borrow/books")
-    public ApiResponse<List<BorrowBookResponse>> getAllBookRequestsAdmin(){
-        return ApiResponse.<List<BorrowBookResponse>>builder()
+    @PutMapping("/borrow/{borrow_id}/return")
+    public ApiResponse<String> returnBook(@PathVariable("borrow_id") Long borrowId){
+        borrowBookService.returnBook(borrowId);
+        return ApiResponse.<String>builder()
                 .code(1000)
-                .message("Get all book requests successfully")
-                .result(borrowBookService.getAllBookRequestsForAdmin())
+                .message("Return book successfully")
+                .build();
+    }
+
+    @GetMapping("/admin/borrow/books/search")
+    public ApiResponse<PageResponse<BorrowBookResponse>> searchBorrowRecordsAdmin(
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "status", required = false) BorrowStatus status,
+            @RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "ddMMyyyy HHmmss") LocalDateTime fromDate,
+            @RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "ddMMyyyy HHmmss") LocalDateTime toDate,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "DESC") String sortDir
+    ) {
+        return ApiResponse.<PageResponse<BorrowBookResponse>>builder()
+                .code(1000)
+                .message("Search borrow records successfully")
+                .result(borrowBookService.searchBorrowRecordsAdmin(email, title, status, fromDate, toDate, page, size, sortBy, sortDir))
                 .build();
     }
 }

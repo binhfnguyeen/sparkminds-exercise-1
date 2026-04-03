@@ -57,3 +57,15 @@ export interface BorrowBookResponse {
     isOverDue: boolean;
     userEmail?: string;
 }
+
+export interface SearchBorrowParams {
+    email?: string;
+    title?: string;
+    status?: string;
+    fromDate?: string;
+    toDate?: string;
+    page?: number;
+    size?: number;
+    sortBy?: string;
+    sortDir?: string;
+}

@@ -1,6 +1,7 @@
 package com.heulwen.demo.service.impl;
 
 import com.heulwen.demo.dto.response.BorrowBookResponse;
+import com.heulwen.demo.dto.response.PageResponse;
 import com.heulwen.demo.exception.AppException;
 import com.heulwen.demo.exception.ErrorCode;
 import com.heulwen.demo.model.Book;
@@ -13,10 +14,16 @@ import com.heulwen.demo.repository.UserRepository;
 import com.heulwen.demo.service.BorrowBookService;
 import com.heulwen.demo.service.EmailService;
 import com.heulwen.demo.service.JwtService;
+import com.heulwen.demo.specification.BorrowRecordSpecification;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -163,5 +170,58 @@ public class BorrowBookServiceImpl implements BorrowBookService {
                         .userEmail(record.getUser().getEmail())
                         .build()
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public void returnBook(Long borrowId) {
+        BorrowRecord record = borrowRecordRepository.findById(borrowId)
+                .orElseThrow(()->new AppException(ErrorCode.RECORD_NOT_EXISTED));
+
+        if (!BorrowStatus.BORROWED.equals(record.getStatus())) {
+            throw new AppException(ErrorCode.RECORD_INVALID_STATUS);
+        }
+
+        record.setStatus(BorrowStatus.RETURNED);
+        record.setReturnedAt(LocalDateTime.now());
+        borrowRecordRepository.save(record);
+
+        Book book = record.getBook();
+        book.setQuantity(book.getQuantity() + 1);
+        bookRepository.save(book);
+    }
+
+    @Override
+    public PageResponse<BorrowBookResponse> searchBorrowRecordsAdmin(String email, String title, BorrowStatus status, LocalDateTime fromDate, LocalDateTime toDate, int page, int size, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Specification<BorrowRecord> spec = Specification.where(BorrowRecordSpecification.hasUserEmail(email))
+                .and(BorrowRecordSpecification.hasBookTitle(title))
+                .and(BorrowRecordSpecification.hasStatus(status))
+                .and(BorrowRecordSpecification.borrowedAfter(fromDate))
+                .and(BorrowRecordSpecification.borrowedBefore(toDate));
+
+        Page<BorrowRecord> recordPage = borrowRecordRepository.findAll(spec, pageable);
+
+        List<BorrowBookResponse> content = recordPage.getContent().stream().map(record -> BorrowBookResponse.builder()
+                .borrowId(record.getId())
+                .bookId(record.getBook().getId())
+                .title(record.getBook().getTitle())
+                .author(record.getBook().getAuthor())
+                .imgUrl(record.getBook().getImgUrl())
+                .status(record.getStatus())
+                .borrowedAt(record.getCreatedAt())
+                .dueDate(record.getDueDate())
+                .isOverDue(record.getDueDate() != null && LocalDateTime.now().isAfter(record.getDueDate()))
+                .userEmail(record.getUser().getEmail())
+                .build()).collect(Collectors.toList());
+
+        return PageResponse.<BorrowBookResponse>builder()
+                .currentPage(page)
+                .totalPages(recordPage.getTotalPages())
+                .pageSize(recordPage.getSize())
+                .totalElements(recordPage.getTotalElements())
+                .content(content)
+                .build();
     }
 }

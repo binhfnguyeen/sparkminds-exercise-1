@@ -25,15 +25,15 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository){
         return args -> {
-            if (!userRepository.existsByEmail("admin_bookbook@yopmail.com")) {
+            if (!userRepository.existsByEmail("admin@gmail.com")) {
                 User user = User.builder()
-                        .email("admin_bookbook@yopmail.com")
-                        .password(passwordEncoder.encode("admin_bookbook"))
+                        .email("admin@gmail.com")
+                        .password(passwordEncoder.encode("admin"))
                         .role(Role.ADMIN)
                         .status(UserStatus.ACTIVE)
                         .createdAt(LocalDateTime.now()).build();
                 userRepository.save(user);
-                log.warn(">>admin user has been created with default password: admin_bookbook, please change it!");
+                log.warn(">>admin user has been created with default password: admin, please change it!");
             }
         };
     }

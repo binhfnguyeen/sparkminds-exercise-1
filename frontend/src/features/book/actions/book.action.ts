@@ -1,7 +1,7 @@
 'use server';
 
 import { bookService } from '../services/book.service';
-import {BookCreateRequest, BookUpdateRequest, SearchBookParams} from '@/shared/types/book.types';
+import {BookCreateRequest, BookUpdateRequest, SearchBookParams, SearchBorrowParams} from '@/shared/types/book.types';
 import {revalidatePath} from "next/cache";
 import {getToken} from "@/features/auth/actions/auth.action";
 
@@ -65,12 +65,6 @@ export async function getBorrowedBooksAction() {
     return bookService.getBorrowedBooks(token);
 }
 
-export async function getAllBorrowRequestsAdminAction() {
-    const token = await getToken();
-    if (!token) throw new Error("Chưa xác thực");
-    return bookService.getAllBorrowRequestsAdmin(token);
-}
-
 export async function approveBorrowRequestAction(borrowId: number){
     const token = await getToken();
     if (!token) throw new Error("Chưa xác thực");
@@ -87,4 +81,16 @@ export async function deleteCategoryAction(id: number) {
     const token = await getToken();
     if (!token) throw new Error("Chưa xác thực");
     return bookService.deleteCategory(token, id);
+}
+
+export async function returnBookAction(borrowId: number){
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.returnBook(token, borrowId);
+}
+
+export async function searchBorrowRecordsAdminAction(params: SearchBorrowParams) {
+    const token = await getToken();
+    if (!token) throw new Error("Chưa xác thực");
+    return bookService.searchBorrowRecordsAdmin(token, params);
 }
