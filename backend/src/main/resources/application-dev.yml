@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/sparkminds-e1
+    username: app_user
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 12345
+      timeout: 60000
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: heulwentech@gmail.com
+    password: rlmr unqo famc fhnu
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  jwt:
+    signer: 1/2cbirKp5GdXGj/SYm4HDC3DEyOlCQO+WC7IfwATE8dyU4+GdQzQx8Dx1Tjc7a/
+
+google:
+  client:
+    id: 415209795379-fdvdvu59mam6itn486t81u150f8egc76.apps.googleusercontent.com
+
+file:
+  upload-dir: uploads/books

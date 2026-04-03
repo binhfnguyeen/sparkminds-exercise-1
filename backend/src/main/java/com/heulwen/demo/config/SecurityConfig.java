@@ -23,7 +23,7 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfig {
-    @Value("${spring.jwt.signerkey}")
+    @Value("${spring.jwt.signer}")
     private String SIGNER_KEY;
 
     @Bean

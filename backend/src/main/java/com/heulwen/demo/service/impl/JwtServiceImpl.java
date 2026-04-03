@@ -19,7 +19,7 @@ import java.util.Date;
 @Slf4j
 public class JwtServiceImpl implements JwtService {
 
-    @Value("${spring.jwt.signerkey}")
+    @Value("${spring.jwt.signer}")
     private String SIGNER_KEY;
 
     @Override
