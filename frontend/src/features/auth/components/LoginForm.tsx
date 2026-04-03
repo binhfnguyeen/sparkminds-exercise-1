@@ -9,17 +9,15 @@ import {GoogleLogin, CredentialResponse} from "@react-oauth/google";
 
 export const LoginForm = () => {
     const { login } = useAuth();
-    // State đăng nhập cơ bản
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
-    // State bảo mật
     const [otp, setOtp] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    // Luồng hiển thị: 0 = Login, 1 = MFA OTP, 2 = Bắt buộc đổi mật khẩu
+    // 0 = Login, 1 = MFA OTP, 2 = Bắt buộc đổi mật khẩu
     const [step, setStep] = useState<0 | 1 | 2>(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -32,7 +30,6 @@ export const LoginForm = () => {
         }
     }, []);
 
-    // 1. XỬ LÝ ĐĂNG NHẬP CHÍNH
     const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -58,21 +55,16 @@ export const LoginForm = () => {
         }
     };
 
-    // 2. XỬ LÝ XÁC THỰC MFA OTP
     const handleMfaSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
         try {
-            // Giả định bạn đã có hàm verifyMfa trong auth.services.ts
             const response = await authService.verifyMfa(email, Number(otp));
 
             if (response.result.accessToken && response.result.refreshToken) {
-
-                // Ghi nhớ thiết bị/trình duyệt này cho lần đăng nhập sau
                 localStorage.setItem('savedMfaEmail', email);
-
                 await setAuthCookies(response.result.accessToken, response.result.refreshToken);
                 login();
                 await redirectAfterLogin();
@@ -84,7 +76,6 @@ export const LoginForm = () => {
         }
     };
 
-    // 3. XỬ LÝ ÉP BUỘC ĐỔI MẬT KHẨU LẦN ĐẦU (Hoặc sau khi reset)
     const handleForceChangeSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true); setError('');
@@ -95,7 +86,6 @@ export const LoginForm = () => {
         }
 
         try {
-            // Gọi API reset với: email đang nhập, tempPassword đang nằm sẵn trong biến `password`, và newPassword
             const response = await authService.changePasswordFirstTime({
                 email,
                 tempPassword: password,
@@ -116,6 +106,7 @@ export const LoginForm = () => {
 
     const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
         try {
+            setError('');
             const idToken = credentialResponse.credential;
             if (idToken != null){
                 const response = await loginWithGoogle(idToken, rememberMe);
@@ -130,8 +121,9 @@ export const LoginForm = () => {
             } else {
                 console.error("Không lấy được Google Client:", error);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Lỗi đăng nhập bằng Google:", error);
+            setError(error.message || "Đăng nhập bằng Google thất bại hoặc tài khoản của bạn đã bị khóa.");
         }
     }
 

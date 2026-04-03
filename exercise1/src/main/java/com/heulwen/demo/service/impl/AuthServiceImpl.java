@@ -249,6 +249,10 @@ public class AuthServiceImpl implements AuthService {
             if (userOptional.isPresent()) {
                 user = userOptional.get();
 
+                if (UserStatus.BLOCKED.equals(user.getStatus())) {
+                    throw new AppException(ErrorCode.TEMPORARY_BLOCKED);
+                }
+
                 if (UserStatus.UNVERIFIED.equals(user.getStatus())) {
                     user.setStatus(UserStatus.ACTIVE);
                     userRepository.save(user);
@@ -276,6 +280,8 @@ public class AuthServiceImpl implements AuthService {
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
                     .build();
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ErrorCode.AUTHENTICATED_FAILED);
         }

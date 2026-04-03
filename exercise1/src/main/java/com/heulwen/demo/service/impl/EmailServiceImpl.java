@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
                     + "<hr style='border: none; border-top: 1px solid #eaeaea; margin: 20px 0;' />"
                     + "<p style='font-size: 12px; color: #888; text-align: center;'>Trân trọng,<br>Đội ngũ Quản lý Thư viện</p>"
                     + "</div>";
-            helper.setText(htmlContent);
+            helper.setText(htmlContent, true);
             javaMailSender.send(mimeMessage);
             log.info("Successfully sent the book borrowing notification email to {}", to);
         } catch (MessagingException e) {
