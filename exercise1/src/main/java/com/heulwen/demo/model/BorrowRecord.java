@@ -38,6 +38,9 @@ public class BorrowRecord {
     @Column(name = "status", nullable = false)
     BorrowStatus status;
 
+    @Column(name = "due_date")
+    LocalDateTime dueDate;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     LocalDateTime createdAt;

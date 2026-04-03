@@ -10,6 +10,7 @@ export default async function BorrowedBooksPage() {
         }
 
         const borrowedBooks = response.code === 1000 ? response.result : [];
+        console.info(borrowedBooks);
 
         return (
             <div className="min-h-screen bg-gray-50/30 relative">

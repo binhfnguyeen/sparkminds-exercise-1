@@ -52,4 +52,6 @@ export interface BorrowBookResponse {
     author: string;
     imgUrl?: string;
     borrowedAt: string;
+    dueDate: string;
+    isOverDue: boolean;
 }

@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,6 +68,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
                     .user(user)
                     .book(book)
                     .status(BorrowStatus.BORROWED)
+                    .dueDate(LocalDateTime.now().plusDays(14))
                     .build();
             borrowRecordRepository.save(borrowRecord);
 
@@ -96,7 +98,9 @@ public class BorrowBookServiceImpl implements BorrowBookService {
                             .author(record.getBook().getAuthor())
                             .title(record.getBook().getTitle())
                             .imgUrl(record.getBook().getImgUrl())
-                            .borrowedAt(record.getBook().getCreatedAt())
+                            .borrowedAt(record.getCreatedAt())
+                            .dueDate(record.getDueDate())
+                            .isOverDue(record.getDueDate() != null && LocalDateTime.now().isAfter(record.getDueDate()))
                             .build()
                     ).collect(Collectors.toList());
         } catch (ParseException e) {

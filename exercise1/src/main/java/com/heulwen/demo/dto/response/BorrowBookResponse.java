@@ -17,4 +17,6 @@ public class BorrowBookResponse {
     String author;
     String imgUrl;
     LocalDateTime borrowedAt;
+    LocalDateTime dueDate;
+    boolean isOverDue;
 }
