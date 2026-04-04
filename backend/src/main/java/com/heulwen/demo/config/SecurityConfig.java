@@ -1,5 +1,7 @@
 package com.heulwen.demo.config;
 
+import com.heulwen.demo.config.filter.MaintenanceFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +15,9 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -22,7 +26,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final MaintenanceFilter maintenanceFilter;
+
     @Value("${spring.jwt.signer}")
     private String SIGNER_KEY;
 
@@ -80,6 +88,8 @@ public class SecurityConfig {
                 .decoder(jwtDecoder())
                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
         );
+
+        httpSecurity.addFilterAfter(maintenanceFilter, BearerTokenAuthenticationFilter.class);
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
