@@ -28,8 +28,13 @@ public class MaintenanceFilter extends OncePerRequestFilter {
             "/api/refresh-token",
             "/images/**",
             "/v3/api-docs/**",
+            "/v3/api-docs",
             "/swagger-ui/**",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "/api/docs/**",
+            "/api/docs",
+            "/api/docs-json/**",
+            "/api/docs-json"
     );
 
     @Override
