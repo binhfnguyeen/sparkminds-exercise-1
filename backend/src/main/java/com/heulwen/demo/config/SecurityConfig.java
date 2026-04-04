@@ -41,6 +41,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request
                     -> request.requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/verify-email").permitAll()

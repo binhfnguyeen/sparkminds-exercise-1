@@ -26,7 +26,10 @@ public class MaintenanceFilter extends OncePerRequestFilter {
     private final List<String> ALWAYS_ALLOWED_URL = Arrays.asList(
             "/api/login/**",
             "/api/refresh-token",
-            "/images/**"
+            "/images/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
     );
 
     @Override
