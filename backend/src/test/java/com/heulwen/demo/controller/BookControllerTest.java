@@ -2,14 +2,14 @@ package com.heulwen.demo.controller;
 
 import com.heulwen.demo.dto.request.BookCreateRequest;
 import com.heulwen.demo.dto.response.BookResponse;
-import com.heulwen.demo.service.BookService;
-import com.heulwen.demo.service.FileStorageService;
+import com.heulwen.demo.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BookController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class BookController {
+public class BookControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -32,6 +32,18 @@ public class BookController {
 
     @MockitoBean
     private FileStorageService fileStorageService;
+
+    @MockitoBean
+    private SystemConfigService systemConfigService;
+
+    @MockitoBean
+    private JpaMetamodelMappingContext jpaMappingContext;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean
+    private AuthService authService;
 
     @Autowired
     private ObjectMapper objectMapper;

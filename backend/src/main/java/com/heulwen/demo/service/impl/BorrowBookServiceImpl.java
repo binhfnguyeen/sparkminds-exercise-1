@@ -176,7 +176,6 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public void returnBook(Long borrowId) {
         BorrowRecord record = borrowRecordRepository.findById(borrowId)
                 .orElseThrow(()->new AppException(ErrorCode.RECORD_NOT_EXISTED));

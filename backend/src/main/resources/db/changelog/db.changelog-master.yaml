@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users
+      author: binhnguyen
+      changes:
+        - sqlFile:
+            path: changes/001_create_users.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: 002-create-categories
+      author: binhnguyen
+      changes:
+        - sqlFile:
+            path: changes/002_create_categories.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: 003-create-books
+      author: binhnguyen
+      changes:
+        - sqlFile:
+            path: changes/003_create_books.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: 004-create-borrow-records
+      author: binhnguyen
+      changes:
+        - sqlFile:
+            path: changes/004_create_borrow_records.sql
+            relativeToChangelogFile: true
+
+  - changeSet:
+      id: 005-create-verification-tokens
+      author: binhnguyen
+      changes:
+        - sqlFile:
+            path: changes/005_create_verification_tokens.sql
+            relativeToChangelogFile: true
