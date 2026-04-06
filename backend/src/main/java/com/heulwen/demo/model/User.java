@@ -1,5 +1,6 @@
 package com.heulwen.demo.model;
 
+import com.heulwen.demo.config.MfaSecretConverter;
 import com.heulwen.demo.model.enumType.Role;
 import com.heulwen.demo.model.enumType.UserStatus;
 import jakarta.persistence.*;
@@ -68,6 +69,7 @@ public class User {
     boolean mfaEnabled;
 
     @Column(name = "mfa_secret")
+    @Convert(converter = MfaSecretConverter.class)
     String mfaSecret;
 
     @Column(name = "is_deleted")
