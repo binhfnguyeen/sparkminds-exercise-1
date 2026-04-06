@@ -31,6 +31,7 @@ public class MaintenanceFilter extends OncePerRequestFilter {
             "/v3/api-docs",
             "/swagger-ui/**",
             "/swagger-ui.html",
+            "/api/swagger-ui/**",
             "/api/docs/**",
             "/api/docs",
             "/api/docs-json/**",

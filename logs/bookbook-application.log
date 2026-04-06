@@ -1,32 +1,44 @@
-2026-04-04 14:50:36 [restartedMain] INFO  com.heulwen.demo.BackendApplication - Starting BackendApplication using Java 17.0.17 with PID 21828 (D:\java-projects\sparkminds-exercise-1\backend\target\classes started by Dell in D:\java-projects\sparkminds-exercise-1)
-2026-04-04 14:50:36 [restartedMain] INFO  com.heulwen.demo.BackendApplication - The following 1 profile is active: "dev"
-2026-04-04 14:50:36 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-04-04 14:50:36 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-04-04 14:50:37 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
-2026-04-04 14:50:39 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2026-04-04 14:50:39 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 458 ms. Found 5 JPA repository interfaces.
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BookRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BorrowRecordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.CategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.VerificationTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
-2026-04-04 14:50:40 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 0 Redis repository interfaces.
-2026-04-04 14:50:43 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2026-04-04 14:50:43 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
-2026-04-04 14:50:43 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-04-04 14:50:43 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.14]
-2026-04-04 14:50:43 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 7090 ms
-2026-04-04 14:50:45 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-04-04 14:50:45 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 7.1.8.Final
-2026-04-04 14:50:46 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-04-04 14:50:46 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-04-04 14:50:47 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6845e026
-2026-04-04 14:50:47 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-04-04 14:50:47 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-04-04 14:50:47 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+2026-04-06 08:46:42 [restartedMain] INFO  com.heulwen.demo.BackendApplication - Starting BackendApplication using Java 17.0.17 with PID 3968 (D:\java-projects\sparkminds-exercise-1\backend\target\classes started by Dell in D:\java-projects\sparkminds-exercise-1)
+2026-04-06 08:46:42 [restartedMain] INFO  com.heulwen.demo.BackendApplication - The following 1 profile is active: "dev"
+2026-04-06 08:46:42 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-06 08:46:42 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-06 08:46:43 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-06 08:46:44 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-06 08:46:44 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 405 ms. Found 5 JPA repository interfaces.
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BookRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BorrowRecordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.CategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.VerificationTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:46:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 18 ms. Found 0 Redis repository interfaces.
+2026-04-06 08:46:46 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-04-06 08:46:46 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-04-06 08:46:46 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-06 08:46:46 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.14]
+2026-04-06 08:46:46 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 4123 ms
+2026-04-06 08:46:47 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-06 08:46:48 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4aab1010
+2026-04-06 08:46:48 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-06 08:46:48 [restartedMain] INFO  liquibase.database - Set default schema name to public
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.ui - Database is up to date, no changesets to execute
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.util - UPDATE SUMMARY
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.util - Run:                          0
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.util - Previously run:               5
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.util - Filtered out:                 0
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.util - -------------------------------
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.util - Total change sets:            5
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.util - Update summary generated
+2026-04-06 08:46:49 [restartedMain] INFO  liquibase.command - Command execution complete
+2026-04-06 08:46:51 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-06 08:46:51 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 7.1.8.Final
+2026-04-06 08:46:52 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-06 08:46:52 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-06 08:46:53 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
 	Database JDBC URL [jdbc:postgresql://localhost:5433/sparkminds-e1]
 	Database driver: PostgreSQL JDBC Driver
 	Database dialect: PostgreSQLDialect
@@ -38,61 +50,174 @@
 	Pool: DatasourceConnectionProviderImpl
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-04-04 14:50:50 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-04-04 14:50:50 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-04-04 14:50:51 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-04-04 14:50:54 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-04-04 14:50:55 [restartedMain] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.WebMvcConfig.addResourceHandlers() - Tham số: [org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry@2af84563]
-2026-04-04 14:50:55 [restartedMain] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.WebMvcConfig.addResourceHandlers() - Thời gian: 3ms - Kết quả: null
-2026-04-04 14:50:56 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
-2026-04-04 14:50:56 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
-2026-04-04 14:50:56 [restartedMain] INFO  com.heulwen.demo.BackendApplication - Started BackendApplication in 22.339 seconds (process running for 23.803)
-2026-04-04 14:50:57 [restartedMain] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /api/docs-json endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
-2026-04-04 14:50:57 [restartedMain] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /api/docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
-2026-04-04 14:52:40 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-04-04 14:52:40 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-04-04 14:52:40 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 5 ms
-2026-04-04 14:52:42 [http-nio-8081-exec-1] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:52:42 [http-nio-8081-exec-1] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 254ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:52:44 [http-nio-8081-exec-2] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:52:44 [http-nio-8081-exec-2] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 180ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:52:45 [http-nio-8081-exec-3] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.BookController.searchBooks() - Tham số: [null, null, null, null, 0, 10, id, DESC]
-2026-04-04 14:52:45 [http-nio-8081-exec-3] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.BookController.searchBooks() - Thời gian: 171ms - Kết quả: ApiResponse(code=1000, message=Get books successful, result=Page 1 of 1 containing com.heulwen.demo.dto.response.BookResponse instances)
-2026-04-04 14:52:45 [http-nio-8081-exec-3] WARN  o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
-	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
-	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+2026-04-06 08:46:55 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-06 08:46:55 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-06 08:46:55 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-06 08:46:57 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-06 08:47:02 [restartedMain] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.WebMvcConfig.addResourceHandlers() - Tham số: [org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry@548cd3d9]
+2026-04-06 08:47:02 [restartedMain] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.WebMvcConfig.addResourceHandlers() - Thời gian: 2ms - Kết quả: null
+2026-04-06 08:47:04 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-04-06 08:47:04 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-04-06 08:47:04 [restartedMain] INFO  com.heulwen.demo.BackendApplication - Started BackendApplication in 23.357 seconds (process running for 26.33)
+2026-04-06 08:47:05 [restartedMain] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /api/docs-json endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-04-06 08:47:05 [restartedMain] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /api/docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-04-06 08:47:23 [http-nio-8081-exec-1] INFO  o.a.tomcat.util.http.parser.Cookie - A cookie header was received [g_state={"i_l":0,"i_ll":1775404680072,"i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-04-06 08:47:23 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-06 08:47:23 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-06 08:47:23 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-04-06 08:47:34 [http-nio-8081-exec-3] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 1208 ms
+2026-04-06 08:58:40 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-06 08:58:40 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-06 08:58:40 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-06 08:58:40 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-06 08:58:40 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-06 08:58:47 [restartedMain] INFO  com.heulwen.demo.BackendApplication - Starting BackendApplication using Java 17.0.17 with PID 13516 (D:\java-projects\sparkminds-exercise-1\backend\target\classes started by Dell in D:\java-projects\sparkminds-exercise-1)
+2026-04-06 08:58:47 [restartedMain] INFO  com.heulwen.demo.BackendApplication - The following 1 profile is active: "dev"
+2026-04-06 08:58:47 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-04-06 08:58:47 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-04-06 08:58:47 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-06 08:58:48 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-06 08:58:48 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-06 08:58:48 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 235 ms. Found 5 JPA repository interfaces.
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BookRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BorrowRecordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.CategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.VerificationTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 08:58:49 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2026-04-06 08:58:50 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-04-06 08:58:50 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-04-06 08:58:50 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-06 08:58:50 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.14]
+2026-04-06 08:58:50 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2947 ms
+2026-04-06 08:58:50 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-06 08:58:51 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6b9ee38b
+2026-04-06 08:58:51 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-06 08:58:51 [restartedMain] INFO  liquibase.database - Set default schema name to public
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.ui - Database is up to date, no changesets to execute
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.util - UPDATE SUMMARY
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.util - Run:                          0
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.util - Previously run:               5
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.util - Filtered out:                 0
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.util - -------------------------------
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.util - Total change sets:            5
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.util - Update summary generated
+2026-04-06 08:58:52 [restartedMain] INFO  liquibase.command - Command execution complete
+2026-04-06 08:58:54 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-06 08:58:54 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 7.1.8.Final
+2026-04-06 08:58:55 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-06 08:58:55 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-06 08:58:55 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5433/sparkminds-e1]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 15.15
+	Default catalog/schema: sparkminds-e1/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DatasourceConnectionProviderImpl
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-06 08:58:57 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-06 08:58:57 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-06 08:58:57 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-06 08:58:59 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-06 08:59:00 [restartedMain] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.WebMvcConfig.addResourceHandlers() - Tham số: [org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry@15306f4e]
+2026-04-06 08:59:00 [restartedMain] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.WebMvcConfig.addResourceHandlers() - Thời gian: 2ms - Kết quả: null
+2026-04-06 08:59:00 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2026-04-06 08:59:00 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-04-06 08:59:00 [restartedMain] INFO  com.heulwen.demo.BackendApplication - Started BackendApplication in 14.507 seconds (process running for 15.944)
+2026-04-06 08:59:01 [restartedMain] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /api/docs-json endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-04-06 08:59:01 [restartedMain] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /api/docs/swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-04-06 08:59:08 [http-nio-8081-exec-1] INFO  o.a.tomcat.util.http.parser.Cookie - A cookie header was received [g_state={"i_l":0,"i_ll":1775404680072,"i_e":{"enable_itp_optimization":0}};] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-04-06 08:59:08 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-06 08:59:08 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-04-06 08:59:08 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-04-06 09:00:30 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2026-04-06 09:00:30 [Thread-1] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-06 09:00:30 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+2026-04-06 09:00:31 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-04-06 09:00:31 [Thread-1] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+2026-04-06 09:00:31 [Thread-1] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-06 09:00:31 [Thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-06 09:00:31 [Thread-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-06 09:00:31 [restartedMain] INFO  com.heulwen.demo.BackendApplication - Starting BackendApplication using Java 17.0.17 with PID 13516 (D:\java-projects\sparkminds-exercise-1\backend\target\classes started by Dell in D:\java-projects\sparkminds-exercise-1)
+2026-04-06 09:00:31 [restartedMain] INFO  com.heulwen.demo.BackendApplication - The following 1 profile is active: "dev"
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 143 ms. Found 5 JPA repository interfaces.
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BookRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.BorrowRecordRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.CategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.heulwen.demo.repository.VerificationTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-04-06 09:00:32 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2026-04-06 09:00:33 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-04-06 09:00:33 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2026-04-06 09:00:33 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-04-06 09:00:33 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.14]
+2026-04-06 09:00:34 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 3456 ms
+2026-04-06 09:00:35 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-04-06 09:00:36 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@5772c495
+2026-04-06 09:00:36 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.database - Set default schema name to public
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.ui - Database is up to date, no changesets to execute
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.util - UPDATE SUMMARY
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.util - Run:                          0
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.util - Previously run:               5
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.util - Filtered out:                 0
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.util - -------------------------------
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.util - Total change sets:            5
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.util - Update summary generated
+2026-04-06 09:00:36 [restartedMain] INFO  liquibase.command - Command execution complete
+2026-04-06 09:00:36 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-06 09:00:36 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-06 09:00:36 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-06 09:00:36 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5433/sparkminds-e1]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 15.15
+	Default catalog/schema: sparkminds-e1/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DatasourceConnectionProviderImpl
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-06 09:00:37 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-06 09:00:38 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-06 09:00:38 [restartedMain] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'applicationInitConfig' defined in file [D:\java-projects\sparkminds-exercise-1\backend\target\classes\com\heulwen\demo\config\ApplicationInitConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.security.crypto.password.PasswordEncoder' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-04-06 09:00:38 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-06 09:00:38 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2026-04-06 09:00:38 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2026-04-06 09:00:38 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-04-06 09:00:38 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
 
-2026-04-04 14:52:45 [http-nio-8081-exec-4] INFO  o.a.tomcat.util.http.parser.Cookie - A cookie header was received [g_state={"i_l":0,"i_ll":1775276681548,"i_e":{"enable_itp_optimization":0},"i_b":"Uw8zBTd2JZdZ9vAefN8iqvjY/5hR/JWoESc6BG9wboQ"};] that contained an invalid cookie. That cookie will be ignored.
- Note: further occurrences of this error will be logged at DEBUG level.
-2026-04-04 14:52:45 [http-nio-8081-exec-5] INFO  o.a.tomcat.util.http.parser.Cookie - A cookie header was received [g_state={"i_l":0,"i_ll":1775276681548,"i_e":{"enable_itp_optimization":0},"i_b":"Uw8zBTd2JZdZ9vAefN8iqvjY/5hR/JWoESc6BG9wboQ"};] that contained an invalid cookie. That cookie will be ignored.
- Note: further occurrences of this error will be logged at DEBUG level.
-2026-04-04 14:53:27 [http-nio-8081-exec-7] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.AuthenticationController.login() - Tham số: [LoginRequest(email=nguyenchau16112004@gmail.com, password=nguyennguyen123, rememberMe=false)]
-2026-04-04 14:53:28 [http-nio-8081-exec-7] INFO  c.h.d.s.impl.TokenRedisServiceImpl - Refresh token saved to Redis for user: nguyenchau16112004@gmail.com
-2026-04-04 14:53:28 [http-nio-8081-exec-7] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.AuthenticationController.login() - Thời gian: 701ms - Kết quả: ApiResponse(code=1000, message=Login successful, result=AuthenticateResponse(accessToken=eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoZXVsd2VuLnRlY2giLCJzdWIiOiJuZ3V5ZW5jaGF1MTYxMTIwMDRAZ21haWwuY29tIiwiZXhwIjoxNzc1MjkyODA3LCJpYXQiOjE3NzUyODkyMDcsInNjb3BlIjoiUk9MRV9VU0VSIn0.nVOH78xp3xy-Os2h30zfDPEYWObbSI3tPCUBfoHAO9inqEeLPw2iJf326vnNrUqV0-HRt450d37-7fez1R6Wkw, refreshToken=eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoZXVsd2VuLnRlY2giLCJzdWIiOiJuZ3V5ZW5jaGF1MTYxMTIwMDRAZ21haWwuY29tIiwiZXhwIjoxNzc1ODk0MDA3LCJpYXQiOjE3NzUyODkyMDd9.LJNfCw1wV-Kqb6A6IrSPxyNaUIlw6_5yl8VADAScWZNWxCTuCwXyvTUVDTL7oe1Qab5dQNkLf4ii0f0K6R2c9A, mfaRequired=false, email=null))
-2026-04-04 14:53:28 [http-nio-8081-exec-8] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:53:28 [http-nio-8081-exec-8] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 53ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:53:28 [http-nio-8081-exec-9] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:53:28 [http-nio-8081-exec-9] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 18ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:53:29 [http-nio-8081-exec-10] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:53:29 [http-nio-8081-exec-10] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 14ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:53:29 [http-nio-8081-exec-1] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.BookController.searchBooks() - Tham số: [null, null, null, null, 0, 10, id, DESC]
-2026-04-04 14:53:29 [http-nio-8081-exec-1] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.BookController.searchBooks() - Thời gian: 29ms - Kết quả: ApiResponse(code=1000, message=Get books successful, result=Page 1 of 1 containing com.heulwen.demo.dto.response.BookResponse instances)
-2026-04-04 14:53:29 [http-nio-8081-exec-2] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.AuthenticationController.getProfile() - Tham số: [Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoZXVsd2VuLnRlY2giLCJzdWIiOiJuZ3V5ZW5jaGF1MTYxMTIwMDRAZ21haWwuY29tIiwiZXhwIjoxNzc1MjkyODA3LCJpYXQiOjE3NzUyODkyMDcsInNjb3BlIjoiUk9MRV9VU0VSIn0.nVOH78xp3xy-Os2h30zfDPEYWObbSI3tPCUBfoHAO9inqEeLPw2iJf326vnNrUqV0-HRt450d37-7fez1R6Wkw]
-2026-04-04 14:53:29 [http-nio-8081-exec-2] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.AuthenticationController.getProfile() - Thời gian: 68ms - Kết quả: ApiResponse(code=1000, message=Get profile successful, result=UserResponse(id=4, email=nguyenchau16112004@gmail.com, phone=0965768787, firstName=Châu, lastName=Nguyên, role=USER, dateOfBirth=2004-11-16, status=ACTIVE, mfaEnabled=false, createdAt=null, updatedAt=null))
-2026-04-04 14:53:30 [http-nio-8081-exec-5] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:53:30 [http-nio-8081-exec-5] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 9ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:53:30 [http-nio-8081-exec-6] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.BookController.searchBooks() - Tham số: [null, null, null, null, 0, 10, id, DESC]
-2026-04-04 14:53:30 [http-nio-8081-exec-6] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.BookController.searchBooks() - Thời gian: 32ms - Kết quả: ApiResponse(code=1000, message=Get books successful, result=Page 1 of 1 containing com.heulwen.demo.dto.response.BookResponse instances)
-2026-04-04 14:54:57 [http-nio-8081-exec-1] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.AuthenticationController.logout() - Tham số: [Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoZXVsd2VuLnRlY2giLCJzdWIiOiJuZ3V5ZW5jaGF1MTYxMTIwMDRAZ21haWwuY29tIiwiZXhwIjoxNzc1MjkyODA3LCJpYXQiOjE3NzUyODkyMDcsInNjb3BlIjoiUk9MRV9VU0VSIn0.nVOH78xp3xy-Os2h30zfDPEYWObbSI3tPCUBfoHAO9inqEeLPw2iJf326vnNrUqV0-HRt450d37-7fez1R6Wkw]
-2026-04-04 14:54:57 [http-nio-8081-exec-1] INFO  c.h.d.s.impl.TokenRedisServiceImpl - Access token added to blacklist
-2026-04-04 14:54:57 [http-nio-8081-exec-1] INFO  c.h.d.s.impl.TokenRedisServiceImpl - Refresh token deleted from Redis for user: nguyenchau16112004@gmail.com
-2026-04-04 14:54:57 [http-nio-8081-exec-1] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.AuthenticationController.logout() - Thời gian: 89ms - Kết quả: ApiResponse(code=1000, message=Logout successful, result=null)
-2026-04-04 14:54:57 [http-nio-8081-exec-2] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:54:57 [http-nio-8081-exec-2] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 151ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:54:58 [http-nio-8081-exec-3] INFO  c.heulwen.demo.aspect.LoggingAspect - [REQUEST] com.heulwen.demo.controller.CategoryController.getCategories() - Tham số: []
-2026-04-04 14:54:58 [http-nio-8081-exec-3] INFO  c.heulwen.demo.aspect.LoggingAspect - [RESPONSE] com.heulwen.demo.controller.CategoryController.getCategories() - Thời gian: 90ms - Kết quả: ApiResponse(code=1000, message=Get categories successfully, result=[CategoryResponse(id=1, name=Trinh thám, createdAt=2026-04-04T00:08:34.062267, updatedAt=2026-04-04T00:08:34.062267), CategoryResponse(id=2, name=Phiêu lưu, createdAt=2026-04-04T11:01:08.385738, updatedAt=2026-04-04T11:01:08.385738)])
-2026-04-04 14:55:35 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-04-04 14:55:35 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
-2026-04-04 14:55:35 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-04-04 14:55:35 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-04-04 14:55:35 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-04-06 09:00:38 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.heulwen.demo.config.ApplicationInitConfig required a bean of type 'org.springframework.security.crypto.password.PasswordEncoder' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.security.crypto.password.PasswordEncoder' in your configuration.
+
